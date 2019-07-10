@@ -81,11 +81,11 @@ module.exports = {
   productionSourceMap: false,
   // http://dev.hahaipi.com/wxxcx/index.php/Home/getMachineInfo
   devServer: {
-    host: '100.100.100.23',
+    host: '0.0.0.0',
     port: 8080,
     https: false,
-    hotOnly: false,
-    proxy: 'http://dev.hahaipi.com'
+    hotOnly: false
+    // proxy: 'http://dev.hahaipi.com'
     // proxy: {
     //   '/Home': {
     //     target: 'http://dev.hahaipi.com/', // 域名
