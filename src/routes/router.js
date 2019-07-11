@@ -6,7 +6,7 @@ import {
 } from '@l/businessUtils'
 const { routerStorage } = config
 const Layout = () => import(/* webpackChunkName: "layout" */'@business/layout')
-console.log(Login)
+const router = getLocalStorage(routerStorage)
 export default [
   Login,
   {
