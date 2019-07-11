@@ -1,4 +1,4 @@
-import { getToken, setToken, removeToken } from '@/tools/utils'
+import { getToken, setToken, removeToken } from '@/lib/businessUtils'
 export default {
   state: {
     token: getToken(),
@@ -40,17 +40,17 @@ export default {
     //   return res
     // },
     // 登录
-    async USER_LOGIN_ACTION ({ commit, dispatch }, { account, password, pwdLen }) {
+    async USER_LOGIN_ACTION ({ commit, dispatch }, { account, password }) {
       // const res = await loginApi({
       //   account,
       //   password,
       //   pwd_len: pwdLen
       // })
       // if (res.return_code === '0') {
-      //   commit('USER_SETTOKEN_MUTATE', res.data.token)
+      commit('USER_SETTOKEN_MUTATE', 'admin')
       // }
       // // let res = await dispatch('USER_GETUSERINFO_ACTION')
-      // return res
+      return true
     },
     // 登出去除相关信息
     async USER_LOGOUT_ACTION ({ state, commit }) {

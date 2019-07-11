@@ -15,7 +15,16 @@ const Login = {
     title: '登录'
   }
 }
+const Home = {
+  path: '/home',
+  name: 'Home',
+  component: () => import(/* webpackChunkName: "Home" */ '@v/home/home.vue'),
+  meta: {
+    title: '首页'
+  }
+}
 export {
   Error404,
-  Login
+  Login,
+  Home
 }

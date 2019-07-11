@@ -54,9 +54,17 @@ export default {
    */
   routerStorage: 'api-admin-routes',
   /**
-   * @description 打开的窗口缓存
+   * @description 路由localStorage名字
    */
-  tabNavStorage: 'tabNavList',
+  menuStorage: 'api-admin-menu',
+  /**
+   * @description 打开的标签页窗口缓存
+   */
+  tabNavStorage: 'api-admin-tabNav',
+  /**
+   * @description 用户权限列表
+   */
+  authorizationStorage: 'api-admin-authorization',
   /**
    * @description 需要加载的插件
    */

@@ -1,18 +1,23 @@
-import { Error404, Login } from './base'
-import app from './modules/app'
-const Container = () => import(/* webpackChunkName: "container" */'@business/container')
+import { Error404, Login, Home } from './base'
+import config from '@/config'
+import {
+  getLocalStorage
+  // setLocalStorage
+} from '@l/businessUtils'
+const { routerStorage } = config
+const Layout = () => import(/* webpackChunkName: "layout" */'@business/layout')
 console.log(Login)
 export default [
+  Login,
   {
     path: '/home',
     name: 'default',
     alias: '/',
-    component: Container,
+    component: Layout,
     meta: {
       title: '首页'
     },
-    children: [...app]
+    children: [Home]
   },
-  Login,
   Error404
 ]

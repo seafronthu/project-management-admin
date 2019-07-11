@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import allRouter from './router'
-import { setTitle } from '@/tools/utils'
+import { setTitle } from '@/lib/businessUtils'
 import store from '@/store'
 import config from '@/config'
 const { initialPageName, notLoginPageName } = config

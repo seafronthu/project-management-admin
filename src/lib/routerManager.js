@@ -70,7 +70,7 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, 
       if (obj[id]) {
         if (times + 1 === 1) {
           routerObj.path = '/' + routeObj.path // 祖级路由要加/
-          routerObj.component = () => import('@bussiness/container')
+          routerObj.component = () => import('@bussiness/layout')
         } else if (times + 1 > 1) {
           routerObj.component = () => import('@bussiness/parent-view')
         }

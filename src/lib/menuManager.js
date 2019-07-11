@@ -13,7 +13,8 @@ function arrageRouterToMenu (list) {
         icon: items.meta.icon || '',
         href: items.meta.href,
         name: items.name,
-        meta: items.meta
+        meta: items.meta,
+        title: items.meta.title
       }
       if (hasChildren(items) || (items.meta && items.meta.showChildren)) {
         obj.children = arrageRouterToMenu(items.children || [])
@@ -22,4 +23,7 @@ function arrageRouterToMenu (list) {
     }
   })
   return result
+}
+export {
+  arrageRouterToMenu
 }

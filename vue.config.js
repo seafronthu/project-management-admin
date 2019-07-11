@@ -18,6 +18,19 @@ function addStyleResource (rule) {
     })
 }
 module.exports = {
+  // 配置antd主题
+  css: {
+    loaderOptions: {
+      less: {
+        modifyVars: {
+          'primary-color': '#08a678',
+          'link-color': '#08a678'
+          // 'border-color-base': '#b7eb8f'
+        },
+        javascriptEnabled: true
+      }
+    }
+  },
   publicPath: process.env.NODE_ENV === 'production' ? './' : './', // 项目相对路径
   // assetsDir: './',
   chainWebpack: config => {
