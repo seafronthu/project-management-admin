@@ -80,9 +80,11 @@ exports.login = async cxt => {
   }
   console.log('进来了')
   sendRespond({ cxt, data, message: returnMessage(200) })
+  console.log(cxt)
 }
 // 获取用户权限
 exports.getUserAthority = async cxt => {
+  console.log('奇怪')
   let data = {
     list: ROUTER
   }
