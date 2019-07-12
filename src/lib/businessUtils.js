@@ -56,6 +56,14 @@ function getLocalStorage (name) {
   if (!value) return false
   return JSON.parse(value)
 }
+/**
+ * 从缓存中移除name的值
+ * @param {string} name  对象
+ * @return {boolean|string|array|JSON}
+ */
+function removeLocalStorage (name) {
+  localStorage.removeItem(name)
+}
 export {
   setToken, // 设置token
   getToken, // 获取token
@@ -63,5 +71,6 @@ export {
   setTitle, // 设置title
   hasChildren, // 判断是否有属性children
   setLocalStorage, // 键值对塞到浏览器缓存中
-  getLocalStorage // 从缓存中获取name的值
+  getLocalStorage, // 从缓存中获取name的值
+  removeLocalStorage // 从缓存中移除name的值
 }

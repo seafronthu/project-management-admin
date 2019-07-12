@@ -1,12 +1,10 @@
 import { Error404, Login, Home } from './base'
-import config from '@/config'
-import {
-  getLocalStorage
-  // setLocalStorage
-} from '@l/businessUtils'
-const { routerStorage } = config
+import setRouter from '@l/routerManager'
+import routers from './modules'
+import store from '@/store'
 const Layout = () => import(/* webpackChunkName: "layout" */'@business/layout')
-const router = getLocalStorage(routerStorage)
+const routerArr = setRouter({ routers })
+store.commit('APP_ADDROUTERLIST_MUTATE', routerArr)
 export default [
   Login,
   {
@@ -19,5 +17,6 @@ export default [
     },
     children: [Home]
   },
+  ...routerArr,
   Error404
 ]

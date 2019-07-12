@@ -12,7 +12,7 @@
           v-if="isShowMenu(items)"
             :sub-menu-info="items"
             :key="items.name"
-          >
+          />
         </template>
         <template v-else>
           <a-menu-item v-if="isShowMenu(items)" :key="items.name">

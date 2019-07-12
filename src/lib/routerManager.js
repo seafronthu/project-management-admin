@@ -1,5 +1,5 @@
 import config from '@/config'
-const { routerStorage } = config
+const { authorizationStorage } = config
 /**
  * 整理数组parentId为键名键值为该值下的数组
  * @param {Array<JSON>} arr 数组
@@ -70,9 +70,9 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, 
       if (obj[id]) {
         if (times + 1 === 1) {
           routerObj.path = '/' + routeObj.path // 祖级路由要加/
-          routerObj.component = () => import('@bussiness/layout')
+          routerObj.component = () => import('@business/layout')
         } else if (times + 1 > 1) {
-          routerObj.component = () => import('@bussiness/parent-view')
+          routerObj.component = () => import('@business/parent-view')
         }
         routerObj.meta.way = way ? `${way}/${routerObj.path}` : routerObj.path
         routerObj.children = arrageObjToRouterTree({ obj, parentId: id, routers, times: times + 1, way: routerObj.meta.way, pathRoute })
@@ -86,8 +86,11 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, 
   })
   return parentArr
 }
-function setRouter ({ routers, pathRoute }) {
-  let authRouterStorage = localStorage.getItem(routerStorage)
-  return arrageObjToRouterTree({ obj: arrageArrToObj(authRouterStorage), parentId: '0', routers, pathRoute })
+function setRouter ({ routers }) {
+  let authorization = localStorage.getItem(authorizationStorage)
+  if (authorization && authorization.length > 0) {
+    return arrageObjToRouterTree({ obj: arrageArrToObj(authorization), parentId: '0', routers })
+  }
+  return []
 }
 export default setRouter

@@ -97,8 +97,8 @@ module.exports = {
     host: '0.0.0.0',
     port: 8080,
     https: false,
-    hotOnly: false
-    // proxy: 'http://dev.hahaipi.com'
+    hotOnly: false,
+    proxy: 'http://127.0.0.1:9527'
     // proxy: {
     //   '/Home': {
     //     target: 'http://dev.hahaipi.com/', // 域名

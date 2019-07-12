@@ -115,9 +115,11 @@ export default {
       this[name] = ''
     },
     handleLogin () {
-      if (this.USER_LOGIN_ACTION({ account: '18888727875', password: 'admin' })) {
-        this.$router.push({ name: 'Home' })
-      }
+      this.USER_LOGIN_ACTION({ account: '18888727875', password: 'admin' }).then(res => {
+        if (res.code === '200') {
+          location.href = '/home'
+        }
+      })
     }
   },
 
