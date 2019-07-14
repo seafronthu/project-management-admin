@@ -9,7 +9,7 @@ export default [
   Login,
   {
     path: '/home',
-    name: 'default',
+    name: 'Default',
     alias: '/',
     component: Layout,
     meta: {
@@ -17,6 +17,11 @@ export default [
     },
     children: [Home]
   },
-  ...routerArr,
+  {
+    path: '/',
+    name: 'Layout',
+    component: Layout,
+    children: [...routerArr]
+  },
   Error404
 ]

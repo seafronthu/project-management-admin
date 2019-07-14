@@ -19,6 +19,7 @@ function addErrorLog (info) {
 }
 // 请求时处理
 axios.interceptors.request.use(request => {
+  console.log(request)
   let format = request.format
   delete request.format
   // loading

@@ -21,7 +21,9 @@ export default {
     authorizationList: getLocalStorage(authorizationStorage) || [] // 权限列表
   },
   getters: {
-    menuList: (state, getters, rootState) => arrageRouterToMenu(state.routerList) // 菜单列表
+    menuList: (state, getters, rootState) => {
+      return arrageRouterToMenu(state.routerList)
+    }// 菜单列表
   },
   mutations: {
     // 错误日志列表添加
@@ -44,9 +46,9 @@ export default {
   },
   actions: {
     // 获取权限列表
-    async APP_GETUSERATHORITYAPI_ACTION ({ state, commit }, router) {
+    async APP_GETUSERATHORITYAPI_ACTION ({ state, commit }) {
       const res = await getUserAthorityApi()
-      if (res.code === '200') {
+      if (res.code === 200) {
         const authRouter = res.data.list
         commit('APP_ADDUSERATHORITYAPI_MUTATE', authRouter)
       }

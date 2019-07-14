@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
 import config from '@/config'
+import moment from 'moment'
 const { cookieTokenName, cookieExpires, title } = config
 /**
  * 设置token
@@ -37,24 +38,40 @@ function setTitle (pageTitle) {
  * @return {boolean}
  */
 function hasChildren (item) {
-  return item.children && item.children.length > 0
+  return !!(item.children && item.children.length > 0)
 }
 /**
  * 键值对塞到浏览器缓存中
- * @param {JSON} name  对象
+ * @param {string} name  对象名称
+ * @param {number} day  相差天数
  */
-function setLocalStorage (name, value) {
-  localStorage.setItem(name, JSON.stringify(value))
+function setLocalStorage (name, value, day) {
+  if (day === void 0) {
+    localStorage.setItem(name, JSON.stringify({
+      value }))
+    return
+  }
+  const expires = moment.utc().add(day, 'days').format()
+  localStorage.setItem(name, JSON.stringify({
+    value, expires }))
 }
 /**
  * 从缓存中获取name的值
- * @param {string} name  对象
+ * @param {string} name  对象名称
  * @return {boolean|string|array|JSON}
  */
 function getLocalStorage (name) {
-  let value = localStorage.getItem(name)
-  if (!value) return false
-  return JSON.parse(value)
+  let item = localStorage.getItem(name)
+  if (!item) return false
+  const {
+    value,
+    expires
+  } = JSON.parse(item)
+  if (expires && moment().isBefore(expires)) {
+    return value
+  }
+  removeLocalStorage(name)
+  return false
 }
 /**
  * 从缓存中移除name的值

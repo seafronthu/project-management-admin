@@ -31,7 +31,7 @@ module.exports = {
       }
     }
   },
-  publicPath: process.env.NODE_ENV === 'production' ? './' : './', // 项目相对路径
+  publicPath: process.env.NODE_ENV === 'production' ? '/' : '/', // 项目相对路径
   // assetsDir: './',
   chainWebpack: config => {
     config

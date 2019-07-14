@@ -8,7 +8,7 @@
         v-model="collapsed"
       >
         <div class="logo" />
-        <MenuList/>
+        <MenuList :menu-list="menuList"/>
       </a-layout-sider>
       <a-layout>
         <a-layout-header style="background: #fff; padding: 0">
@@ -32,15 +32,17 @@
 
 <script>
 import MenuList from './menu-list'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Layout',
 
   data () {
     return {
-      collapsed: true
+      collapsed: false
     }
   },
   computed: {
+    ...mapGetters(['menuList'])
   },
 
   watch: {
@@ -57,7 +59,9 @@ export default {
     // })
     // document.body.classList.add('bgcolor-f2')
   },
-  mounted () {},
+  mounted () {
+    console.log(this)
+  },
   beforeDestroy () {
     // document.body.classList.remove('bgcolor-f2')
   }

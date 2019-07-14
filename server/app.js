@@ -15,16 +15,16 @@ app.use(bodyParser())
 // 所有路由
 app.use(require('./routes').routes())
 // spa页
-app.use(Router.get('*', async (cxt, next) => {
-  console.log('gg')
-  fs.readFile(path.join(__dirname, '../dist/index.html'), 'utf-8', (err, content) => {
-    if (err) {
-      console.log('We cannot open "index.html" file.')
-    }
-    cxt.type = 'html'
-    cxt.status = 200
-    cxt.body = content
-  })
-  console.log(`http://${hostname}:${port}`)
-}).routes())
+// app.use(Router.get('*', async (cxt, next) => {
+//   console.log('gg')
+//   fs.readFile(path.join(__dirname, '../dist/index.html'), 'utf-8', (err, content) => {
+//     if (err) {
+//       console.log('We cannot open "index.html" file.')
+//     }
+//     cxt.type = 'html'
+//     cxt.status = 200
+//     cxt.body = content
+//   })
+//   console.log(`http://${hostname}:${port}`)
+// }).routes())
 app.listen(port)

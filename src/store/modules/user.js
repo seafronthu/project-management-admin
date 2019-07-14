@@ -48,11 +48,12 @@ export default {
         account,
         password
       })
-      if (res.code === '200') {
+      console.log(res)
+      if (res.code === 200) {
         commit('USER_SETTOKEN_MUTATE', res.data.token)
+        await dispatch('APP_GETUSERATHORITYAPI_ACTION')
       }
-      let res1 = await dispatch('APP_GETUSERATHORITYAPI_ACTION')
-      return res1
+      return res
     },
     // 登出去除相关信息
     async USER_LOGOUT_ACTION ({ state, commit }) {

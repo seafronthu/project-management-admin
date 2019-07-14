@@ -8,7 +8,7 @@ import { hasChildren } from './businessUtils'
 function arrageRouterToMenu (list) {
   let result = []
   list.forEach(items => {
-    if (items.meta && items.meta.showInBread) {
+    if (!items.meta || !items.meta.hideInMenu) {
       let obj = {
         icon: items.meta.icon || '',
         href: items.meta.href,

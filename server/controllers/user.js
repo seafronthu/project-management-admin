@@ -17,7 +17,7 @@ const ROUTER = [
     href: '',
     keywords: 'API开发管理',
     genre: 'page',
-    component: 'ApiManager'
+    component: 'ApiManagement'
   },
   {
     id: '3',

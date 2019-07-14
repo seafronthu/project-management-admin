@@ -1,11 +1,13 @@
 <!-- 菜单栏主类目递归调用 -->
 <template>
-  <a-sub-menu key="sub1">
+  <a-sub-menu :key="subMenuInfo.name"
+    v-bind="$props"
+    v-on="$listeners">
     <span slot="title">
       <a-icon :type="subMenuInfo.icon" /><span>{{subMenuInfo.title}}</span></span>
     <template v-for="items of subMenuInfo.children">
       <template v-if="isSubMenu(items)">
-        <MenuListSubItem
+        <SubItem
           v-if="isShowMenu(items)"
           :sub-menu-info="items"
           :key="items.name"
@@ -23,22 +25,15 @@
 </template>
 
 <script>
+import { Menu } from 'ant-design-vue'
 import mixin from './mixin'
 export default {
-  name: 'MenuListSubItem',
+  name: 'SubItem',
+  isSubMenu: true,
   mixins: [mixin],
-  data () {
-    return {
-    }
-  },
-
-  components: {},
-
-  computed: {},
-
-  methods: {},
-
-  mounted () {}
+  props: {
+    ...Menu.SubMenu.props
+  }
 }
 </script>
 <style lang="stylus"></style>

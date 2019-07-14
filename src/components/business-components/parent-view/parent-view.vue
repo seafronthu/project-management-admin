@@ -1,5 +1,6 @@
 <template>
-  <keep-alive :include="cacheList" :exclude="notCacheName">
+  <!-- <keep-alive :include="cacheList" :exclude="notCacheName"> -->
+  <keep-alive>
     <router-view ref="child"/>
   </keep-alive>
 </template>

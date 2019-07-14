@@ -5,10 +5,10 @@ import { setTitle } from '@/lib/businessUtils'
 import store from '@/store'
 import config from '@/config'
 const { initialPageName, notLoginPageName } = config
+console.log(allRouter)
 Vue.use(Router)
-
 const router = new Router({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     ...allRouter
