@@ -2,9 +2,27 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import allRouter from './router'
 import { setTitle } from '@/lib/businessUtils'
+import { Error404 } from './base'
+import notification from 'ant-design-vue/es/notification'
+import 'nprogress/nprogress.css' // progress bar style
+import NProgress from 'nprogress' // progress bar
 import store from '@/store'
 import config from '@/config'
+const Layout = () => import(/* webpackChunkName: "layout" */'@business/layout')
+let addErr = 0
+function toRouter (to) {
+  const path = to.path
+  const query = to.query
+  const params = to.params
+  const url = encodeURIComponent(JSON.stringify({
+    path,
+    query,
+    params
+  }))
+  return url
+}
 const { initialPageName, notLoginPageName } = config
+NProgress.configure({ showSpinner: false }) // NProgress Configuration
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
@@ -14,27 +32,61 @@ const router = new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
+  NProgress.start()
   const token = store.state.user.token
-  if (!token && !notLoginPageName.includes(to.name)) {
-    console.log('未登录')
-    // 未登录，跳转的是需要登录页面
-    // const name = to.name
-    const path = to.path
-    const query = to.query
-    const params = to.params
-    const url = encodeURIComponent(JSON.stringify({
-      path,
-      query,
-      params
-    }))
+  if (notLoginPageName.includes(to.name)) {
+    next()
+    NProgress.done()
+  } else if (!token) {
     next({
       name: initialPageName, // 跳转到登录页
       query: {
-        url
+        url: toRouter(to)
       }
     })
+    NProgress.done()
   } else {
-    next()
+    if (store.getters.routerList.length === 0) {
+      store.dispatch('USER_GETUSERINFO_ACTION').then(res => {
+        if (res.code === 200) {
+          store.dispatch('APP_GETUSERATHORITYAPI_ACTION').then(res => {
+            if (res.code === 200 && store.getters.routerList.length > 0) {
+              const routerList = [{
+                path: '/',
+                name: 'Layout',
+                component: Layout,
+                children: [...store.getters.routerList]
+              }, Error404]
+              console.log(routerList)
+              router.addRoutes(routerList)
+              next()
+              NProgress.done()
+            }
+          })
+        } else if (res.code === 400 || res.code === 401) {
+          notification.error({
+            message: '错误',
+            description: res.message
+          })
+          store.dispatch('USER_LOGOUT_ACTION').then(() => {
+            next({
+              name: initialPageName, // 跳转到登录页
+              query: {
+                url: toRouter(to)
+              }
+            })
+            NProgress.done()
+          })
+        }
+      })
+    } else {
+      if (!addErr) {
+        router.addRoutes([Error404])
+        ++addErr
+      }
+      next()
+      NProgress.done()
+    }
   }
 })
 router.afterEach(route => {

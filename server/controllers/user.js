@@ -65,14 +65,14 @@ const ROUTER = [
     component: 'UserDetail'
   }
 ]
-function sendRespond ({ cxt, data, statusCode = 200, message = '成功！', contentType = 'json' }) {
+function sendRespond ({ cxt, data, code = 200, message = '成功！', contentType = 'json' }) {
   cxt.type = contentType
   cxt.body = JSON.stringify({
-    code: statusCode,
+    code,
     data,
     message
   })
-  cxt.status = statusCode
+  cxt.status = 200
 }
 exports.login = async cxt => {
   let data = {
@@ -81,6 +81,14 @@ exports.login = async cxt => {
   console.log('进来了')
   sendRespond({ cxt, data, message: returnMessage(200) })
   console.log(cxt)
+}
+exports.getUserInfo = async cxt => {
+  let data = {
+    name: '胡哥',
+    age: '18',
+    sex: '1'
+  }
+  sendRespond({ cxt, data, message: returnMessage(200) })
 }
 // 获取用户权限
 exports.getUserAthority = async cxt => {

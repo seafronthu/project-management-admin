@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import config from '@/config'
-import { removeToken, removeLocalStorage } from '@l/businessUtils'
+import { removeLocalStorage } from '@l/businessUtils'
+import getters from './getters'
 import user from './modules/user'
 import app from './modules/app'
 const {
@@ -19,14 +20,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
   },
+  getters,
   mutations: {
     CLEARSTATE_MUTATE (state) {
-      removeToken()
       removeLocalStorage(routerStorage)
       removeLocalStorage(menuStorage)
       removeLocalStorage(tabNavStorage)
       removeLocalStorage(authorizationStorage)
-      location.href = '/login'
+      // location.href = '/login'
       // for (let key in state) {
       //   for (let name in state[key]) {
       //     state[key][name] = initData[key][name]

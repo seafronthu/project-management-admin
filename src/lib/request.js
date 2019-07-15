@@ -19,7 +19,6 @@ function addErrorLog (info) {
 }
 // 请求时处理
 axios.interceptors.request.use(request => {
-  console.log(request)
   let format = request.format
   delete request.format
   // loading
@@ -97,10 +96,10 @@ class HttpRequest {
     let data = options.data || {}
     let format = options.format
     headers = { ...head, ...headers }
-    if (!options.notLogin) {
-      headers.token = store.state.user.token
-      // data.token = store.state.user.token
-    }
+    // if (!options.notLogin) {
+    headers.token = store.state.user.token
+    // data.token = store.state.user.token
+    // }
     let config = {
       method,
       baseURL,
@@ -129,11 +128,11 @@ class HttpRequest {
   }
   async request (options) {
     // 默认登录（判断是否有token）有token返回true，不登录返回true
-    if (!this.askLogin(options.notLogin)) {
-    // 需要登录（没有登录信息）
-      await store.dispatch('USER_LOGOUT_ACTION')
-      return false
-    }
+    // if (!this.askLogin(options.notLogin)) {
+    // // 需要登录（没有登录信息）
+    //   await store.dispatch('USER_LOGOUT_ACTION')
+    //   return false
+    // }
     const instance = axios
     let config = Object.assign(this.getInsideConfig(), this.getParamConfig(options))
     let res = instance(config)

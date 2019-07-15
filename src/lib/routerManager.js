@@ -1,8 +1,4 @@
-import config from '@/config'
-import {
-  getLocalStorage
-} from '@/lib/businessUtils'
-const { authorizationStorage } = config
+
 /**
  * 整理数组parentId为键名键值为该值下的数组
  * @param {Array<JSON>} arr 数组
@@ -95,8 +91,7 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, 
   })
   return parentArr
 }
-function setRouter ({ routers }) {
-  let authorization = getLocalStorage(authorizationStorage)
+function setRouter ({ routers, authorization }) {
   if (authorization && authorization.length > 0) {
     return arrageObjToRouterTree({ obj: arrageArrToObj(authorization), parentId: '0', routers })
   }
