@@ -5,7 +5,6 @@ import { setTitle } from '@/lib/businessUtils'
 import store from '@/store'
 import config from '@/config'
 const { initialPageName, notLoginPageName } = config
-console.log(allRouter)
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
@@ -17,6 +16,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const token = store.state.user.token
   if (!token && !notLoginPageName.includes(to.name)) {
+    console.log('未登录')
     // 未登录，跳转的是需要登录页面
     // const name = to.name
     const path = to.path

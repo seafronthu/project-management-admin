@@ -4,8 +4,7 @@ import routers from './modules'
 import store from '@/store'
 const Layout = () => import(/* webpackChunkName: "layout" */'@business/layout')
 const routerArr = setRouter({ routers })
-store.commit('APP_ADDROUTERLIST_MUTATE', routerArr)
-export default [
+const routes = [
   Login,
   {
     path: '/home',
@@ -16,12 +15,16 @@ export default [
       title: '首页'
     },
     children: [Home]
-  },
-  {
+  }
+]
+if (routerArr.length > 0) {
+  store.commit('APP_ADDROUTERLIST_MUTATE', routerArr)
+  routes.push({
     path: '/',
     name: 'Layout',
     component: Layout,
     children: [...routerArr]
-  },
-  Error404
-]
+  })
+}
+routes.push(Error404)
+export default routes

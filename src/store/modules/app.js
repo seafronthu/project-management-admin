@@ -42,12 +42,14 @@ export default {
     APP_ADDUSERATHORITYAPI_MUTATE (state, authRouter) {
       state.authorizationList = authRouter
       setLocalStorage(authorizationStorage, authRouter)
+      console.log(getLocalStorage(authorizationStorage))
     }
   },
   actions: {
     // 获取权限列表
     async APP_GETUSERATHORITYAPI_ACTION ({ state, commit }) {
       const res = await getUserAthorityApi()
+      console.log(2)
       if (res.code === 200) {
         const authRouter = res.data.list
         commit('APP_ADDUSERATHORITYAPI_MUTATE', authRouter)

@@ -67,7 +67,7 @@ function getLocalStorage (name) {
     value,
     expires
   } = JSON.parse(item)
-  if (expires && moment().isBefore(expires)) {
+  if (!expires || moment().isBefore(expires)) {
     return value
   }
   removeLocalStorage(name)

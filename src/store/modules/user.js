@@ -48,10 +48,12 @@ export default {
         account,
         password
       })
-      console.log(res)
+      console.log(1)
       if (res.code === 200) {
         commit('USER_SETTOKEN_MUTATE', res.data.token)
-        await dispatch('APP_GETUSERATHORITYAPI_ACTION')
+        const res2 = await dispatch('APP_GETUSERATHORITYAPI_ACTION')
+        console.log(3)
+        return res2
       }
       return res
     },
