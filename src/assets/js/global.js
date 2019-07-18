@@ -2,7 +2,7 @@
 (function () {
   // requestAnimationFrame cancelAnimationFrame 兼容设置
   var lastTime = 0
-  var vendors = ['webkit', 'moz']
+  var vendors = ['webkit', 'moz', 'ms', 'o']
   for (var xx = 0; xx < vendors.length && !window.requestAnimationFrame; ++xx) {
     window.requestAnimationFrame = window[vendors[xx] + 'RequestAnimationFrame']
     window.cancelAnimationFrame = window[vendors[xx] + 'CancelAnimationFrame'] ||
