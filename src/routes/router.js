@@ -1,16 +1,5 @@
-import { Login, Home } from './base'
-const Layout = () => import(/* webpackChunkName: "layout" */'@business/layout')
+import { Login } from './base'
 const routes = [
-  Login,
-  {
-    path: '/home',
-    name: 'Default',
-    alias: '/',
-    component: Layout,
-    meta: {
-      title: '首页'
-    },
-    children: [Home]
-  }
+  Login
 ]
 export default routes

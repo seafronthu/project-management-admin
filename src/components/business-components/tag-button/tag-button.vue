@@ -9,11 +9,9 @@
       @close="handleClose"
       @click="handleTagClick"
     >
-      <span>
-        <span v-if="dot" class="dot" :style="{color: color}">●</span>
+        <IconFont v-if="dot" icon="dot" :style="{color: color, paddingRight: '10px'}"></IconFont>
         <slot></slot>
         <!-- <a-icon type="close-circle" /> -->
-      </span>
     </a-tag>
     <a-menu slot="overlay" @click="handleMenuClick">
       <slot name="menu"></slot>
@@ -23,6 +21,7 @@
 </template>
 
 <script>
+import IconFont from '@hhf/icon-font'
 export default {
   name: 'TagButton',
 
@@ -57,7 +56,9 @@ export default {
       default: false
     }
   },
-  components: {},
+  components: {
+    IconFont
+  },
 
   computed: {
     stylesMerge () {
@@ -102,4 +103,5 @@ export default {
 .dot
   padding-right 10px
   color #eeeeee
+  font-size 25px
 </style>

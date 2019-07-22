@@ -20,7 +20,8 @@ const Home = {
   name: 'Home',
   component: () => import(/* webpackChunkName: "Home" */ '@v/home/home.vue'),
   meta: {
-    title: '首页'
+    title: '首页',
+    notClose: true
   }
 }
 export {

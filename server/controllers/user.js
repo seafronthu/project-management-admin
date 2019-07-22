@@ -57,7 +57,7 @@ const ROUTER = [
   },
   {
     id: '7',
-    parentId: '5',
+    parentId: '6',
     title: '用户详情',
     href: '',
     keywords: '用户详情',

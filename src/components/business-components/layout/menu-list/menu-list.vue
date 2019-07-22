@@ -6,8 +6,10 @@
       theme="dark"
       @openChange="onOpenChange"
       @click="handleRouter"
-      :defaultSelectedKeys="defaultSelectedKeys"
-      :defaultOpenKeys="defaultOpenKeys"
+      :defaultOpenKeys="[]"
+      :openKeys="openKeys"
+      :defaultSelectedKeys="[]"
+      :selectedKeys="selectedKeys"
       class="not-select"
     >
       <template v-for="items of menuList">
@@ -47,7 +49,8 @@ export default {
     return {
       rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
       defaultSelectedKeys: [],
-      defaultOpenKeys: []
+      selectedKeys: [], // 选中的menuitem
+      openKeys: [] // 展开的submenu
     }
   },
   // beforeRouteUpdate (to, from, next) {
@@ -66,25 +69,43 @@ export default {
 
   computed: {
   },
-
+  watch: {
+    '$route': {
+      handler () {
+        this.handleSelected()
+      },
+      immediate: true
+    }
+  },
   methods: {
     handleSelected () {
       const {
         name,
-        matched
+        matched,
+        meta
       } = this.$route
-      this.defaultSelectedKeys = [name] // 选中的menu-item
+      if (meta.hideMenu) { // 菜单栏是隐藏的
+        return
+      }
+      // 选中的menu-item
       const len = matched.length
-      const defaultOpenKeys = [] // 选中的sub-menu
+      const openKeys = [] // 选中的sub-menu
       if (len > 1) {
-        for (let i = 0; i < len - 1; ++i) {
-          defaultOpenKeys.push(matched[i].name)
+        for (let i = 1; i < len - 1; ++i) {
+          const items = matched[i]
+          if (!items.meta || !items.meta.hideMenu) {
+            openKeys.push(items.name)
+          }
         }
-        this.defaultOpenKeys = defaultOpenKeys
+        this.openKeys = openKeys
+        let vals = matched[len - 1]
+        if (!vals.meta || !vals.meta.hideMenu) {
+          this.selectedKeys = [name]
+        }
       }
     },
     onOpenChange (openKeys) {
-
+      this.openKeys = openKeys
       // const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1)
       // if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
       //   this.openKeys = openKeys
@@ -99,7 +120,6 @@ export default {
     }
   },
   created () {
-    this.handleSelected(this.$route.name)
   }
 }
 </script>

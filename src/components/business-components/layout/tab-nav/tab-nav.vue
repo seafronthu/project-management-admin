@@ -130,7 +130,6 @@ export default {
   computed: {
     translates () {
       const diverge = this.diverge
-      console.log('computed', `translateX(${diverge}px)`)
       return `translateX(${diverge}px)`
     }
   },
@@ -151,8 +150,6 @@ export default {
     },
     // 滚动距离
     scrollFunc (offset) {
-      console.log(offset)
-      console.log(this.diverge + offset)
       let wrapWidth = this.$refs.scrollWrap.offsetWidth
       let containerWidth = this.$refs.scrollContainer.offsetWidth
       if (offset > 0) { // 往左偏移
@@ -184,7 +181,6 @@ export default {
     },
     // 选中的颜色
     checkedColorFunc (name) {
-      console.log(this.value, 'value', name, this.color)
       return this.value === name ? this.color : ''
     },
     // 点击的标签页

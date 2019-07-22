@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import allRouter from './router'
 import { setTitle } from '@/lib/businessUtils'
-import { Error404 } from './base'
+import { Error404, Home } from './base'
 import notification from 'ant-design-vue/es/notification'
 import 'nprogress/nprogress.css' // progress bar style
 import NProgress from 'nprogress' // progress bar
@@ -49,17 +49,29 @@ router.beforeEach((to, from, next) => {
     if (store.getters.routerList.length === 0) {
       store.dispatch('USER_GETUSERINFO_ACTION').then(res => {
         if (res.code === 200) {
-          store.dispatch('APP_GETUSERATHORITYAPI_ACTION').then(res => {
+          store.dispatch('APP_GETUSERATHORITYAPI_ACTION', [Home]).then(res => {
             if (res.code === 200 && store.getters.routerList.length > 0) {
-              const routerList = [{
-                path: '/',
-                name: 'Layout',
-                component: Layout,
-                children: [...store.getters.routerList]
-              }, Error404]
+              const routerList = [
+                {
+                  path: '/home',
+                  name: 'Default',
+                  alias: '/',
+                  component: Layout,
+                  meta: {
+                    title: '首页'
+                  },
+                  children: [Home]
+                },
+                {
+                  path: '/',
+                  name: 'Layout',
+                  component: Layout,
+                  children: [...store.getters.routerList]
+                }, Error404]
               router.addRoutes(routerList)
               ++addErr
               const redirect = decodeURIComponent(from.query.redirect || to.path)
+              console.log(to)
               if (to.path === redirect) {
                 // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
                 next({ ...to, replace: true })

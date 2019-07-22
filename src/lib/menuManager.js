@@ -8,7 +8,7 @@ import { hasChildren } from './businessUtils'
 function arrageRouterToMenu (list) {
   let result = []
   list.forEach(items => {
-    if (!items.meta || !items.meta.hideInMenu) {
+    if (!items.meta || !items.meta.hideMenu) {
       let obj = {
         icon: items.meta.icon || '',
         href: items.meta.href,
@@ -16,8 +16,11 @@ function arrageRouterToMenu (list) {
         meta: items.meta,
         title: items.meta.title
       }
-      if (hasChildren(items) || (items.meta && items.meta.showChildren)) {
-        obj.children = arrageRouterToMenu(items.children || [])
+      if (hasChildren(items)) {
+        const childrenList = arrageRouterToMenu(items.children || [])
+        if (childrenList.length > 0) {
+          obj.children = childrenList
+        }
       }
       result.push(obj)
     }

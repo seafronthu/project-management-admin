@@ -34,11 +34,11 @@ function arrageArrToObj (arr) {
  * 把arrageArrToObj整理的对象变成tree形
  * @param {JSON} obj arrageArrToObj整理的对象
  * @param {number} parentId 父级id
- * @param {number} times 当前对象层级
  * @param {JSON} routers 前台所有路由
+ * @param {number} times 当前对象层级
  * @return {Array<JSON>} [{name,path,redirect,meta}]
  */
-function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, pathRoute = {} }) {
+function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, peerRouting = [] }) {
   let arr = obj[parentId]
   let parentArr = []
   arr.forEach(items => {
@@ -80,20 +80,20 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, 
         routerObj.component = () => import('@business/parent-view')
         // }
         routerObj.meta.way = way ? `${way}/${routerObj.path}` : routerObj.path
-        routerObj.children = arrageObjToRouterTree({ obj, parentId: id, routers, times: times + 1, way: routerObj.meta.way, pathRoute })
+        routerObj.children = arrageObjToRouterTree({ obj, parentId: id, routers, times: times + 1, way: routerObj.meta.way, peerRouting })
       } else if (items.component) {
         routerObj.meta.way = way ? `${way}/${routerObj.path}` : routerObj.path // 面包屑
         routerObj.component = routers[items.component].component
-        pathRoute[routerObj.name] = routerObj // 待定
+        peerRouting.push(routerObj) // 待定
       }
       parentArr.push(routerObj)
     }
   })
   return parentArr
 }
-function setRouter ({ routers, authorization }) {
+function setRouter ({ routers, authorization, peerRouting }) {
   if (authorization && authorization.length > 0) {
-    return arrageObjToRouterTree({ obj: arrageArrToObj(authorization), parentId: '0', routers })
+    return arrageObjToRouterTree({ obj: arrageArrToObj(authorization), parentId: '0', routers, peerRouting })
   }
   return []
 }

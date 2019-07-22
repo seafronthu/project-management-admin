@@ -7,7 +7,8 @@ export default {
     errorList: [], // 日错误志列表
     // menuList: getLocalStorage(menuStorage) || [], // 菜单列表
     tabNavList: [], // 选项卡导航
-    authorizationList: [] // 权限列表
+    authorizationList: [], // 权限列表
+    baseRouterList: [] // 默认路由
   },
   // getters: {
   //   menuList: (state, getters, rootState) => {
@@ -25,6 +26,10 @@ export default {
         state.tabNavList.push(item)
       }
     },
+    // 添加默认路由
+    APP_ADDBASEROUTERLIST_MUTATE (state, list) {
+      state.baseRouterList = list
+    },
     // 删除选项卡导航
     APP_REMOVETABNAVLIST_MUTATE (state, name) {
       state.tabNavList = state.tabNavList.filter(v => v.name !== name)
@@ -36,12 +41,13 @@ export default {
   },
   actions: {
     // 获取权限列表
-    async APP_GETUSERATHORITYAPI_ACTION ({ state, commit }) {
+    async APP_GETUSERATHORITYAPI_ACTION ({ state, commit }, baseRouterList) {
       try {
         const res = await getUserAthorityApi()
         if (res.code === 200) {
           const authRouter = res.data.list
-          commit('APP_ADDUSERATHORITYAPI_MUTATE', authRouter)
+          commit('APP_ADDBASEROUTERLIST_MUTATE', baseRouterList) // 添加默认路由
+          commit('APP_ADDUSERATHORITYAPI_MUTATE', authRouter) // 添加权限路由
         }
         return res
       } catch (err) {
