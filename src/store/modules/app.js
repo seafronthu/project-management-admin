@@ -6,7 +6,7 @@ export default {
   state: {
     errorList: [], // 日错误志列表
     // menuList: getLocalStorage(menuStorage) || [], // 菜单列表
-    tabNavList: [], // 标签页列表
+    tabNavList: [], // 选项卡导航
     authorizationList: [] // 权限列表
   },
   // getters: {
@@ -19,9 +19,15 @@ export default {
     APP_ADDERRORLOG_MUTATE (state, error) {
       state.errorList.unshift(error)
     },
-    // 添加标签页
-    APP_ADDTABNAVLIST_MUTATE (state) {
-
+    // 添加选项卡导航
+    APP_ADDTABNAVLIST_MUTATE (state, item) {
+      if (!state.tabNavList.some(v => v.name === item.name)) {
+        state.tabNavList.push(item)
+      }
+    },
+    // 删除选项卡导航
+    APP_REMOVETABNAVLIST_MUTATE (state, name) {
+      state.tabNavList = state.tabNavList.filter(v => v.name !== name)
     },
     // 添加路由权限列表
     APP_ADDUSERATHORITYAPI_MUTATE (state, authRouter) {

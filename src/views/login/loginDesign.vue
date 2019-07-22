@@ -64,7 +64,6 @@ export default {
 
   methods: {},
   created () {
-    console.log(this.$route.query)
   },
   mounted () {}
 }

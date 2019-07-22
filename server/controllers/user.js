@@ -78,9 +78,7 @@ exports.login = async cxt => {
   let data = {
     token: '11111'
   }
-  console.log('进来了')
   sendRespond({ cxt, data, message: returnMessage(200) })
-  console.log(cxt)
 }
 exports.getUserInfo = async cxt => {
   let data = {
@@ -92,7 +90,6 @@ exports.getUserInfo = async cxt => {
 }
 // 获取用户权限
 exports.getUserAthority = async cxt => {
-  console.log('奇怪')
   let data = {
     list: ROUTER
   }

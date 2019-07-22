@@ -8,6 +8,7 @@
       @click="handleRouter"
       :defaultSelectedKeys="defaultSelectedKeys"
       :defaultOpenKeys="defaultOpenKeys"
+      class="not-select"
     >
       <template v-for="items of menuList">
         <template v-if="isSubMenu(items)">

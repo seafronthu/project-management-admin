@@ -8,7 +8,7 @@
         v-model="collapsed"
       >
         <div class="logo" />
-        <MenuList :menu-list="menuList"/>
+        <MenuList :menu-list="menuList" />
       </a-layout-sider>
       <a-layout>
         <a-layout-header style="background: #fff; padding: 0">
@@ -18,12 +18,16 @@
             @click="()=> collapsed = !collapsed"
           />
         </a-layout-header>
-        <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
-          <transition :name="transitionName">
-            <keep-alive>
-              <router-view />
-            </keep-alive>
-          </transition>
+        <a-layout-content style="background-color:#f5f7f9">
+          <TabNav :list="tabNavList" :value="tagChecked" @trigger-tag-click="handleTagClick" @trigger-tag-close="handleTagClose" />
+          <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
+          <a-layout-content>
+            <transition :name="transitionName">
+              <keep-alive>
+                <router-view />
+              </keep-alive>
+            </transition>
+          </a-layout-content>
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -32,26 +36,50 @@
 
 <script>
 import MenuList from './menu-list'
-import { mapGetters } from 'vuex'
+import TabNav from './tab-nav'
+import { mapGetters, mapState, mapMutations } from 'vuex'
 export default {
   name: 'Layout',
 
   data () {
     return {
-      collapsed: false
+      collapsed: false,
+      tagChecked: ''
     }
   },
   computed: {
+    ...mapState({
+      tabNavList: state => state.app.tabNavList
+    }),
     ...mapGetters(['menuList'])
   },
 
   watch: {
+    '$route': {
+      handler (to, from) {
+        const { name, query, params, meta } = to
+        const newTag = { name, query, params, meta }
+        this.APP_ADDTABNAVLIST_MUTATE(newTag)
+        this.tagChecked = name
+      },
+      immediate: true
+    }
   },
   components: {
-    MenuList
+    MenuList,
+    TabNav
   },
 
   methods: {
+    ...mapMutations(['APP_ADDTABNAVLIST_MUTATE', 'APP_REMOVETABNAVLIST_MUTATE']),
+    // 点击t标签页
+    handleTagClick (item) {
+      this.$router.push({ name: item.name })
+    },
+    // 关闭标签页
+    handleTagClose (item) {
+      this.APP_REMOVETABNAVLIST_MUTATE(item.name)
+    }
   },
   created () {
     // window.addEventListener('popstate', (e) => {
