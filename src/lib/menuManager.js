@@ -10,6 +10,8 @@ function arrageRouterToMenu (list) {
   list.forEach(items => {
     if (!items.meta || !items.meta.hideMenu) {
       let obj = {
+        query: items.query || '',
+        params: items.params,
         icon: items.meta.icon || '',
         href: items.meta.href,
         name: items.name,

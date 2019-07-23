@@ -7,11 +7,10 @@
         <div class="close-link flex-row flex-center">
           <a-icon type="close-circle" />
         </div>
-        <a-menu slot="overlay">
-          <a-menu-item>
-            <a
-              href="javascript:;"
-              key="closeAll"
+        <a-menu slot="overlay" @click="(options) => handleMenuClick(options, {index})">
+          <a-menu-item key="closeAll" :disabled="judgeIsCloseOtherFunc(item, 'closeAll', index)">
+            <template v-if="judgeIsCloseOtherFunc(item, 'closeAll', index)">关闭所有</template>
+            <a v-else href="javascript:;"
             >关闭所有</a>
           </a-menu-item>
         </a-menu>
@@ -52,43 +51,72 @@
           >
             <!-- <transition-group name="list-complete-demo" tag="div"> -->
             <TagButton
-              v-for="item of list"
+              v-for="(item, index) of list"
+              ref="tabNavRef"
               dot
               class="tab-nav-anim"
               :key="item.name"
               height="100%"
-              :color="checkedColorFunc(item.name)"
-              closable
+              :color="checkedColorFunc(item)"
+              :closable="judgeIsCloseCurrentdFunc(item)"
               :trigger="['contextmenu']"
-              @trigger-close="handleTagClose(item)"
+              @trigger-close="handleTagClose(item, 'closeCurrent')"
               @trigger-tag-click="handleTagClick(item)"
-              @trigger-menu-click="handleMenuClick"
+              @trigger-menu-click="(options) => handleMenuClick(options, {item, index})"
             >
               {{getNameFunc(item)}}
               <template v-slot:menu>
+                <!-- <a-menu-item
+                  key="refresh"
+                  :name="item"
+                >
+                  <a
+                    href="javascript:;"
+                  >刷新</a>
+                </a-menu-item> -->
                 <a-menu-item
                   key="closeCurrent"
                   :name="item"
+                  :disabled="!judgeIsCloseCurrentdFunc(item)"
                 >
-                  <a href="javascript:;">关闭当前标签页</a>
+                  <template v-if="!judgeIsCloseCurrentdFunc(item)">关闭当前标签页</template>
+                  <a
+                    v-else
+                    href="javascript:;"
+                  >关闭当前标签页</a>
                 </a-menu-item>
                 <a-menu-item
                   key="closeRight"
                   :name="item"
+                  :disabled="judgeIsCloseOtherFunc(item, 'closeRight', index)"
                 >
-                  <a href="javascript:;">关闭右侧</a>
+                  <template v-if="judgeIsCloseOtherFunc(item, 'closeRight', index)">关闭右侧</template>
+                  <a
+                    v-else
+                    href="javascript:;"
+                  >关闭右侧</a>
                 </a-menu-item>
                 <a-menu-item
                   key="closeLeft"
                   :name="item"
+                  :disabled="judgeIsCloseOtherFunc(item, 'closeLeft', index)"
                 >
-                  <a href="javascript:;">关闭左侧</a>
+                  <template v-if="judgeIsCloseOtherFunc(item, 'closeLeft', index)">关闭左侧</template>
+                  <a
+                    v-else
+                    href="javascript:;"
+                  >关闭左侧</a>
                 </a-menu-item>
                 <a-menu-item
                   key="closeOther"
                   :name="item"
+                  :disabled="judgeIsCloseOtherFunc(item, 'closeOther', index)"
                 >
-                  <a href="javascript:;">关闭其它</a>
+                  <template v-if="judgeIsCloseOtherFunc(item, 'closeOther', index)">关闭其它</template>
+                  <a
+                    v-else
+                    href="javascript:;"
+                  >关闭其它</a>
                 </a-menu-item>
               </template>
             </TagButton>
@@ -101,6 +129,7 @@
 
 <script>
 import TagButton from '@business/tag-button'
+import { isCloseRoute, isSameRoute } from '@l/businessUtils'
 export default {
   name: 'TabNav',
   props: {
@@ -113,12 +142,12 @@ export default {
       default: '#08a678'
     },
     value: { // 选中tag
-      type: String
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
     return {
-      tagList: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
       diverge: 0
     }
   },
@@ -135,6 +164,23 @@ export default {
   },
 
   methods: {
+    // 判断是否可以关闭其它标签页 true是不能选择
+    judgeIsCloseOtherFunc (item, type, index) {
+      switch (type) {
+        case 'closeRight':
+          return !this.list.slice(index + 1).some(v => this.judgeIsCloseCurrentdFunc(v))
+        case 'closeLeft':
+          return !this.list.slice(0, index).some(v => this.judgeIsCloseCurrentdFunc(v))
+        case 'closeOther':
+          return !this.list.some((v, i) => i === index ? false : this.judgeIsCloseCurrentdFunc(v))
+        case 'closeAll':
+          return !this.list.some(v => this.judgeIsCloseCurrentdFunc(v))
+      }
+    },
+    // 这边判断当前标签页是否可以关闭 true 可以关闭
+    judgeIsCloseCurrentdFunc (item) {
+      return isCloseRoute(item)
+    },
     // 滚轮事件(禁止触发原生事件，mac上左滑会返回上一页)
     handleScroll (e) {
       var type = e.type
@@ -166,6 +212,7 @@ export default {
         }
       }
     },
+    // 选中之后根据位置进行偏移
     chooseToMoveFunc () {
       let wrapWidth = this.$refs.scrollWrap.offsetWidth
       let containerWidth = this.$refs.scrollContainer.offsetWidth
@@ -175,28 +222,41 @@ export default {
 
       }
     },
+    // 选中的标签页
+    chooseNavTag (item) {
+      this.$nextTick(() => {
+        let tabNavRef = this.$refs.tabNavRef
+        let index = this.list.findIndex(v => isSameRoute(item, v))
+        let ele = tabNavRef[index].$el
+        this.chooseToMoveFunc(ele)
+        // for
+        // console.log(tabNavRef)
+      })
+    },
     // 得到标签名
     getNameFunc (item) {
       return (item && item.meta && item.meta.title) || ''
     },
     // 选中的颜色
-    checkedColorFunc (name) {
-      return this.value === name ? this.color : ''
+    checkedColorFunc (item) {
+      return isSameRoute(item, this.value) ? this.color : ''
     },
     // 点击的标签页
     handleTagClick (item) {
       this.$emit('trigger-tag-click', item)
     },
     // 点击关闭标签页
-    handleTagClose (item) {
-      this.$emit('trigger-tag-close', item)
+    handleTagClose (item, type, index) {
+      this.$emit('trigger-tag-close', { item, type, index })
     },
-    handleMenuClick ({ item, key, keyPath }) {
-      console.log({ item, key, keyPath })
+    // 点击标签页下拉菜单栏
+    handleMenuClick (options, { item, index }) {
+      this.handleTagClose(item, options.key, index)
     }
   },
 
-  mounted () {}
+  mounted () {
+  }
 }
 </script>
 <style lang="stylus" scoped>
@@ -241,6 +301,6 @@ export default {
         overflow visible
         transition transform 0.3s ease-out
         .tab-nav-anim
-          transition all 1s
+          transition all 0.5s
           margin-right 8px
 </style>

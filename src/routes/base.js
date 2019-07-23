@@ -21,7 +21,7 @@ const Home = {
   component: () => import(/* webpackChunkName: "Home" */ '@v/home/home.vue'),
   meta: {
     title: '首页',
-    notClose: true
+    notClosed: true
   }
 }
 export {

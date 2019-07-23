@@ -38,13 +38,15 @@
 import MenuList from './menu-list'
 import TabNav from './tab-nav'
 import { mapGetters, mapState, mapMutations } from 'vuex'
+// isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
+import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
 export default {
   name: 'Layout',
 
   data () {
     return {
       collapsed: false,
-      tagChecked: ''
+      tagChecked: {}
     }
   },
   computed: {
@@ -57,10 +59,13 @@ export default {
   watch: {
     '$route': {
       handler (to, from) {
+        const { tabNavList } = this
         const { name, query, params, meta } = to
         const newTag = { name, query, params, meta }
-        this.APP_ADDTABNAVLIST_MUTATE(newTag)
-        this.tagChecked = name
+        if (!tabNavList.some(v => v.name === name)) {
+          this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
+        }
+        this.tagChecked = tabNavList.find(v => isSameRoute(to, v))
       },
       immediate: true
     }
@@ -71,14 +76,46 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['APP_ADDTABNAVLIST_MUTATE', 'APP_REMOVETABNAVLIST_MUTATE']),
-    // 点击t标签页
+    ...mapMutations(['APP_SETTABNAVLIST_MUTATE']),
+    // 当关闭标签页的时候跳转页面
+    goToPageFunc (list, route, item) {
+      this.$router.push(selectNavTab(list, route, item))
+    },
+    // 点击标签页
     handleTagClick (item) {
       this.$router.push({ name: item.name })
     },
     // 关闭标签页
-    handleTagClose (item) {
-      this.APP_REMOVETABNAVLIST_MUTATE(item.name)
+    // 操作的标签页 item  操作类型type
+    handleTagClose ({ item, type, index }) {
+      let { tabNavList } = this
+      let beforeArr = []
+      let afterArr = []
+      switch (type) {
+        case 'closeCurrent':
+          tabNavList = tabNavList.filter(v => !isSameRoute(item, v))
+          break
+        case 'closeAll':
+          tabNavList = tabNavList.filter(v => !isCloseRoute(v))
+          break
+        case 'closeLeft':
+          beforeArr = tabNavList.slice(0, index)
+          afterArr = tabNavList.slice(index)
+          beforeArr = beforeArr.filter(v => !isSameRoute(item, v) && !isCloseRoute(v))
+          tabNavList = [...beforeArr, ...afterArr]
+          break
+        case 'closeRight':
+          beforeArr = tabNavList.slice(0, index)
+          afterArr = tabNavList.slice(index)
+          afterArr = afterArr.filter(v => isSameRoute(item, v) || !isCloseRoute(v))
+          tabNavList = [...beforeArr, ...afterArr]
+          break
+        case 'closeOther':
+          tabNavList = tabNavList.filter(v => isSameRoute(item, v) || !isCloseRoute(v))
+          break
+      }
+      this.APP_SETTABNAVLIST_MUTATE(tabNavList)
+      this.goToPageFunc(tabNavList, this.$route, item)
     }
   },
   created () {
@@ -88,7 +125,6 @@ export default {
     // document.body.classList.add('bgcolor-f2')
   },
   mounted () {
-    console.log(this)
   },
   beforeDestroy () {
     // document.body.classList.remove('bgcolor-f2')

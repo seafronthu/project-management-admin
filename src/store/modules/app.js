@@ -21,18 +21,19 @@ export default {
       state.errorList.unshift(error)
     },
     // 添加选项卡导航
-    APP_ADDTABNAVLIST_MUTATE (state, item) {
-      if (!state.tabNavList.some(v => v.name === item.name)) {
-        state.tabNavList.push(item)
-      }
-    },
-    // 添加默认路由
-    APP_ADDBASEROUTERLIST_MUTATE (state, list) {
-      state.baseRouterList = list
+    APP_SETTABNAVLIST_MUTATE (state, list) {
+      state.tabNavList = list
+      // if (!state.tabNavList.some(v => v.name === item.name)) {
+      //   state.tabNavList.push(item)
+      // }
     },
     // 删除选项卡导航
     APP_REMOVETABNAVLIST_MUTATE (state, name) {
       state.tabNavList = state.tabNavList.filter(v => v.name !== name)
+    },
+    // 添加默认路由
+    APP_ADDBASEROUTERLIST_MUTATE (state, list) {
+      state.baseRouterList = list
     },
     // 添加路由权限列表
     APP_ADDUSERATHORITYAPI_MUTATE (state, authRouter) {

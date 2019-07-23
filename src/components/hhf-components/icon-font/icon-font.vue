@@ -69,6 +69,6 @@ export default {
 .hhf-icon-font
   display: inline-block
   font-style italic
-  color #555555
+  color #dddddd
   line-height 0
 </style>
