@@ -65,7 +65,7 @@ export default {
         if (!tabNavList.some(v => v.name === name)) {
           this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
         }
-        this.tagChecked = tabNavList.find(v => isSameRoute(to, v))
+        this.tagChecked = newTag
       },
       immediate: true
     }
@@ -79,7 +79,12 @@ export default {
     ...mapMutations(['APP_SETTABNAVLIST_MUTATE']),
     // 当关闭标签页的时候跳转页面
     goToPageFunc (list, route, item) {
-      this.$router.push(selectNavTab(list, route, item))
+      let router = selectNavTab(list, route, item)
+      if (isSameRoute(router, this.$route)) {
+        this.tagChecked = { ...router } // 为了触发偏移事件（组件TabNav有监听事件）
+        return
+      }
+      this.$router.push(router)
     },
     // 点击标签页
     handleTagClick (item) {
@@ -116,6 +121,9 @@ export default {
       }
       this.APP_SETTABNAVLIST_MUTATE(tabNavList)
       this.goToPageFunc(tabNavList, this.$route, item)
+    },
+    handleResize () {
+      this.tagChecked = { ...this.tagChecked }// 为了触发偏移事件（组件TabNav有监听事件）
     }
   },
   created () {
@@ -125,8 +133,10 @@ export default {
     // document.body.classList.add('bgcolor-f2')
   },
   mounted () {
+    window.addEventListener('resize', this.handleResize)
   },
   beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
     // document.body.classList.remove('bgcolor-f2')
   }
 }

@@ -162,7 +162,14 @@ export default {
       return `translateX(${diverge}px)`
     }
   },
-
+  watch: {
+    value: {
+      handler (currentV, beforeV) {
+        this.chooseNavTag(currentV)
+      },
+      immediate: true
+    }
+  },
   methods: {
     // 判断是否可以关闭其它标签页 true是不能选择
     judgeIsCloseOtherFunc (item, type, index) {
@@ -213,13 +220,21 @@ export default {
       }
     },
     // 选中之后根据位置进行偏移
-    chooseToMoveFunc () {
+    chooseToMoveFunc (ele) {
       let wrapWidth = this.$refs.scrollWrap.offsetWidth
       let containerWidth = this.$refs.scrollContainer.offsetWidth
+      let tagOffsetLeft = ele.offsetLeft
+      let tagWidth = ele.offsetWidth
       if (wrapWidth > containerWidth) { // 内容没有超出容器宽度
         this.diverge = 0 // 不偏移
-      } else {
-
+      } else if (tagOffsetLeft < -this.diverge) { // 偏移是负的绝对值大于标签offsetLeft即在可视区左边
+        if (wrapWidth > tagOffsetLeft + tagWidth) { // 左边距小于容器
+          this.diverge = 0
+        } else {
+          this.diverge = -(tagOffsetLeft + tagWidth - wrapWidth)
+        }
+      } else if (tagOffsetLeft + tagWidth > wrapWidth - this.diverge) { // 偏移的距离加上容器的宽度小于offsetLeft即在可视区右边
+        this.diverge = -(tagOffsetLeft + tagWidth - wrapWidth)
       }
     },
     // 选中的标签页
@@ -229,8 +244,6 @@ export default {
         let index = this.list.findIndex(v => isSameRoute(item, v))
         let ele = tabNavRef[index].$el
         this.chooseToMoveFunc(ele)
-        // for
-        // console.log(tabNavRef)
       })
     },
     // 得到标签名
@@ -256,6 +269,7 @@ export default {
   },
 
   mounted () {
+    window.addEventListener('resize', this.handleResize)
   }
 }
 </script>
