@@ -20,7 +20,7 @@ function arrageRouterToMenu (list) {
       }
       if (hasChildren(items)) {
         const childrenList = arrageRouterToMenu(items.children || [])
-        if (childrenList.length > 0) {
+        if (childrenList.length > 0) { // 有些子级不需要展示的在菜单栏（为了防止详情页展示出来）
           obj.children = childrenList
         }
       }

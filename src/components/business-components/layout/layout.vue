@@ -12,11 +12,7 @@
       </a-layout-sider>
       <a-layout>
         <a-layout-header style="background: #fff; padding: 0">
-          <a-icon
-            class="trigger"
-            :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-            @click="()=> collapsed = !collapsed"
-          />
+          <TopHead :collapsed="collapsed" @trigger-collapse="(state)=> collapsed = state"></TopHead>
         </a-layout-header>
         <a-layout-content style="background-color:#f5f7f9">
           <TabNav :list="tabNavList" :value="tagChecked" @trigger-tag-click="handleTagClick" @trigger-tag-close="handleTagClose" />
@@ -37,6 +33,7 @@
 <script>
 import MenuList from './menu-list'
 import TabNav from './tab-nav'
+import TopHead from './top-head'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 // isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
 import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
@@ -72,7 +69,8 @@ export default {
   },
   components: {
     MenuList,
-    TabNav
+    TabNav,
+    TopHead
   },
 
   methods: {
@@ -146,14 +144,6 @@ export default {
   height 100%
   .layout-container
     height 100%
-  .trigger
-    font-size 18px
-    line-height 64px
-    padding 0 24px
-    cursor pointer
-    transition color 0.3s
-    &:hover
-      color #1890ff
   .logo
     height 32px
     background rgba(255, 255, 255, 0.2)
