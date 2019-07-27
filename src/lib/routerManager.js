@@ -38,11 +38,11 @@ function arrageArrToObj (arr) {
  * @param {number} times 当前对象层级
  * @return {Array<JSON>} [{name,path,redirect,meta}]
  */
-function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, peerRouting = [] }) {
+function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, breadcrumb, peerRouting = [] }) {
   let arr = obj[parentId]
   let parentArr = []
   arr.forEach(items => {
-    if (items.genre === 'page') {
+    if (items.genre === 'menu') {
       // const routeObj = routers[items.component] ? routers[items.component] : { // 父级路由
       //   name: items.component,
       //   path: componentNameConversion(items.component)['-'],
@@ -67,24 +67,38 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, way, 
           genre: items.genre, // 类型页面还是操作等等 page button tab
           delete: items.delete, // 是否软删除
           jurisdiction: items.Jurisdiction // 权限
-        }
+        },
+        component: routeObj.component
       }
       if (routeObj.redirect) {
         Object.assign(routerObj, { redirect: routeObj.redirect })
       }
+      const {
+        name,
+        meta: {
+          icon,
+          title
+        },
+        component
+      } = routerObj
+      let breadcrumbObj = { title, icon, key: name }
+      if (component) { // 面包屑 父类不能给name代表不能路由跳转
+        breadcrumbObj.name = name
+      } else { // 表示父类不是页面
+        routerObj.redirect = '/404'
+      }
+      routerObj.meta.breadcrumb = breadcrumb ? [...breadcrumb, breadcrumbObj] : [breadcrumbObj]
       if (obj[id]) {
         // if (times === 0) {
         //   routerObj.path = '/' + routeObj.path // 祖级路由要加/
         //   routerObj.component = () => import('@business/layout')
         // } else if (times > 0) {
-        routerObj.component = () => import('@business/parent-view')
+        routerObj.component = component || (() => import('@business/parent-view'))
         // }
-        routerObj.meta.way = way ? `${way}/${routerObj.path}` : routerObj.path
-        routerObj.children = arrageObjToRouterTree({ obj, parentId: id, routers, times: times + 1, way: routerObj.meta.way, peerRouting })
+        routerObj.children = arrageObjToRouterTree({ obj, parentId: id, routers, times: times + 1, breadcrumb: routerObj.meta.breadcrumb, peerRouting })
       } else if (items.component) {
-        routerObj.meta.way = way ? `${way}/${routerObj.path}` : routerObj.path // 面包屑
-        routerObj.component = routers[items.component].component
-        peerRouting.push(routerObj) // 待定
+        routerObj.component = routeObj.component
+        peerRouting.push(routerObj) // 同级路由
       }
       parentArr.push(routerObj)
     }

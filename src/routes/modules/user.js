@@ -16,6 +16,7 @@ const Personal = {
 const User = {
   path: 'user',
   name: 'User',
+  redirect: '/404',
   meta: {
     title: '用户中心'
   }

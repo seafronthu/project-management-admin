@@ -12,7 +12,7 @@
       </a-layout-sider>
       <a-layout>
         <a-layout-header style="background: #fff; padding: 0">
-          <TopHead :collapsed="collapsed" @trigger-collapse="(state)=> collapsed = state"></TopHead>
+          <TopHead :collapsed="collapsed" @trigger-router="handleRouter" :breadcrumb-list="breadcrumbList" @trigger-collapse="(state)=> collapsed = state"></TopHead>
         </a-layout-header>
         <a-layout-content style="background-color:#f5f7f9">
           <TabNav :list="tabNavList" :value="tagChecked" @trigger-tag-click="handleTagClick" @trigger-tag-close="handleTagClose" />
@@ -37,13 +37,15 @@ import TopHead from './top-head'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 // isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
 import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
+import config from '@/config'
 export default {
   name: 'Layout',
 
   data () {
     return {
       collapsed: false,
-      tagChecked: {}
+      tagChecked: {}, // 当前选中的标签页
+      breadcrumbList: [] // 面包屑
     }
   },
   computed: {
@@ -63,6 +65,9 @@ export default {
           this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
         }
         this.tagChecked = newTag
+        let breadcrumb = to.meta && to.meta.breadcrumb
+        this.breadcrumbList = [{ name: config.homeName, key: config.homeName, icon: 'home' }, ...(breadcrumb || [])]
+        console.log(this.breadcrumbList)
       },
       immediate: true
     }
@@ -122,6 +127,9 @@ export default {
     },
     handleResize () {
       this.tagChecked = { ...this.tagChecked }// 为了触发偏移事件（组件TabNav有监听事件）
+    },
+    handleRouter (name) {
+      this.$router.push({ name })
     }
   },
   created () {

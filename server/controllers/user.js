@@ -7,7 +7,7 @@ const ROUTER = [
     title: '首页',
     href: '',
     keywords: '牛皮牛皮',
-    genre: 'page',
+    genre: 'menu',
     component: 'Home'
   },
   {
@@ -16,7 +16,7 @@ const ROUTER = [
     title: 'API开发管理',
     href: '',
     keywords: 'API开发管理',
-    genre: 'page',
+    genre: 'menu',
     component: 'ApiManagement'
   },
   {
@@ -25,7 +25,7 @@ const ROUTER = [
     title: '账号管理',
     href: '',
     keywords: '账号管理',
-    genre: 'page',
+    genre: 'menu',
     component: 'AccountManagement'
   },
   {
@@ -34,7 +34,7 @@ const ROUTER = [
     title: '个人中心',
     href: '',
     keywords: '个人中心',
-    genre: 'page',
+    genre: 'menu',
     component: 'Personal'
   },
   {
@@ -43,7 +43,7 @@ const ROUTER = [
     title: '用户中心',
     href: '',
     keywords: '用户中心',
-    genre: 'page',
+    genre: 'menu',
     component: 'User'
   },
   {
@@ -52,7 +52,7 @@ const ROUTER = [
     title: '用户列表',
     href: '',
     keywords: '用户列表',
-    genre: 'page',
+    genre: 'menu',
     component: 'UserList'
   },
   {
@@ -61,7 +61,7 @@ const ROUTER = [
     title: '用户详情',
     href: '',
     keywords: '用户详情',
-    genre: 'page',
+    genre: 'menu',
     component: 'UserDetail'
   }
 ]
