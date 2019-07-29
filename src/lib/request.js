@@ -10,7 +10,7 @@ function addErrorLog (info) {
   let data = {
     type: 'ajax',
     code: status,
-    mes: statusText,
+    msg: statusText,
     url: responseURL
   }
   // 判断是否是发送报错日志的接口 防止进入死循环
