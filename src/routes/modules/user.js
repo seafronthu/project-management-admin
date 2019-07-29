@@ -2,7 +2,8 @@ const AccountManagement = {
   path: 'account-management',
   name: 'AccountManagement',
   meta: {
-    title: '账号管理'
+    title: '账号管理',
+    icon: 'solution'
   }
 }
 const Personal = {

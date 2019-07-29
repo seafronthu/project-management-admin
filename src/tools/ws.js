@@ -1,52 +1,87 @@
-export default class Ws {
-  constructor (url, options) {
-    if (!/^(ws:\/\/)/.test(url)) {
-      url = `ws://${url}`
-    }
-    this.url = url
-    this.init()
+/**
+ * websocket
+ * @param {*} url 连接地址
+ * @param {JSON} {reconnect: 重连次数, delay: 重连延迟时间}
+ */
+function Ws (url, { reconnectTimes = 0, reconnectDelay = 0 }) {
+  if (this instanceof Ws) {
+    return new Ws(url, { reconnectTimes, reconnectDelay })
   }
-  init () {
-    this.webSocket = new WebSocket(this.url)
+  if (!url) {
+    throw new TypeError('The url is required ')
   }
-  // 连接状态
-  get readyState () {
-    const {
-      webSocket
-    } = this
-    // 0:CONNECTING 1:OPEN 2:CLOSING 3:CLOSED
-    return webSocket.readyState
+  if (!/^(ws:\/\/)/.test(url)) {
+    url = `ws://${url}`
   }
-  // 发送消息
-  send (obj) {
-    const {
-      webSocket
-    } = this
-    webSocket.send(obj)
+  this.reconnectTimes = reconnectTimes
+  this.reconnectDelay = reconnectDelay
+  this.activeCloseureStatus = false // 是否为主动关闭 默认不是
+  this.url = url
+  this.init()
+}
+const listensArr = ['open', 'message', 'error', 'close']
+Ws.prototype.init = function () {
+  this.webSocket = new WebSocket(this.url)
+  listensArr.forEach(v => {
+    this.webSocket.addEventListener(v, this[v].bind(this))
+  })
+  return this
+}
+listensArr.forEach(key => {
+  Ws.prototype[`on${key}`] = function () {
+    this.
+    return this
   }
-  // 关闭
+})
+const eventsArr = ['send', 'close']
+// 操作
+let operation = {
   close (code, reason) {
-    const {
-      webSocket
-    } = this
-    webSocket.close()
-  }
-  onMessage (callback) {
-    const {
-      webSocket
-    } = this
-    webSocket.addEventListener('message', callback)
-  }
-  onError (callback) {
-    const {
-      webSocket
-    } = this
-    webSocket.addEventListener('error', callback)
-  }
-  onClose (callback) {
-    const {
-      webSocket
-    } = this
-    webSocket.addEventListener('close', callback)
+    this.activeCloseureStatus = true
+    this.webSocket.close(code, reason)
+  },
+  send (data) {
   }
 }
+eventsArr.forEach(key => {
+  Ws.prototype[key] = function () {
+    let args = arguments
+    operation[key].apply(this, args)
+    return this
+  }
+})
+Object.defineProperty(Ws.prototype, 'readyState', {
+  get () {
+    const type = this.webSocket.readyState
+    switch (type) {
+      case 0:
+        return 'CONNECTING'
+      case 1:
+        return 'OPEN'
+      case 2:
+        return 'CLOSING'
+      case 3:
+        return 'CLOSED'
+      default:
+        return 'NOTCONNECT'
+    }
+  }
+})
+// const listensArr = ['open', 'message', 'error', 'close']
+// listensArr.forEach(key => {
+//   Ws.prototype[`on${key}`] = function (callback) {
+//     const {
+//       webSocket
+//     } = this
+//     webSocket.addEventListener(key, callback)
+//     return this
+//   }
+// })
+Ws.prototype.on
+Ws.prototype.reconnect = function () {
+  if (this.readyState === 'CONNECTING' || this.readyState === 'OPEN') {
+    return
+  }
+  this.webSocket = new WebSocket(this.url)
+}
+export default Ws

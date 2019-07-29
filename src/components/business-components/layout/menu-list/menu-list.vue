@@ -3,7 +3,7 @@
   <div>
     <a-menu
       mode="inline"
-      theme="dark"
+      :theme="theme"
       @openChange="onOpenChange"
       @click="handleRouter"
       :defaultOpenKeys="[]"
@@ -45,6 +45,12 @@ import SubItemFunctional from './sub-item-functional.vue'
 export default {
   name: 'MenuList',
   mixins: [mixin],
+  props: {
+    theme: {
+      type: String,
+      default: 'dark'
+    }
+  },
   data () {
     return {
       rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],

@@ -1,16 +1,7 @@
 <!-- 顶部导航 -->
 <template>
-  <div class="top-nav flex-row flex-between-center">
-    <div class="flex-row flex-start-center">
-      <a href="javascript: void 0">
-        <a-icon
-          class="trigger"
-          :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-          @click="handleCollapsed"
-        />
-      </a>
-      <HeadBreadcrumb @trigger-click="handleRouter" :list="breadcrumbList"/>
-    </div>
+  <div class="top-head flex-row flex-between-center">
+    <div class="logo" />
     <div class="flex-1">
       <slot></slot>
     </div>
@@ -18,13 +9,9 @@
   </div>
 </template>
 <script>
-import HeadBreadcrumb from './head-breadcrumb'
-import { setTimeout } from 'timers'
 export default {
   name: 'TopHead',
   props: {
-    collapsed: Boolean,
-    breadcrumbList: Array
   },
   data () {
     return {
@@ -32,33 +19,21 @@ export default {
   },
 
   components: {
-    HeadBreadcrumb
   },
 
   methods: {
-    handleCollapsed () {
-      this.$emit('trigger-collapse', !this.collapsed)
-    },
-    handleRouter (name) {
-      this.$emit('trigger-router', name)
-    }
   },
 
   mounted () {
-    setTimeout(() => {
-      console.log(this.breadcrumbList)
-    }, 2000)
   }
 }
 </script>
 <style lang="stylus" scoped>
-.top-nav
-  .trigger
-    font-size 18px
-    line-height 64px
-    padding 0 24px
-    cursor pointer
-    // transition color 0.3s
-    // &:hover
-    //   color #1890ff
+.top-head
+  background-color #108ee9
+  .logo
+    width 168px
+    height 32px
+    background rgba(255, 255, 255, 0.2)
+    margin 16px
 </style>

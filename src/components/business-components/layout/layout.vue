@@ -2,29 +2,41 @@
 <template>
   <div class="layout flex-row">
     <a-layout class="layout-container">
-      <a-layout-sider
-        :trigger="null"
-        collapsible
-        v-model="collapsed"
-      >
-        <div class="logo" />
-        <MenuList :menu-list="menuList" />
-      </a-layout-sider>
+      <a-layout-header style="background: #fff; padding: 0">
+        <TopHead/>
+      </a-layout-header>
       <a-layout>
-        <a-layout-header style="background: #fff; padding: 0">
-          <TopHead :collapsed="collapsed" @trigger-router="handleRouter" :breadcrumb-list="breadcrumbList" @trigger-collapse="(state)=> collapsed = state"></TopHead>
-        </a-layout-header>
-        <a-layout-content style="background-color:#f5f7f9">
-          <TabNav :list="tabNavList" :value="tagChecked" @trigger-tag-click="handleTagClick" @trigger-tag-close="handleTagClose" />
-          <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
-          <a-layout-content>
-            <transition :name="transitionName">
-              <keep-alive>
-                <router-view />
-              </keep-alive>
-            </transition>
+        <a-layout-sider
+          :trigger="null"
+          collapsible
+          v-model="collapsed"
+        >
+          <MenuList theme="#3ba0e9" :menu-list="menuList" />
+        </a-layout-sider>
+        <a-layout>
+          <a-layout-content style="background-color:#f5f7f9">
+            <secondHead
+              :collapsed="collapsed"
+              @trigger-router="handleRouter"
+              :breadcrumb-list="breadcrumbList"
+              @trigger-collapse="(state)=> collapsed = state"
+            />
+            <TabNav
+              :list="tabNavList"
+              :value="tagChecked"
+              @trigger-tag-click="handleTagClick"
+              @trigger-tag-close="handleTagClose"
+            />
+            <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
+            <a-layout-content>
+              <transition :name="transitionName">
+                <keep-alive>
+                  <router-view />
+                </keep-alive>
+              </transition>
+            </a-layout-content>
           </a-layout-content>
-        </a-layout-content>
+        </a-layout>
       </a-layout>
     </a-layout>
   </div>
@@ -34,6 +46,7 @@
 import MenuList from './menu-list'
 import TabNav from './tab-nav'
 import TopHead from './top-head'
+import SecondHead from './second-head'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 // isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
 import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
@@ -66,7 +79,7 @@ export default {
         }
         this.tagChecked = newTag
         let breadcrumb = to.meta && to.meta.breadcrumb
-        this.breadcrumbList = [{ name: config.homeName, key: config.homeName, icon: 'home' }, ...(breadcrumb || [])]
+        this.breadcrumbList = [{ name: config.homeName, key: config.homeName, icon: 'home', title: '首页' }, ...(breadcrumb || [])]
         console.log(this.breadcrumbList)
       },
       immediate: true
@@ -75,7 +88,8 @@ export default {
   components: {
     MenuList,
     TabNav,
-    TopHead
+    TopHead,
+    SecondHead
   },
 
   methods: {
@@ -152,8 +166,4 @@ export default {
   height 100%
   .layout-container
     height 100%
-  .logo
-    height 32px
-    background rgba(255, 255, 255, 0.2)
-    margin 16px
 </style>

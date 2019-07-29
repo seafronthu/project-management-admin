@@ -4,7 +4,8 @@ const ApiManagement = {
   component: () => import(/* webpackChunkName: "ApiManagement" */ '@v/api-management/api-management.vue'),
   meta: {
     title: 'API开发管理',
-    beforeCloseName: 'closeApiManagement'
+    beforeCloseName: 'closeApiManagement',
+    icon: 'api'
   }
 }
 export default {
