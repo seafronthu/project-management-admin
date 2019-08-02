@@ -11,7 +11,7 @@
           collapsible
           v-model="collapsed"
         >
-          <MenuList theme="#3ba0e9" :menu-list="menuList" />
+          <MenuList theme="dark" :menu-list="menuList" />
         </a-layout-sider>
         <a-layout>
           <a-layout-content style="background-color:#f5f7f9">

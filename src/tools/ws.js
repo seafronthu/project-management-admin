@@ -19,20 +19,42 @@ function Ws (url, { reconnectTimes = 0, reconnectDelay = 0 }) {
   this.url = url
   this.init()
 }
-const listensArr = ['open', 'message', 'error', 'close']
+const listensArr = ['open', 'message', 'error']
+// 初始化
 Ws.prototype.init = function () {
   this.webSocket = new WebSocket(this.url)
   listensArr.forEach(v => {
     this.webSocket.addEventListener(v, this[v].bind(this))
   })
+  this.webSocket.addEventListener('close', this.closed)
   return this
 }
+Ws.prototype.cbk = function (key) {
+  return this[key] || function () {}
+}
+// 监听函数
 listensArr.forEach(key => {
-  Ws.prototype[`on${key}`] = function () {
-    this.
+  Ws.prototype[key] = function () {
+    this.cbk(`on${key}`).apply(this, arguments)
     return this
   }
 })
+// 报错关闭一定会触发
+Ws.prototype.closed = function () {
+  const {
+    reconnectTimes,
+    activeCloseureStatus,
+    reconnect,
+    reconnectDelay,
+    cbk
+  } = this
+  cbk('onclose').apply(this, arguments)
+  if (!activeCloseureStatus && reconnectTimes > 0) {
+    clearTimeout(this.timer)
+    this.timer = null
+    this.timer = setTimeout(reconnect.bind(this), reconnectDelay)
+  }
+}
 const eventsArr = ['send', 'close']
 // 操作
 let operation = {
@@ -41,6 +63,11 @@ let operation = {
     this.webSocket.close(code, reason)
   },
   send (data) {
+    try {
+      this.webSocket.send(data)
+    } catch (err) {
+      this.cbk('onerror').apply(this, err)
+    }
   }
 }
 eventsArr.forEach(key => {
@@ -67,21 +94,10 @@ Object.defineProperty(Ws.prototype, 'readyState', {
     }
   }
 })
-// const listensArr = ['open', 'message', 'error', 'close']
-// listensArr.forEach(key => {
-//   Ws.prototype[`on${key}`] = function (callback) {
-//     const {
-//       webSocket
-//     } = this
-//     webSocket.addEventListener(key, callback)
-//     return this
-//   }
-// })
-Ws.prototype.on
 Ws.prototype.reconnect = function () {
   if (this.readyState === 'CONNECTING' || this.readyState === 'OPEN') {
     return
   }
-  this.webSocket = new WebSocket(this.url)
+  this.init()
 }
 export default Ws

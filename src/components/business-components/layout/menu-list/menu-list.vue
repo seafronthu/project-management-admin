@@ -46,10 +46,7 @@ export default {
   name: 'MenuList',
   mixins: [mixin],
   props: {
-    theme: {
-      type: String,
-      default: 'dark'
-    }
+    theme: String
   },
   data () {
     return {

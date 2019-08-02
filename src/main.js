@@ -1,6 +1,7 @@
 import '@a/js/global'
 import Vue from 'vue'
 import '@a/css/common.styl'
+import '@a/css/theme.styl'
 import '@a/css/animate.styl'
 import App from './App.vue'
 import router from './routes'
