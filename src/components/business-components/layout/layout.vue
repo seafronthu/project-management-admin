@@ -10,6 +10,7 @@
           :trigger="null"
           collapsible
           v-model="collapsed"
+          theme="dark"
         >
           <MenuList theme="dark" :menu-list="menuList" />
         </a-layout-sider>
