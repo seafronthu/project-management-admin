@@ -2,17 +2,19 @@
 <template>
   <div class="layout flex-row">
     <a-layout class="layout-container">
-      <a-layout-header style="background: #fff; padding: 0">
-        <TopHead/>
+      <a-layout-header class="layout-header">
+        <TopHead>
+            <TopUser/>
+        </TopHead>
       </a-layout-header>
       <a-layout>
         <a-layout-sider
           :trigger="null"
           collapsible
           v-model="collapsed"
-          theme="dark"
+          theme="green"
         >
-          <MenuList theme="dark" :menu-list="menuList" />
+          <MenuList :collapsed="collapsed" theme="green" :menu-list="menuList" />
         </a-layout-sider>
         <a-layout>
           <a-layout-content style="background-color:#f5f7f9">
@@ -48,6 +50,7 @@ import MenuList from './menu-list'
 import TabNav from './tab-nav'
 import TopHead from './top-head'
 import SecondHead from './second-head'
+import TopUser from './top-user'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 // isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
 import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
@@ -81,7 +84,6 @@ export default {
         this.tagChecked = newTag
         let breadcrumb = to.meta && to.meta.breadcrumb
         this.breadcrumbList = [{ name: config.homeName, key: config.homeName, icon: 'home', title: '首页' }, ...(breadcrumb || [])]
-        console.log(this.breadcrumbList)
       },
       immediate: true
     }
@@ -90,7 +92,8 @@ export default {
     MenuList,
     TabNav,
     TopHead,
-    SecondHead
+    SecondHead,
+    TopUser
   },
 
   methods: {
@@ -165,6 +168,10 @@ export default {
 <style lang="stylus" scoped>
 .layout
   height 100%
+  .layout-header
+    padding 0
+    height 45px
+    line-height 35px
   .layout-container
     height 100%
 </style>

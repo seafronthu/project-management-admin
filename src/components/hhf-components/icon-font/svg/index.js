@@ -5,7 +5,6 @@ function SvgIcon (h, type) {
   let svgObj = {
     'dot': <path d="M512 512m-512 0a512 512 0 1 0 1024 0 512 512 0 1 0-1024 0Z" p-id="918"></path>
   }
-  console.log(type)
   const PathIcon = svgObj[type]
   // const { width = '1em', height = '1em', color, type } = {}
   // const PathIcon = svgObj[type]

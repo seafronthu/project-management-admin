@@ -1,8 +1,10 @@
 <!-- 顶部导航 -->
 <template>
-  <div class="top-head flex-row flex-between-center">
-    <div class="logo" />
-    <div class="flex-1">
+  <div class="top-head flex-row flex-between-center height-full">
+    <div class="logo-container">
+      <div class="logo" />
+    </div>
+    <div class="flex-1 height-full flex-row flex-end-center" style="padding: 0 15px;">
       <slot></slot>
     </div>
     <!-- collapsed按钮 -->
@@ -30,10 +32,13 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .top-head
-  background-color #108ee9
-  .logo
-    width 168px
-    height 32px
-    background rgba(255, 255, 255, 0.2)
-    margin 16px
+  height 100%
+  background-color #008678
+  .logo-container
+    width 200px
+    height 100%
+    padding 5px 10px
+    .logo
+      height 100%
+      background rgba(255, 255, 255, 0.2)
 </style>

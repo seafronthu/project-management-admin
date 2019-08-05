@@ -46,14 +46,20 @@ export default {
   name: 'MenuList',
   mixins: [mixin],
   props: {
-    theme: String
+    theme: String,
+    collapsed: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
   data () {
     return {
       rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
       defaultSelectedKeys: [],
       selectedKeys: [], // 选中的menuitem
-      openKeys: [] // 展开的submenu
+      openKeys: [], // 展开的submenu
+      cachedOpenKeys: [] // 缓存的submenu 防止菜单栏缩小的时候会自动展开二级菜单或者放大菜单栏 没有展开二级菜单
     }
   },
   // beforeRouteUpdate (to, from, next) {
@@ -73,6 +79,14 @@ export default {
   computed: {
   },
   watch: {
+    collapsed (bol) {
+      if (bol) {
+        this.cachedOpenKeys = [...this.openKeys]
+        this.openKeys = []
+      } else {
+        this.openKeys = this.cachedOpenKeys
+      }
+    },
     '$route': {
       handler () {
         this.handleSelected()
@@ -100,7 +114,8 @@ export default {
             openKeys.push(items.name)
           }
         }
-        this.openKeys = openKeys
+        // 防止缩小菜单栏每次路由改变会展开二级菜单
+        this.collapsed ? (this.cachedOpenKeys = openKeys) : (this.openKeys = openKeys)
         let vals = matched[len - 1]
         if (!vals.meta || !vals.meta.hideMenu) {
           this.selectedKeys = [name]

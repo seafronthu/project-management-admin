@@ -66,7 +66,7 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
           keywords: items.keywords, // 关键字用来搜索路由
           genre: items.genre, // 类型页面还是操作等等 page button tab
           delete: items.delete, // 是否软删除
-          jurisdiction: items.Jurisdiction // 权限
+          jurisdiction: items.jurisdiction // 权限
         },
         component: routeObj.component
       }
@@ -79,10 +79,10 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
           icon,
           title
         },
-        component
+        component // 路由组件
       } = routerObj
       let breadcrumbObj = { title, icon, key: name }
-      if (component) { // 面包屑 父类不能给name代表不能路由跳转
+      if (component) { // 面包屑 父类不能给name代表不能路由跳转（判断是否前台是否有路由组件）
         breadcrumbObj.name = name
       } else { // 表示父类不是页面
         routerObj.redirect = '/404'

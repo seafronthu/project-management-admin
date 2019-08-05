@@ -1,0 +1,31 @@
+$theme = blue
+changeColor(rb, max)
+  rb = parseInt(rb * max, 10) / 100
+  if Math.abs(rb - max) < 0.000001
+    1
+  else 
+    (rb % max) / parseFloat(max);
+}
+changeRgba(col)
+  r = red(col)
+  g = green(col)
+  b = blue(col)
+  a = alpha(col)
+  
+  {
+    r: change
+  }
+$color(cor = false)
+  if cor
+    color cor
+  else
+    color rgba(0, 0, 0, .65)
+$bgcolor(cor = false)
+  if cor
+    background-color cor
+  else
+    background-color rgba(255, 255, 255, .25)
+$changeColor()
+  $theme = arguments
+$themeBgColor()
+  $bgcolor($theme)
