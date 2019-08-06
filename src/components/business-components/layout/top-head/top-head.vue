@@ -4,7 +4,7 @@
     <div class="logo-container">
       <div class="logo" />
     </div>
-    <div class="flex-1 height-full flex-row flex-end-center" style="padding: 0 15px;">
+    <div class="flex-1 height-full flex-row flex-end-stretch" style="padding: 0 15px;">
       <slot></slot>
     </div>
     <!-- collapsed按钮 -->

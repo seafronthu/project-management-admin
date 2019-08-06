@@ -5,7 +5,7 @@
     <div class="btn close-btn">
       <a-dropdown>
         <div class="close-link flex-row flex-center">
-          <a-icon type="close-circle" />
+          <IconFont icon="clear" width="1.5em" height="1.5em" />
         </div>
         <a-menu slot="overlay" @click="(options) => handleMenuClick(options, {index})">
           <a-menu-item key="closeAll" :disabled="judgeIsCloseOtherFunc(item, 'closeAll', index)">
@@ -129,6 +129,7 @@
 
 <script>
 import TagButton from '@business/tag-button'
+import IconFont from '@hhf/icon-font'
 import { isCloseRoute, isSameRoute } from '@l/businessUtils'
 export default {
   name: 'TabNav',
@@ -153,7 +154,8 @@ export default {
   },
 
   components: {
-    TagButton
+    TagButton,
+    IconFont
   },
 
   computed: {
@@ -252,7 +254,7 @@ export default {
     },
     // 选中的颜色
     checkedColorFunc (item) {
-      return isSameRoute(item, this.value) ? this.color : ''
+      return isSameRoute(item, this.value) ? this.color : '#868686'
     },
     // 点击的标签页
     handleTagClick (item) {
@@ -293,6 +295,9 @@ export default {
       .close-link
         width 100%
         height 100%
+        transition color 0.2s ease-in-out
+        &:hover
+          $themecolor()
     &.left-btn
       left 0
     &.right-btn

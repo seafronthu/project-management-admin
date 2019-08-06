@@ -3,7 +3,7 @@
   <i
     class="hhf-icon-font"
   >
-  <SvgIcon :type="icon"/>
+  <SvgIcon :type="icon" :class="clsMerge" :style="stlsMerge" :width="width" :height="height"/>
     <!-- <svg
     :class="clsMerge"
     :style="stlsMerge"
@@ -24,7 +24,9 @@ export default {
     icon: String,
     color: String,
     size: String,
-    spin: Boolean
+    spin: Boolean,
+    width: String,
+    height: String
   },
   data () {
     return {
@@ -36,10 +38,6 @@ export default {
   },
 
   computed: {
-    iconName () {
-      const { icon } = this
-      return `#hhf-icon-${icon}`
-    },
     clsMerge () {
       const { classes } = this
       const iCls = 'hhf-icon-font-svg'
@@ -69,6 +67,5 @@ export default {
 .hhf-icon-font
   display: inline-block
   font-style italic
-  color #dddddd
   line-height 0
 </style>

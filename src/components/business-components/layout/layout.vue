@@ -4,7 +4,10 @@
     <a-layout class="layout-container">
       <a-layout-header class="layout-header">
         <TopHead>
-            <TopUser/>
+            <FullScreen/>
+            <ErrorStore/>
+            <HeaderMessage />
+            <HeaderUser/>
         </TopHead>
       </a-layout-header>
       <a-layout>
@@ -50,7 +53,10 @@ import MenuList from './menu-list'
 import TabNav from './tab-nav'
 import TopHead from './top-head'
 import SecondHead from './second-head'
-import TopUser from './top-user'
+import HeaderUser from './header-user'
+import ErrorStore from './error-store'
+import FullScreen from './full-screen'
+import HeaderMessage from './header-message'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 // isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
 import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
@@ -93,7 +99,10 @@ export default {
     TabNav,
     TopHead,
     SecondHead,
-    TopUser
+    HeaderUser,
+    ErrorStore,
+    FullScreen,
+    HeaderMessage
   },
 
   methods: {

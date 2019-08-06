@@ -1,10 +1,10 @@
 <!-- 用户头像 -->
 <template>
-    <a-dropdown>
-      <!-- <a class="ant-dropdown-link" href="#">
+  <a-dropdown>
+    <!-- <a class="ant-dropdown-link" href="#">
       Hover me <a-icon type="down" />
     </a> -->
-    <div class="top-user height-full flex-row flex-center pointer">
+    <div class="top-user flex-row flex-center pointer">
       <a-avatar
         shape="circle"
         size="default"
@@ -12,25 +12,28 @@
       >{{avatarValue}}</a-avatar>
       <span class="top-user-nick">{{avatarValue}}</span>
     </div>
-      <a-menu slot="overlay">
-        <a-menu-item>
-          <a href="javascript:;">1st menu item</a>
-        </a-menu-item>
-        <a-menu-item>
-          <a href="javascript:;">2nd menu item</a>
-        </a-menu-item>
-        <a-menu-divider />
-      <a-menu-item key="3">
-        <a-icon type="logout" />
-        <span>退出登录</span>
+    <a-menu slot="overlay">
+      <a-menu-item><a href="javascript:;">个人中心</a>
       </a-menu-item>
-      </a-menu>
-    </a-dropdown>
+      <a-menu-item>
+        <a href="javascript:;">个人设置</a>
+      </a-menu-item>
+      <a-menu-divider />
+      <a-menu-item key="3">
+        <a
+          href="javascript:;"
+        >
+          <a-icon type="logout" />
+          <span style="padding-left: 10px;">退出登录</span>
+        </a>
+      </a-menu-item>
+    </a-menu>
+  </a-dropdown>
 </template>
 
 <script>
 export default {
-  name: 'TopUser',
+  name: 'HeaderUser',
 
   data () {
     return {
@@ -44,13 +47,14 @@ export default {
 
   methods: {},
 
-  mounted () {}
+  mounted () {
+  }
 }
 </script>
 <style lang="stylus" scoped>
 .top-user
   transition background-color 0.2s ease-in-out
-  padding 0 15px;
+  padding 0 10px
   &:hover
     $bgcolor()
   .top-user-dropdown-link

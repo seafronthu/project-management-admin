@@ -1,4 +1,4 @@
-// $theme = blue
+$theme = #08a678
 // changeColor(rb, max)
 //   rb = parseInt(rb * max, 10) / 100
 //   if Math.abs(rb - max) < 0.000001
@@ -25,6 +25,8 @@ $bgcolor(cor = false)
     background-color cor
   else
     background-color rgba(255, 255, 255, .25)
+$themecolor()
+  color $theme
 // $changeColor()
 //   $theme = arguments
 // $themeBgColor()

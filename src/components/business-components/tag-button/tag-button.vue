@@ -71,6 +71,7 @@ export default {
           flexFlow: 'row nowrap',
           justifyContent: 'flex-start',
           alignItem: 'center',
+          fontWeight: 'bold',
           height
         }
       }
