@@ -49,9 +49,9 @@ export const isSameObjTool = (obj1, obj2) => {
 }
 function getParentsOffsetTop (selfEle, parentsEle) {
   parentsEle = parentsEle || document.documentElement || document.body // 祖级dom
-  let parentEle = selfEle.parentNode // 父级dom
+  let parentEle = selfEle.offsetParent // 父级dom
   let distance = selfEle.offsetTop
-  if (parentEle === parentsEle) {
+  if (parentEle === parentsEle || parentEle === null) {
     return distance
   }
   return distance + getParentsOffsetTop(parentEle, parentsEle)
