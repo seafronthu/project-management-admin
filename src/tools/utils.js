@@ -47,6 +47,11 @@ export const isSameObjTool = (obj1, obj2) => {
   }
   return true
 }
+/**
+ * 获取当前对象对父级定位对象的距离
+ * @param {*} selfEle 当前对象
+ * @param {*} parentsEle 父级定位对象如果没有祖级dom
+ */
 function getParentsOffsetTop (selfEle, parentsEle) {
   parentsEle = parentsEle || document.documentElement || document.body // 祖级dom
   let parentEle = selfEle.offsetParent // 父级dom
@@ -56,6 +61,20 @@ function getParentsOffsetTop (selfEle, parentsEle) {
   }
   return distance + getParentsOffsetTop(parentEle, parentsEle)
 }
+/**
+ * 异步函数补货错误信息
+ * @param {*} asyncFunc promise函数
+ * @param  {...any} arg promise函数的参数
+ */
+async function errorCaptured (asyncFunc, ...arg) {
+  try {
+    let res = await asyncFunc(...arg)
+    return [null, res]
+  } catch (err) {
+    return [err, null]
+  }
+}
 export {
-  getParentsOffsetTop
+  getParentsOffsetTop,
+  errorCaptured
 }
