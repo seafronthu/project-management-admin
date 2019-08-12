@@ -69,7 +69,8 @@ export default {
     }
     document.addEventListener('keydown', (e) => {
       if (e.key) {
-        if (e.key.toLowerCase() === 'f11' || e.key.toLowerCase() === 'f12') {
+        // if (e.key.toLowerCase() === 'f11' || e.key.toLowerCase() === 'f12') {
+        if (e.key.toLowerCase() === 'f11') {
           e.preventDefault()
         }
         return

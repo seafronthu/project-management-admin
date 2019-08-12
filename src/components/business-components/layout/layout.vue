@@ -20,7 +20,7 @@
           <MenuList :collapsed="collapsed" theme="green" :menu-list="menuList" />
         </a-layout-sider>
         <a-layout>
-          <a-layout-content style="background-color:#f5f7f9">
+          <a-layout-content style="background-color:#ffffff">
             <secondHead
               :collapsed="collapsed"
               @trigger-router="handleRouter"

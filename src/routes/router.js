@@ -35,7 +35,7 @@ const meta = {
   /**
    * @description 是否软删除
    */
-  delete: '',
+  tag: '',
   /**
    * @description 权限
    */

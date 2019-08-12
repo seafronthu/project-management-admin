@@ -7,7 +7,7 @@ const ROUTER = [
     title: '首页',
     href: '',
     keywords: '牛皮牛皮',
-    genre: 'menu',
+    genre: 'detail',
     component: 'Home'
   },
   {
@@ -16,7 +16,7 @@ const ROUTER = [
     title: 'API开发管理',
     href: '',
     keywords: 'API开发管理',
-    genre: 'menu',
+    genre: 'list',
     component: 'ApiManagement'
   },
   {
@@ -34,7 +34,7 @@ const ROUTER = [
     title: '个人中心',
     href: '',
     keywords: '个人中心',
-    genre: 'menu',
+    genre: 'list',
     component: 'Personal'
   },
   {
@@ -52,7 +52,7 @@ const ROUTER = [
     title: '用户列表',
     href: '',
     keywords: '用户列表',
-    genre: 'menu',
+    genre: 'list',
     component: 'UserList'
   },
   {
@@ -61,8 +61,26 @@ const ROUTER = [
     title: '用户详情',
     href: '',
     keywords: '用户详情',
-    genre: 'menu',
+    genre: 'detail',
     component: 'UserDetail'
+  },
+  {
+    id: '8',
+    parentId: '0',
+    title: '权限管理',
+    href: '',
+    keywords: '权限管理',
+    genre: 'menu',
+    component: 'AuthManagement'
+  },
+  {
+    id: '9',
+    parentId: '8',
+    title: '路由管理',
+    href: '',
+    keywords: '路由管理',
+    genre: 'list',
+    component: 'RouteManagement'
   }
 ]
 function sendRespond ({ cxt, data, code = 200, message = '成功！', contentType = 'json' }) {

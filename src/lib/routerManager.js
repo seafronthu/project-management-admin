@@ -36,13 +36,14 @@ function arrageArrToObj (arr) {
  * @param {number} parentId 父级id
  * @param {JSON} routers 前台所有路由
  * @param {number} times 当前对象层级
+ * @param {JSON} parentRoute 父级路由用于把tab对象放进去（当页面需要对tab处理权限的时候使用，产品需求(灬ꈍ ꈍ灬)）
  * @return {Array<JSON>} [{name,path,redirect,meta}]
  */
-function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, breadcrumb, peerRouting = [] }) {
+function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, breadcrumb, peerRouting = [], parentRoute = { meta: {} } }) {
   let arr = obj[parentId]
   let parentArr = []
   arr.forEach(items => {
-    if (items.genre === 'menu') {
+    if (items.genre === 'menu' || items.genre === 'list' || items.genre === 'detail') {
       // const routeObj = routers[items.component] ? routers[items.component] : { // 父级路由
       //   name: items.component,
       //   path: componentNameConversion(items.component)['-'],
@@ -52,6 +53,7 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
       if (!routers[items.component]) {
         return
       }
+      parentRoute.meta.detail = true
       const routeObj = routers[items.component]
       const meta = routeObj.meta
       let id = items.id
@@ -65,7 +67,7 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
           href: items.href, // 跳转到其它网站
           keywords: items.keywords, // 关键字用来搜索路由
           genre: items.genre, // 类型页面还是操作等等 page button tab
-          delete: items.delete, // 是否软删除
+          tag: items.tag, // 是否软删除
           jurisdiction: items.jurisdiction // 权限
         },
         component: routeObj.component
@@ -95,13 +97,31 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
         // } else if (times > 0) {
         routerObj.component = component || (() => import('@business/parent-view'))
         // }
-        routerObj.children = arrageObjToRouterTree({ obj, parentId: id, routers, times: times + 1, breadcrumb: routerObj.meta.breadcrumb, peerRouting })
+        routerObj.children = arrageObjToRouterTree({ obj, parentId: id, routers, times: times + 1, breadcrumb: routerObj.meta.breadcrumb, peerRouting, parentRoute: routerObj })
       } else if (items.component) {
         routerObj.component = routeObj.component
         peerRouting.push(routerObj) // 同级路由
       }
+      if (items.genre === 'list') {
+        if (obj[id]) {
+          obj[id].forEach(its => {
+            let genre = its.genre
+            let buttonType = its.buttonType
+            if (genre === 'button' && buttonType !== 'other') {
+              routerObj.meta[buttonType] = true
+            }
+          })
+        }
+      }
       parentArr.push(routerObj)
     }
+    //  else if (items.genre === 'tab') {
+    //   if (Array.isArray(parentRoute.meta.tab)) {
+    //     parentRoute.meta.tab.push(items)
+    //   } else {
+    //     parentRoute.meta.tab = [items]
+    //   }
+    // }
   })
   return parentArr
 }
