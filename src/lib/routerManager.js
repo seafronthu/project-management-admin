@@ -97,21 +97,19 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
         // } else if (times > 0) {
         routerObj.component = component || (() => import('@business/parent-view'))
         // }
+        obj[id].forEach(its => {
+          let genre = its.genre
+          let buttonType = its.buttonType
+          if (genre === 'button' && buttonType !== 'other') {
+            routerObj.meta[buttonType] = true // 按钮权限 增删改
+          } else if (genre === 'detail') {
+            routerObj.meta['select'] = true
+          }
+        })
         routerObj.children = arrageObjToRouterTree({ obj, parentId: id, routers, times: times + 1, breadcrumb: routerObj.meta.breadcrumb, peerRouting, parentRoute: routerObj })
       } else if (items.component) {
         routerObj.component = routeObj.component
         peerRouting.push(routerObj) // 同级路由
-      }
-      if (items.genre === 'list') {
-        if (obj[id]) {
-          obj[id].forEach(its => {
-            let genre = its.genre
-            let buttonType = its.buttonType
-            if (genre === 'button' && buttonType !== 'other') {
-              routerObj.meta[buttonType] = true
-            }
-          })
-        }
       }
       parentArr.push(routerObj)
     }
