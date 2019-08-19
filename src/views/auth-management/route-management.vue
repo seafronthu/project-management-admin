@@ -1,5 +1,6 @@
 <!-- 路由管理 -->
 <template>
+<div>
   <a-tree
     class="draggable-tree"
     :defaultExpandedKeys="expandedKeys"
@@ -8,9 +9,12 @@
     @drop="onDrop"
     :treeData="gData"
   />
+  <EditMenu />
+</div>
 </template>
 
 <script>
+import { EditMenu } from '@business/edit-menu'
 const x = 3
 const y = 2
 const z = 1
@@ -46,6 +50,9 @@ export default {
     }
   },
   name: 'RouteManagement',
+  components: {
+    EditMenu
+  },
   methods: {
     onDragEnter (info) {
       // console.log(info, 'onDragEnter')

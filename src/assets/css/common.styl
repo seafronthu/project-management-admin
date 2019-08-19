@@ -62,7 +62,7 @@
 .flex-1
   flex 1
 .vertical-middle
-  vertical-align: middle
+  vertical-align middle
 // 鼠标
 .pointer
   cursor pointer
@@ -81,3 +81,16 @@
   font-weight bold
 .init-color
   $color()
+// scrollbar
+::-webkit-scrollbar
+  width 8px
+  height 8px
+::-webkit-scrollbar-thumb
+  border-radius 10px
+  background #cccccc
+::-webkit-scrollbar-track
+  background #fff
+// initial
+.no-ul
+  list-style none
+  margin 0
