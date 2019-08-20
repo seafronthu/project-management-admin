@@ -1,7 +1,7 @@
 <!-- 路由菜单栏 -->
 <template>
-  <li class="flex-row flex-between-center edit-menu-item">
-    <div>
+  <li class="flex-row flex-between-center edit-menu-item" :class="{'edit-menu-item-active': keysObj.selectedKeys.includes(eventKey)}">
+    <div @click="handleClick">
     <span>icon</span>
     <span>item</span>
     </div>
@@ -17,19 +17,30 @@
 </template>
 
 <script>
+import { getKey } from '@l/businessUtils'
 export default {
   name: 'EditMenuItem',
-
+  props: {
+  },
   data () {
+    let key = getKey(this)
     return {
+      eventKey: key
     }
   },
-
+  inject: ['provideClick', 'provideSelected', 'keysObj'],
   components: {},
 
   computed: {},
 
-  methods: {},
+  methods: {
+    handleClick () {
+      const { eventKey, keysObj: { selectedKeys } } = this
+      let arr = selectedKeys.includes(eventKey) ? selectedKeys.filter(v => v !== eventKey) : [...selectedKeys, eventKey]
+      this.provideSelected(arr)
+      this.provideClick(eventKey)
+    }
+  },
 
   mounted () {}
 }

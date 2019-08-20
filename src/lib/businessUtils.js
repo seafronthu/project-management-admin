@@ -1,14 +1,22 @@
 import Cookies from 'js-cookie'
 import config from '@/config'
 import moment from 'moment'
-import { isSameObjTool } from '@/tools/utils'
-const { cookieTokenName, cookieExpires, title } = config
+import {
+  isSameObjTool
+} from '@/tools/utils'
+const {
+  cookieTokenName,
+  cookieExpires,
+  title
+} = config
 /**
  * 设置token
  * @param {string} token 登录信息的token
  */
 function setToken (token) {
-  Cookies.set(cookieTokenName, token, { expires: cookieExpires || 1 })
+  Cookies.set(cookieTokenName, token, {
+    expires: cookieExpires || 1
+  })
 }
 /**
  * 获取token
@@ -49,12 +57,15 @@ function hasChildren (item) {
 function setLocalStorage (name, value, day) {
   if (day === void 0) {
     localStorage.setItem(name, JSON.stringify({
-      value }))
+      value
+    }))
     return
   }
   const expires = moment.utc().add(day, 'days').format()
   localStorage.setItem(name, JSON.stringify({
-    value, expires }))
+    value,
+    expires
+  }))
 }
 /**
  * 从缓存中获取name的值
@@ -127,7 +138,17 @@ function selectNavTab (list, route, item) {
   if (len > 0) {
     return list[len - 1]
   }
-  return { path: '/' }
+  return {
+    path: '/'
+  }
+}
+
+function getKey (vm) {
+  let key = vm.key
+  if (vm.$vnode) {
+    key = vm.$vnode.key
+  }
+  return key
 }
 export {
   setToken, // 设置token
@@ -140,5 +161,6 @@ export {
   removeLocalStorage, // 从缓存中移除name的值
   isCloseRoute, // 是否可以关闭当前路由
   isSameRoute, // 判断路由是否相等
-  selectNavTab // 选中那个标签页
+  selectNavTab, // 选中那个标签页
+  getKey // 得到子组件上的key值
 }

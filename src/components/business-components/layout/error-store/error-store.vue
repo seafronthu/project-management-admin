@@ -33,5 +33,5 @@ export default {
   padding 0 10px
   transition background-color 0.2s ease-in-out
   &:hover
-    $bgcolor()
+    $bgColor()
 </style>

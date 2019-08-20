@@ -1,18 +1,21 @@
 <!-- 路由菜单 -->
 <template>
-  <ul class="route-menu">
-    <slot :selectedKeys="selectedKeys" :openKeys="openKeys"></slot>
+  <ul class="edit-menu no-ul">
+    <slot></slot>
   </ul>
 </template>
 
 <script>
+// import Vue from 'vue'
 export default {
   name: 'EditMenu',
   provide () {
+    // const keysObj = Vue.observable({ selectedKeys: this.selectedKeys, openKeys: this.openKeys })
     return {
-      provideClick () {
-        console.log(this.mark)
-      }
+      provideClick: this.handleClick, // 点击当前的菜单栏包括展开栏
+      provideOpenChange: this.handleOpenChange, // 点击展开栏
+      provideSelected: this.handleSelected, // 点击菜单栏
+      keysObj: this.$props
     }
   },
   props: {
@@ -31,11 +34,23 @@ export default {
     }
   },
 
-  components: {},
+  components: {
+  },
 
   computed: {},
-
-  methods: {},
+  watch: {
+  },
+  methods: {
+    handleOpenChange (keys) {
+      this.$emit('trigger-open-change', keys)
+    },
+    handleClick (key) {
+      this.$emit('trigger-click', key)
+    },
+    handleSelected (keys) {
+      this.$emit('trigger-selected', keys)
+    }
+  },
 
   mounted () {}
 }

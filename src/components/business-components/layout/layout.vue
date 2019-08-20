@@ -2,12 +2,15 @@
 <template>
   <div class="layout flex-row">
     <a-layout class="layout-container">
-      <a-layout-header class="layout-header">
+      <a-layout-header
+        class="layout-header"
+        style="top:0;left:0;"
+      >
         <TopHead>
-            <FullScreen/>
-            <ErrorStore/>
-            <HeaderMessage />
-            <HeaderUser/>
+          <FullScreen />
+          <ErrorStore />
+          <HeaderMessage />
+          <HeaderUser />
         </TopHead>
       </a-layout-header>
       <a-layout>
@@ -16,11 +19,19 @@
           collapsible
           v-model="collapsed"
           theme="green"
+          class="layout-sider"
         >
-          <MenuList :collapsed="collapsed" theme="green" :menu-list="menuList" />
+          <MenuList
+            :collapsed="collapsed"
+            theme="green"
+            :menu-list="menuList"
+          />
         </a-layout-sider>
-        <a-layout>
-          <a-layout-content style="background-color:#ffffff">
+        <a-layout class="layout-anim" :class="{'layout-anim-short': collapsed}">
+          <a-layout-header
+            class="layout-header"
+            style="background-color:#ffffff"
+          >
             <secondHead
               :collapsed="collapsed"
               @trigger-router="handleRouter"
@@ -33,6 +44,8 @@
               @trigger-tag-click="handleTagClick"
               @trigger-tag-close="handleTagClose"
             />
+          </a-layout-header>
+          <a-layout-content style="background-color:#ffffff">
             <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
             <a-layout-content>
               <transition :name="transitionName">
@@ -176,11 +189,27 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .layout
-  height 100%
+  .layout-container
+    padding-top 45px
   .layout-header
     padding 0
-    height 45px
-    line-height 35px
-  .layout-container
-    height 100%
+    height auto
+    line-height normal
+    position fixed
+    width 100%
+    z-index 91
+  .layout-sider
+    position fixed
+    left 0
+    top 0
+    z-index 90
+    height 100vh
+    box-sizing border-box
+    padding-top 45px
+  .layout-anim
+    padding-left: 200px
+    transition padding 0.15s ease-in-out
+    &.layout-anim-short
+      padding-left: 80px
+      transition padding 0.25s cubic-bezier(0.215, 0.61, 0.355, 1)
 </style>

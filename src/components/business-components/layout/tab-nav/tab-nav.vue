@@ -297,7 +297,7 @@ export default {
         height 100%
         transition color 0.2s ease-in-out
         &:hover
-          $themecolor()
+          $themeColor()
     &.left-btn
       left 0
     &.right-btn

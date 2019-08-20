@@ -1,2 +1,4 @@
 import EditMenu from './edit-menu'
-export { EditMenu }
+import EditMenuSubitem from './edit-menu-subitem'
+import EditMenuItem from './edit-menu-item'
+export { EditMenu, EditMenuSubitem, EditMenuItem }

@@ -56,7 +56,7 @@ export default {
   transition background-color 0.2s ease-in-out
   padding 0 10px
   &:hover
-    $bgcolor()
+    $bgColor()
   .top-user-dropdown-link
     margin-right 5px
     $color()

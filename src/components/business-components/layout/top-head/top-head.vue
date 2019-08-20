@@ -32,7 +32,8 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .top-head
-  height 100%
+  height 45px
+  line-height 35px
   background-color #008678
   .logo-container
     width 200px

@@ -31,5 +31,5 @@ export default {
   color #ffffff
   transition background-color 0.2s ease-in-out
   &:hover
-    $bgcolor()
+    $bgColor()
 </style>
