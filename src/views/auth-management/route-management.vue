@@ -1,87 +1,19 @@
 <!-- 路由管理 -->
 <template>
-<div>
-  <a-tree
-    class="draggable-tree"
-    :defaultExpandedKeys="expandedKeys"
-    draggable
-    @dragenter="onDragEnter"
-    @drop="onDrop"
-    :treeData="gData"
-  />
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-  <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
-    <EditMenuItem key="item-1"/>
-    <EditMenuSubitem key="subitem-1">
-      <EditMenuItem key="item-2"/>
-    </EditMenuSubitem>
-  </EditMenu>
-</div>
+<ContainerFluid class="bg-color-f route-management">
+  <div class="flex-row flex-start-stretch">
+  <div class="left-menu">
+    <h4 class="title">路由分组</h4 >
+    <EditMenu @trigger-open-change="handleOpenChange" :openKeys="openKeys" :selectedKeys="selectedKeys">
+      <EditMenuItem key="item-1"/>
+      <EditMenuSubitem key="subitem-1">
+        <EditMenuItem key="item-2"/>
+      </EditMenuSubitem>
+    </EditMenu>
+  </div>
+  <div class="right-container flex-1"></div>
+  </div>
+</ContainerFluid>
 </template>
 
 <script>
@@ -110,3 +42,16 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+.route-management
+  .left-menu
+    width 240px
+    border 1px solid #dcdcdc
+    .title
+      text-align left
+      font-weight bold
+      padding 0 10px
+      height 40px
+      line-height 40px
+      border-bottom 1px solid #dcdcdc
+</style>

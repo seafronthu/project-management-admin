@@ -29,8 +29,9 @@
         </a-layout-sider>
         <a-layout class="layout-anim" :class="{'layout-anim-short': collapsed}">
           <a-layout-header
-            class="layout-header"
-            style="background-color:#ffffff"
+            class="layout-header layout-anim layout-nav-tag"
+            style="background-color:#ffffff;"
+            :class="{'layout-anim-short': collapsed}"
           >
             <secondHead
               :collapsed="collapsed"
@@ -45,7 +46,7 @@
               @trigger-tag-close="handleTagClose"
             />
           </a-layout-header>
-          <a-layout-content style="background-color:#ffffff">
+          <a-layout-content style="padding-top:88px;">
             <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
             <a-layout-content>
               <transition :name="transitionName">
@@ -189,8 +190,10 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .layout
+  min-height 100vh
   .layout-container
     padding-top 45px
+    background-color #f5f7f9
   .layout-header
     padding 0
     height auto
@@ -198,6 +201,10 @@ export default {
     position fixed
     width 100%
     z-index 91
+    &.layout-nav-tag
+      left 0
+      top 44px
+      z-index 89
   .layout-sider
     position fixed
     left 0

@@ -1,6 +1,6 @@
 <!-- 路由菜单 -->
 <template>
-  <ul class="edit-menu no-ul">
+  <ul class="edit-menu no-ul not-select">
     <slot></slot>
   </ul>
 </template>
