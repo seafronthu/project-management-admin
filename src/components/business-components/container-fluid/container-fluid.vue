@@ -1,6 +1,6 @@
 <!-- 100%容器  -->
 <template>
-  <div class="container-fluid" >
+  <div class="container-fluid" :style="{height: full ? 'calc(100% - 20px)': null}" >
     <slot></slot>
   </div>
 </template>

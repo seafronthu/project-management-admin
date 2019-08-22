@@ -1,16 +1,9 @@
 <!-- 路由菜单栏 -->
 <template>
-  <li class="flex-row flex-between-center edit-menu-item pointer" :style="{paddingLeft: inlineLeft}" :class="{'edit-menu-item-active': active}">
-    <div @click="handleClick" class="edit-menu-item-title text-ellipsis flex-1 pointer">
-      <span>itemitemitemitemitemitemitemitem</span>
-    </div>
-    <div class="edit-menu-item-operate">
-      <span>icon</span>
-      <ul class="no-ul flex-column flex-start-stretch" v-show="false">
-        <li>添加</li>
-        <li>编辑</li>
-        <li>删除</li>
-        </ul>
+  <li class="edit-menu-item pointer" :class="{'edit-menu-item-active': active}">
+    <div @click="handleClick" class="edit-menu-title text-ellipsis flex-row flex-between-center pointer" :style="{paddingLeft: inlineLeft}">
+      <span class="flex-1 text-ellipsis">{{title}}</span>
+      <slot name="right"></slot>
     </div>
   </li>
 </template>
@@ -23,6 +16,9 @@ export default {
     level: {
       type: Number,
       default: 1
+    },
+    title: {
+      type: String
     }
   },
   data () {
@@ -53,14 +49,9 @@ export default {
   },
 
   mounted () {
-    console.log(this)
+    console.log(this.title, this.level)
   }
 }
 </script>
 <style lang="stylus">
-.edit-menu-item
-  padding-right 10px
-  .edit-menu-item-title
-    height 40px
-    line-height 40px
 </style>

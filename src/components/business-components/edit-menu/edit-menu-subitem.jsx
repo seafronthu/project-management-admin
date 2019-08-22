@@ -1,12 +1,11 @@
-<!-- 路由二级菜单 -->
-<script>
+// 路由二级菜单
 import { getKey } from '@l/businessUtils'
+import animate from '@l/animate'
 export default {
   name: 'EditMenuSubitem',
   props: {
     title: {
-      type: String,
-      default: 'submenusubmenusubmenusubmenusubmenusubmenusubmenu'
+      type: String
     },
     level: {
       type: Number,
@@ -43,7 +42,8 @@ export default {
         level: this.level + 1
       }
       return children.map(v => {
-        v.componentOptions.propsData = { ...props }
+        const propsData = v.componentOptions.propsData
+        v.componentOptions.propsData = { ...propsData, ...props }
         return v
       })
     }
@@ -54,31 +54,27 @@ export default {
     // })
   },
   mounted () {
-    console.log(this)
   },
   render () {
     const { active, title, inlineLeft, handleClick, $scopedSlots } = this
-    let defaultSlot = this.renderChildren($scopedSlots.default())
-    console.log(defaultSlot)
+    let defaultSlot = $scopedSlots.default && this.renderChildren($scopedSlots.default())
+    let rightSlot = $scopedSlots.right && $scopedSlots.right()
+    const liCls = ['edit-menu-subitem', active ? 'edit-menu-subitem-active' : null]
+    const iconCls = ['up-down', active ? 'active' : null]
+    const menuOpenAnimation = { on: animate.transition('slide') }
     return (
-      <li class="edit-menu-subitem" class={{ 'edit-menu-subitem-active': active }}>
-        <div class="edit-menu-subitem-title flex-row flex-start-center pointer" style={{ paddingLeft: inlineLeft }} onclick={handleClick}>
-          <i class="up-down" class={ active ? 'active' : null } />
+      <li class={liCls}>
+        <div class="edit-menu-title flex-row flex-start-center pointer" style={{ paddingLeft: inlineLeft }} onclick={handleClick}>
+          <i class={iconCls} />
           <span class="flex-1 text-ellipsis">{ title }</span>
-          <a-icon type="bars" />
+          {rightSlot}
         </div>
-        { active ? <ul class="edit-menu-subitem-list no-ul">
-          {defaultSlot}
-        </ul> : null }
+        <transition {...menuOpenAnimation}>
+          <ul v-show={active} class="edit-menu-subitem-list no-ul">
+            {defaultSlot}
+          </ul>
+        </transition>
       </li>
     )
   }
 }
-</script>
-<style lang="stylus">
-.edit-menu-subitem
-  .edit-menu-subitem-title
-    padding-right 10px
-    height 40px
-    line-height 40px
-</style>

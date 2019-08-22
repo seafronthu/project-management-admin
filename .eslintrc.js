@@ -9,7 +9,8 @@ module.exports = {
   ],
   globals: {
     'moment': true,
-    'jsencrypt': true
+    'jsencrypt': true,
+    'Velocity': true
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
