@@ -1,21 +1,4 @@
-
-/**
- * 整理数组parentId为键名键值为该值下的数组
- * @param {Array<JSON>} arr 数组
- * @return {JSON} {0:[], 3:[]}
- */
-function arrageArrToObj (arr) {
-  let obj = {}
-  arr.forEach((items) => {
-    let parentId = items.parentId
-    if (obj[parentId]) {
-      obj[parentId].push(items)
-    } else {
-      obj[parentId] = [items]
-    }
-  })
-  return obj
-}
+import { arrageArrToObj } from './businessUtils'
 
 /**
  * 把类似驼峰的MyUserInfo 转换成 my-user-info 和 my_user_info

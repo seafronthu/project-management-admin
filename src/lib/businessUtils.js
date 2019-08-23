@@ -150,6 +150,51 @@ function getKey (vm) {
   }
   return key
 }
+
+/**
+ * 整理数组parentId为键名键值为该值下的数组
+ * @param {Array<JSON>} arr 数组
+ * @return {JSON} {0:[], 3:[]}
+ */
+function arrageArrToObj (arr) {
+  let obj = {}
+  arr.forEach((items) => {
+    let parentId = items.parentId
+    if (obj[parentId]) {
+      obj[parentId].push({ ...items })
+    } else {
+      obj[parentId] = [{ ...items }]
+    }
+  })
+  return obj
+}
+/**
+ * 将数据根据父子级变成树结构
+ * @param {JSON} obj 整理后的数据
+ * @return {Array<JSON>} obj 整理后的数据
+ */
+function arrageObjToTree (obj, parentId = '0') {
+  let arr = []
+  let parentArr = obj[parentId]
+  if (parentArr && parentArr.length > 0) {
+    parentArr.forEach(v => {
+      let idArr = obj[v.id]
+      if (idArr && idArr.length > 0) {
+        v.children = arrageObjToTree(obj, v.id)
+      }
+      arr.push(v)
+    })
+  }
+  return arr
+}
+/**
+ * 将数据变成树结构
+ * @param {Array<JSON>} arr 数组数据[{parentId, id}]
+ * @return {Array<JSON>} obj 整理后的数据 [{parentId, id, children}]
+ */
+function arrageDataToTree (arr, parentId = '0') {
+  return arrageObjToTree(arrageArrToObj(arr), parentId)
+}
 export {
   setToken, // 设置token
   getToken, // 获取token
@@ -162,5 +207,8 @@ export {
   isCloseRoute, // 是否可以关闭当前路由
   isSameRoute, // 判断路由是否相等
   selectNavTab, // 选中那个标签页
-  getKey // 得到子组件上的key值
+  getKey, // 得到子组件上的key值
+  arrageArrToObj, // 整理数组parentId为键名键值为该值下的数组
+  arrageObjToTree, // 将数据根据父子级变成树结构
+  arrageDataToTree // 将[{parentId, id}]数据转成树结构
 }

@@ -2,7 +2,7 @@
 import { getKey } from '@l/businessUtils'
 import animate from '@l/animate'
 export default {
-  name: 'EditMenuSubitem',
+  name: 'EditMenuSubmenu',
   props: {
     title: {
       type: String
@@ -59,7 +59,7 @@ export default {
     const { active, title, inlineLeft, handleClick, $scopedSlots } = this
     let defaultSlot = $scopedSlots.default && this.renderChildren($scopedSlots.default())
     let rightSlot = $scopedSlots.right && $scopedSlots.right()
-    const liCls = ['edit-menu-subitem', active ? 'edit-menu-subitem-active' : null]
+    const liCls = ['edit-menu-submenu', active ? 'edit-menu-submenu-active' : null]
     const iconCls = ['up-down', active ? 'active' : null]
     const menuOpenAnimation = { on: animate.transition('slide') }
     return (
@@ -70,7 +70,7 @@ export default {
           {rightSlot}
         </div>
         <transition {...menuOpenAnimation}>
-          <ul v-show={active} class="edit-menu-subitem-list no-ul">
+          <ul v-show={active} class="edit-menu-submenu-list no-ul">
             {defaultSlot}
           </ul>
         </transition>

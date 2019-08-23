@@ -10,7 +10,8 @@ const RouteManagement = {
   name: 'RouteManagement',
   component: () => import(/* webpackChunkName: "RouteManagement" */ '@v/auth-management/route-management.vue'),
   meta: {
-    title: '路由管理'
+    title: '路由管理',
+    icon: 'bars'
   }
 }
 export default {

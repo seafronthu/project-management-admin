@@ -1,60 +1,23 @@
 <!-- 路由管理 -->
 <template>
-  <ContainerFluid class="bg-color-f route-management" full>
+  <ContainerFluid
+    class="bg-color-f route-management"
+    full
+  >
     <div class="flex-row flex-start-stretch">
       <div class="left-menu">
         <h4 class="title">路由分组</h4>
-        <EditMenu
-          @trigger-open-change="handleOpenChange"
+        <EditAntdMenu
+          :edit-status ="true"
+          :menu-data="arrageData"
+          @trigger-open="handleOpen"
+          @trigger-click="handleClick"
+          @trigger-select="handleSelect"
+          :defaultOpenKeys="defaultOpenKeys"
           :openKeys="openKeys"
+          :defaultSelectedKeys="defaultSelectedKeys"
           :selectedKeys="selectedKeys"
-        >
-          <EditMenuItem
-            key="item-2"
-            title="itemitemitemitemitemitem"
-          >
-            <template v-slot:right>
-            <a-dropdown>
-              <a-icon type="bars" />
-              <a-menu slot="overlay">
-                <a-menu-item key="1">1st menu item</a-menu-item>
-                <a-menu-item key="2">2nd menu item</a-menu-item>
-                <a-menu-item key="3">3rd menu item</a-menu-item>
-              </a-menu>
-            </a-dropdown>
-            </template>
-          </EditMenuItem>
-          <EditMenuSubitem
-            key="subitem-1"
-            title="subitemsubitemsubitemsubitem"
-          >
-            <EditMenuItem
-              key="item-3"
-              title="itemitemitemitemitemitem111"
-            >
-            <template v-slot:right>
-              <a-dropdown>
-                <a-icon type="bars" />
-                <a-menu slot="overlay">
-                  <a-menu-item key="1">1st menu item</a-menu-item>
-                  <a-menu-item key="2">2nd menu item</a-menu-item>
-                  <a-menu-item key="3">3rd menu item</a-menu-item>
-                </a-menu>
-              </a-dropdown>
-            </template>
-            </EditMenuItem>
-            <template v-slot:right>
-              <a-dropdown>
-                <a-icon type="bars" />
-                <a-menu slot="overlay">
-                  <a-menu-item key="1">1st menu item</a-menu-item>
-                  <a-menu-item key="2">2nd menu item</a-menu-item>
-                  <a-menu-item key="3">3rd menu item</a-menu-item>
-                </a-menu>
-              </a-dropdown>
-            </template>
-          </EditMenuSubitem>
-        </EditMenu>
+        />
       </div>
       <div class="right-container flex-1"></div>
     </div>
@@ -62,27 +25,46 @@
 </template>
 
 <script>
-import { EditMenu, EditMenuSubitem, EditMenuItem } from '@business/edit-menu'
+import { mapState } from 'vuex'
+import { EditAntdMenu } from '@business/edit-menu'
+import { arrageDataToTree } from '@l/businessUtils'
 export default {
   data () {
     return {
-      selectedKeys: [],
-      openKeys: []
+      defaultOpenKeys: [],
+      openKeys: [],
+      defaultSelectedKeys: [],
+      selectedKeys: []
     }
   },
   name: 'RouteManagement',
+  computed: {
+    ...mapState({
+      authorizationList: state => state.app.authorizationList
+    }),
+    arrageData () {
+      let arr = this.authorizationList.map(v => {
+        let obj = { ...v }
+        obj.name = obj.component
+        return obj
+      })
+      console.log(arrageDataToTree(arr, '0'))
+      return arrageDataToTree(arr, '0')
+    }
+  },
   components: {
-    EditMenu,
-    EditMenuSubitem,
-    EditMenuItem
+    EditAntdMenu
   },
   methods: {
-    handleOpenChange (keys) {
-      console.log(keys)
-      this.openKeys = keys
+    handleOpen (openKeys) {
+      this.openKeys = openKeys
     },
-    handleSelected (keys) {
-      this.selectedKeys = keys
+    handleClick ({ item, key, keyPath }) {
+      console.log(11)
+      // console.log({ item, key, keyPath })
+    },
+    handleSelect ({ item, key, keyPath }) {
+      console.log({ item, key, keyPath })
     }
   }
 }
@@ -90,7 +72,7 @@ export default {
 <style lang="stylus" scoped>
 .route-management
   .left-menu
-    width 240px
+    width 300px
     border 1px solid #dcdcdc
     .title
       text-align left
@@ -99,4 +81,11 @@ export default {
       height 40px
       line-height 40px
       border-bottom 1px solid #dcdcdc
+  .route-management-edit
+    display none
+  .edit-menu
+    .edit-menu-title
+      &:hover
+        .route-management-edit
+          display block
 </style>
