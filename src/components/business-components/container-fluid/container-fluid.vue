@@ -1,6 +1,6 @@
 <!-- 100%容器  -->
 <template>
-  <div class="container-fluid" :style="{height: full ? 'calc(100% - 20px)': null}" >
+  <div class="container-fluid" ref="fluid" :style="{height: full ? height : null}" >
     <slot></slot>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
   },
   data () {
     return {
+      height: 'calc(100% - 20px)'
     }
   },
 
@@ -25,7 +26,12 @@ export default {
 
   methods: {},
 
-  mounted () {}
+  created () {
+  },
+  mounted () {
+    // const height = this.$refs['fluid'].offsetHeight
+    // this.height = `${height}px`
+  }
 }
 </script>
 <style lang="stylus">
@@ -33,7 +39,7 @@ export default {
   background-color #ffffff
   border-radius 3px
   transition box-shadow 0.3s ease-in-out
-  margin 10px
+  margin 10px 0
   &:hover
     box-shadow 0 0 10px 0 rgba(0,0,0,0.1)
 </style>

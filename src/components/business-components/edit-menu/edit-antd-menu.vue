@@ -87,6 +87,7 @@ export default {
   // },
   components: {
     // SubItem
+    EditAntdItem,
     EditAntdSubmenu
   },
 

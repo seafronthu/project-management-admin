@@ -1,25 +1,35 @@
 <!-- 路由管理 -->
 <template>
   <ContainerFluid
-    class="bg-color-f route-management"
+    class="bg-color-f"
     full
   >
-    <div class="flex-row flex-start-stretch">
-      <div class="left-menu">
-        <h4 class="title">路由分组</h4>
-        <EditAntdMenu
-          :edit-status ="true"
-          :menu-data="arrageData"
-          @trigger-open="handleOpen"
-          @trigger-click="handleClick"
-          @trigger-select="handleSelect"
-          :defaultOpenKeys="defaultOpenKeys"
-          :openKeys="openKeys"
-          :defaultSelectedKeys="defaultSelectedKeys"
-          :selectedKeys="selectedKeys"
-        />
+    <div class="route-management flex-column flex-start-stretch height-full">
+      <div class="route-management-top"></div>
+      <div class="route-management-container flex-row flex-start-stretch flex-1">
+        <div class="left-menu flex-column flex-start-stretch">
+        <a-input-search style="margin-bottom: 8px" placeholder="Search" />
+        <div class="left-menu-container flex-column flex-start-stretch flex-1">
+          <h4 class="title">路由分组</h4>
+          <div class="left-menu-content flex-1">
+          <EditAntdMenu
+            :edit-status ="true"
+            :menu-data="arrageData"
+            @trigger-open="handleOpen"
+            @trigger-click="handleClick"
+            @trigger-select="handleSelect"
+            :defaultOpenKeys="defaultOpenKeys"
+            :openKeys="openKeys"
+            :defaultSelectedKeys="defaultSelectedKeys"
+            :selectedKeys="selectedKeys"
+          />
+          </div>
+        </div>
+        </div>
+        <div class="right-container flex-1">
+          <EditRoute/>
+        </div>
       </div>
-      <div class="right-container flex-1"></div>
     </div>
   </ContainerFluid>
 </template>
@@ -28,6 +38,7 @@
 import { mapState } from 'vuex'
 import { EditAntdMenu } from '@business/edit-menu'
 import { arrageDataToTree } from '@l/businessUtils'
+import EditRoute from './components/edit-route'
 export default {
   data () {
     return {
@@ -48,19 +59,18 @@ export default {
         obj.name = obj.component
         return obj
       })
-      console.log(arrageDataToTree(arr, '0'))
       return arrageDataToTree(arr, '0')
     }
   },
   components: {
-    EditAntdMenu
+    EditAntdMenu,
+    EditRoute
   },
   methods: {
     handleOpen (openKeys) {
       this.openKeys = openKeys
     },
     handleClick ({ item, key, keyPath }) {
-      console.log(11)
       // console.log({ item, key, keyPath })
     },
     handleSelect ({ item, key, keyPath }) {
@@ -71,16 +81,31 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .route-management
-  .left-menu
-    width 300px
-    border 1px solid #dcdcdc
-    .title
-      text-align left
-      font-weight bold
-      padding 0 10px
-      height 40px
-      line-height 40px
-      border-bottom 1px solid #dcdcdc
+  padding 15px
+  .route-management-top
+    height 50px
+  .route-management-container
+    .left-menu
+      padding 10px 0
+      width 400px
+      .left-menu-container
+        border 1px solid #dcdcdc
+        overflow hidden
+        height 0
+        .left-menu-content
+          height 0
+          overflow-x hidden
+          overflow-y auto
+      .title
+        text-align left
+        font-weight bold
+        padding 0 10px
+        height 40px
+        margin-bottom 0
+        line-height 40px
+        border-bottom 1px solid #dcdcdc
+    .right-container
+      padding-left 15px;
   .route-management-edit
     display none
   .edit-menu
@@ -88,4 +113,5 @@ export default {
       &:hover
         .route-management-edit
           display block
+
 </style>
