@@ -11,7 +11,7 @@
         <template v-slot:label>
           <span class="text-ellipsis" title="parentId（父级ID）">parentId（父级ID）</span>
         </template>
-        <a-input disabled />
+        <a-input disabled :defaultValue="routeInfo.parentId" />
       </a-form-item>
     </a-col>
     <a-col :span="2"></a-col>
@@ -20,7 +20,7 @@
         <template v-slot:label>
           <span class="text-ellipsis" title="id（唯一主键，不可更改）">id（唯一主键，不可更改）</span>
         </template>
-        <a-input disabled />
+        <a-input disabled :defaultValue="routeInfo.id" />
       </a-form-item>
     </a-col>
   </a-row>
@@ -35,7 +35,7 @@
               {
                 rules: [{ required: true, message: 'component is required!' }],
               }
-            ]" />
+            ]" v-model="routeInfo.component"/>
       </a-form-item>
     </a-col>
     <a-col :span="2"></a-col>
@@ -50,12 +50,41 @@
                 rules: [{ required: true, message: 'genre is required!' }],
               }
             ]">
-          <a-select-option value="1">menu</a-select-option>
-          <a-select-option value="2">list</a-select-option>
-          <a-select-option value="3">detail</a-select-option>
-          <a-select-option value="4">tab</a-select-option>
-          <a-select-option value="5">button</a-select-option>
+          <a-select-option value="menu">menu</a-select-option>
+          <a-select-option value="list">list</a-select-option>
+          <a-select-option value="detail">detail</a-select-option>
+          <a-select-option value="tab">tab</a-select-option>
+          <a-select-option value="button">button</a-select-option>
         </a-select>
+      </a-form-item>
+    </a-col>
+  </a-row>
+  <a-row>
+    <a-col :span="11">
+      <a-form-item>
+        <template v-slot:label>
+          <span class="text-ellipsis" title="title（标题）">title（标题）</span>
+        </template>
+        <a-input v-decorator="[
+              'title',
+              {
+                rules: [{ required: true, message: 'title is required!' }],
+              }
+            ]" />
+      </a-form-item>
+    </a-col>
+    <a-col :span="2"></a-col>
+    <a-col :span="11">
+      <a-form-item>
+        <template v-slot:label>
+          <span class="text-ellipsis" title="keyword（关键字）">keyword（关键字）</span>
+        </template>
+        <a-input v-decorator="[
+              'buttonType',
+              {
+                rules: [{ required: true, message: 'buttonType is required!' }],
+              }
+            ]" />
       </a-form-item>
     </a-col>
   </a-row>
@@ -73,16 +102,19 @@
     <a-button
       type="primary"
       html-type="submit"
-    >
-      Submit
-    </a-button>
+    >新增</a-button>
   </a-form>
 </template>
 
 <script>
 export default {
   name: 'EditRoute',
-
+  props: {
+    routeInfo: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data () {
     return {
       form: this.$form.createForm(this)

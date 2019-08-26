@@ -5,29 +5,35 @@
     full
   >
     <div class="route-management flex-column flex-start-stretch height-full">
-      <div class="route-management-top"></div>
+      <div class="route-management-top">
+        <RouteOperation />
+      </div>
       <div class="route-management-container flex-row flex-start-stretch flex-1">
         <div class="left-menu flex-column flex-start-stretch">
-        <a-input-search style="margin-bottom: 8px" placeholder="Search" />
-        <div class="left-menu-container flex-column flex-start-stretch flex-1">
-          <h4 class="title">路由分组</h4>
-          <div class="left-menu-content flex-1">
-          <EditAntdMenu
-            :edit-status ="true"
-            :menu-data="arrageData"
-            @trigger-open="handleOpen"
-            @trigger-click="handleClick"
-            @trigger-select="handleSelect"
-            :defaultOpenKeys="defaultOpenKeys"
-            :openKeys="openKeys"
-            :defaultSelectedKeys="defaultSelectedKeys"
-            :selectedKeys="selectedKeys"
+          <a-input-search
+            style="margin-bottom: 8px"
+            placeholder="Search"
           />
+          <div class="left-menu-container flex-column flex-start-stretch flex-1">
+            <h4 class="title">路由分组</h4>
+            <div class="left-menu-content flex-1">
+              <EditAntdMenu
+                :edit-status="true"
+                :menu-data="arrageData"
+                @trigger-open="handleOpen"
+                @trigger-click="handleClick"
+                @trigger-edit="handleEdit"
+                @trigger-select="handleSelect"
+                :defaultOpenKeys="defaultOpenKeys"
+                :openKeys="openKeys"
+                :defaultSelectedKeys="defaultSelectedKeys"
+                :selectedKeys="selectedKeys"
+              />
+            </div>
           </div>
         </div>
-        </div>
         <div class="right-container flex-1">
-          <EditRoute/>
+          <EditRoute :routeInfo="routeInfo" />
         </div>
       </div>
     </div>
@@ -39,13 +45,17 @@ import { mapState } from 'vuex'
 import { EditAntdMenu } from '@business/edit-menu'
 import { arrageDataToTree } from '@l/businessUtils'
 import EditRoute from './components/edit-route'
+import RouteOperation from './components/route-operation'
 export default {
   data () {
     return {
       defaultOpenKeys: [],
       openKeys: [],
       defaultSelectedKeys: [],
-      selectedKeys: []
+      selectedKeys: [],
+      routeInfo: {
+        parentId: '0'
+      }
     }
   },
   name: 'RouteManagement',
@@ -57,6 +67,20 @@ export default {
       let arr = this.authorizationList.map(v => {
         let obj = { ...v }
         obj.name = obj.component
+        obj.trigger = [
+          {
+            id: 'insert',
+            name: '添加子分组'
+          },
+          {
+            id: 'update',
+            name: '修改'
+          },
+          {
+            id: 'delete',
+            name: '删除'
+          }
+        ]
         return obj
       })
       return arrageDataToTree(arr, '0')
@@ -64,7 +88,8 @@ export default {
   },
   components: {
     EditAntdMenu,
-    EditRoute
+    EditRoute,
+    RouteOperation
   },
   methods: {
     handleOpen (openKeys) {
@@ -75,6 +100,9 @@ export default {
     },
     handleSelect ({ item, key, keyPath }) {
       console.log({ item, key, keyPath })
+    },
+    handleEdit ({ item, key, keyPath, itemData }) {
+      console.log({ item, key, keyPath, itemData })
     }
   }
 }
@@ -105,7 +133,7 @@ export default {
         line-height 40px
         border-bottom 1px solid #dcdcdc
     .right-container
-      padding-left 15px;
+      padding-left 15px
   .route-management-edit
     display none
   .edit-menu
@@ -113,5 +141,4 @@ export default {
       &:hover
         .route-management-edit
           display block
-
 </style>

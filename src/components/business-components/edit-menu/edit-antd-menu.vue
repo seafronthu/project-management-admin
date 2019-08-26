@@ -66,9 +66,10 @@ export default {
     cachedOpenKeys: Array // 缓存的submenu 防止菜单栏缩小的时候会自动展开二级菜单或者放大菜单栏 没有展开二级菜单
   },
   provide () {
-    const { editStatus } = this
+    const { editStatus, handleEdit } = this
     return {
-      edit: editStatus
+      edit: editStatus,
+      editClick: handleEdit
     }
   },
   data () {
@@ -104,8 +105,8 @@ export default {
     handleClick ({ item, key, keyPath }) {
       this.$emit('trigger-click', { item, key, keyPath })
     },
-    handleEdit () {
-      this.$emit('trigger-edit')
+    handleEdit ({ item, key, keyPath, itemData }) {
+      this.$emit('trigger-edit', { item, key, keyPath, itemData })
     }
   },
   created () {
@@ -127,5 +128,8 @@ export default {
     position absolute
     top 50%
     right 16px
+    $color()
     transform translateY(-50%)
+    :hover
+      $themeColor()
 </style>

@@ -44,14 +44,17 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
         name: routeObj.name,
         path: routeObj.path,
         meta: {
-          ...meta,
           id: items.id,
           parentId: items.parentId,
-          href: items.href, // 跳转到其它网站
-          keywords: items.keywords, // 关键字用来搜索路由
-          genre: items.genre, // 类型页面还是操作等等 page button tab
+          title: items.title,
+          description: items.description, // 描述用来搜索路由
+          // href: items.href, // 跳转到其它网站
+          // keywords: items.keywords, // 关键字用来搜索路由
+          genre: items.genre, // 路由类型 menu菜单（一般父级路由）list列表 detail详情 tab 5button
+          buttonType: items.buttonType, // 其他other 按钮类型 insert增 delete删 update改 export导出 import导入
           tag: items.tag, // 是否软删除
-          jurisdiction: items.jurisdiction // 权限
+          jurisdiction: items.jurisdiction, // 权限
+          ...meta
         },
         component: routeObj.component
       }
