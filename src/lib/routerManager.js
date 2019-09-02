@@ -22,7 +22,7 @@ import { arrageArrToObj } from './businessUtils'
  * @param {JSON} parentRoute 父级路由用于把tab对象放进去（当页面需要对tab处理权限的时候使用，产品需求(灬ꈍ ꈍ灬)）
  * @return {Array<JSON>} [{name,path,redirect,meta}]
  */
-function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, breadcrumb, peerRouting = [], parentRoute = { meta: {} } }) {
+function arrageObjToRouterTree ({ obj, parentId = 0, routers, times = 0, breadcrumb, peerRouting = [], parentRoute = { meta: {} } }) {
   let arr = obj[parentId]
   let parentArr = []
   arr.forEach(items => {
@@ -86,8 +86,13 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
         obj[id].forEach(its => {
           let genre = its.genre
           let buttonType = its.buttonType
-          if (genre === 'button' && buttonType !== 'other') {
-            routerObj.meta[buttonType] = true // 按钮权限 增删改
+          if (genre === 'button' && buttonType !== 'other') { // 按钮权限 增删改
+            let buttonArray = routerObj.meta[buttonType]
+            if (Array.isArray(buttonArray)) {
+              routerObj.meta[buttonType].push(its.component)
+            } else {
+              routerObj.meta[buttonType] = [its.component]
+            }
           } else if (genre === 'detail') {
             routerObj.meta['select'] = true
           }
@@ -111,7 +116,7 @@ function arrageObjToRouterTree ({ obj, parentId = '0', routers, times = 0, bread
 }
 function setRouter ({ routers, authorization, peerRouting }) {
   if (authorization && authorization.length > 0) {
-    return arrageObjToRouterTree({ obj: arrageArrToObj(authorization), parentId: '0', routers, peerRouting })
+    return arrageObjToRouterTree({ obj: arrageArrToObj(authorization), parentId: 0, routers, peerRouting })
   }
   return []
 }

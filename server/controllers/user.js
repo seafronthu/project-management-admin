@@ -1,5 +1,7 @@
 
 const returnMessage = require('../config/message')
+const userModels = require('../models/user')
+const { sendRespond } = require('../lib/utils')
 const ROUTER = [
   {
     id: '1',
@@ -81,17 +83,19 @@ const ROUTER = [
     keywords: '路由管理',
     genre: 'list',
     component: 'RouteManagement'
+  },
+  {
+    id: '10',
+    parentId: '8',
+    title: '角色列表',
+    href: '',
+    keywords: '路由管理',
+    genre: 'list',
+    component: 'RouteManagement'
   }
+
 ]
-function sendRespond ({ cxt, data, code = 200, message = '成功！', contentType = 'json' }) {
-  cxt.type = contentType
-  cxt.body = JSON.stringify({
-    code,
-    data,
-    message
-  })
-  cxt.status = 200
-}
+
 exports.login = async cxt => {
   let data = {
     token: '11111'
@@ -112,4 +116,35 @@ exports.getUserAthority = async cxt => {
     list: ROUTER
   }
   sendRespond({ cxt, data, message: returnMessage(200) })
+}
+exports.getRoute = async cxt => {
+  const [error, results] = await userModels.getRoute(cxt.sql_connection)
+  if (error) {
+    sendRespond({ cxt, data: error, code: 500, status: 500, message: error.message })
+    return
+  }
+  sendRespond({ cxt, data: results[0], message: returnMessage(200) })
+}
+// 创建路由
+exports.createRoute = async cxt => {
+  let { request: { body: { component, parentId, title, description, genre, buttonType } } } = cxt
+  const [error, results] = await userModels.createRoute(cxt.sql_connection, { component, parentId, title, description, genre, buttonType })
+  console.log(results, 'create')
+  if (error) {
+    sendRespond({ cxt, data: error, code: 500, status: 500, message: error.message })
+    return
+  }
+  const { insertId } = results[0]
+  sendRespond({ cxt, data: { id: insertId }, message: returnMessage(200) })
+}
+// 修改路由
+exports.updateRoute = async cxt => {
+  let { request: { body: { component, parentId, title, description, genre, buttonType } } } = cxt
+  const [error, results] = await userModels.updateRoute(cxt.sql_connection, { component, parentId, title, description, genre, buttonType })
+  console.log(results, 'update')
+  if (error) {
+    sendRespond({ cxt, data: error, code: 500, status: 500, message: error.message })
+    return
+  }
+  sendRespond({ cxt, data: results[0], message: returnMessage(200) })
 }

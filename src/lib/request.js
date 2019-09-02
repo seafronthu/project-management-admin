@@ -10,7 +10,7 @@ function addErrorLog (info) {
   let data = {
     type: 'ajax',
     code: status,
-    msg: statusText,
+    message: statusText,
     url: responseURL
   }
   // 判断是否是发送报错日志的接口 防止进入死循环
@@ -56,13 +56,13 @@ axios.interceptors.response.use(response => {
 }, error => {
   // 网络异常 收集信息
   if (error && error.response) {
-    addErrorLog(error.response)
+    const { response, response: { data, status } } = error
+    addErrorLog(response)
+    return Promise.resolve({ message: data, code: status })
   } else {
     // 网络出问题了
+    return Promise.resolve({ message: error.message, code: -400 })
   }
-  return Promise.reject(error)
-  // Toast('网络异常')
-  // return Promise.resolve(error.response)
 })
 class HttpRequest {
   constructor (baseUrl) {
@@ -110,7 +110,7 @@ class HttpRequest {
     if (options.timeout) {
       config.timeout = options.timeout
     }
-    if (method === 'post') {
+    if (method === 'post' || method === 'put') {
       data = headers['Content-Type'] === 'application/x-www-form-urlencoded' ? qs.stringify(data) : data
       config.data = data
     } else if (method === 'get') {
@@ -155,6 +155,20 @@ class HttpRequest {
   async jsonPost (options) {
     let config = {
       method: 'post',
+      head: {
+        'Content-Type': 'application/json',
+        'Accept-Language': 'charset=utf-8'
+      },
+      ...options
+      // url: options.url,
+      // data: options.data,
+      // headers: options
+    }
+    return this.request(config)
+  }
+  async jsonPut (options) {
+    let config = {
+      method: 'put',
       head: {
         'Content-Type': 'application/json',
         'Accept-Language': 'charset=utf-8'

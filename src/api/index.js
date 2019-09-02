@@ -2,10 +2,16 @@
 import {
   loginApi,
   getUserInfoApi,
-  getUserAthorityApi
+  getUserAthorityApi,
+  getRouteApi,
+  createRouteApi,
+  updateRouteApi
 } from './user'
 export {
   loginApi,
   getUserInfoApi,
-  getUserAthorityApi
+  getUserAthorityApi,
+  getRouteApi,
+  createRouteApi,
+  updateRouteApi
 }

@@ -11,7 +11,7 @@
     </a-col>
     <a-col :span="1"></a-col>
     <a-col :span="4">
-      <a-button type="primary" icon="plus">新建路由分组</a-button>
+      <a-button type="primary" icon="plus" @click="handleAdd">新建路由分组</a-button>
     </a-col>
   </a-row>
 </template>
@@ -29,7 +29,11 @@ export default {
 
   computed: {},
 
-  methods: {},
+  methods: {
+    handleAdd () {
+      this.$emit('trigger-add')
+    }
+  },
 
   mounted () {}
 }

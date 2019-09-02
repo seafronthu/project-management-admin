@@ -9,7 +9,7 @@
           class="edit-icon"
         />
         <a-menu slot="overlay" v-if="itemData.trigger">
-          <a-menu-item v-for="item of itemData.trigger" :key="item.id" @click="handleClick">
+          <a-menu-item v-for="item of itemData.trigger" :key="item.type" @click="handleClick">
             <span>{{item.name}}</span>
           </a-menu-item>
         </a-menu>

@@ -17,4 +17,22 @@ let getUserAthority = {
   path: '/user/getUserAthority',
   middleware: controllers.getUserAthority
 }
-module.exports = [login, getUserInfo, getUserAthority]
+// 创建路由
+let getRoute = {
+  method: 'get',
+  path: '/user/getRoute',
+  middleware: controllers.getRoute
+}
+// 创建路由
+let createRoute = {
+  method: 'post',
+  path: '/user/createRoute',
+  middleware: controllers.createRoute
+}
+// 修改路由
+let updateRoute = {
+  method: 'post',
+  path: '/user/updateRoute',
+  middleware: controllers.updateRoute
+}
+module.exports = [login, getUserInfo, getUserAthority, getRoute, createRoute, updateRoute]

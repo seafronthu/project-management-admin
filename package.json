@@ -18,12 +18,14 @@
     "koa-router": "^7.4.0",
     "koa-static-cache": "^5.1.2",
     "moment": "^2.24.0",
+    "mysql2": "^1.6.5",
     "nprogress": "^0.2.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@ant-design/icons": "^1.1.16",
     "@vue/cli-plugin-babel": "^3.9.2",
     "@vue/cli-plugin-eslint": "^3.9.2",
     "@vue/cli-service": "^3.9.2",
