@@ -21,13 +21,23 @@
           theme="green"
           class="layout-sider"
         >
-          <MenuList
-            :collapsed="collapsed"
-            theme="green"
-            :menu-list="menuList"
-          />
+          <!-- <a-drawer
+            :placement="left"
+            :closable="false"
+            @close="onClose"
+            :visible="visible"
+          > -->
+            <MenuList
+              :collapsed="collapsed"
+              theme="green"
+              :menu-list="menuList"
+            />
+          <!-- </a-drawer> -->
         </a-layout-sider>
-        <a-layout class="layout-anim" :class="{'layout-anim-short': collapsed}">
+        <a-layout
+          class="layout-anim"
+          :class="{'layout-anim-short': collapsed}"
+        >
           <a-layout-header
             class="layout-header layout-anim layout-nav-tag"
             style="background-color:#ffffff;"
@@ -191,6 +201,7 @@ export default {
 <style lang="stylus" scoped>
 .layout
   min-height 100vh
+  overflow-x hidden
   .layout-container
     padding-top 45px
     background-color #f5f7f9
@@ -214,9 +225,10 @@ export default {
     box-sizing border-box
     padding-top 45px
   .layout-anim
-    padding-left: 200px
+    padding-left 200px
+    width 100vw
     transition padding 0.15s ease-in-out
     &.layout-anim-short
-      padding-left: 80px
+      padding-left 80px
       transition padding 0.25s cubic-bezier(0.215, 0.61, 0.355, 1)
 </style>

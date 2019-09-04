@@ -91,7 +91,7 @@ const ROUTER = [
     href: '',
     keywords: '路由管理',
     genre: 'list',
-    component: 'RouteManagement'
+    component: 'RoleList'
   }
 
 ]

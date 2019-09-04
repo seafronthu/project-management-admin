@@ -1,27 +1,44 @@
 <!-- 角色列表 -->
 <template>
-  <div>
-    <a-table :columns="columns" :dataSource="data">
-
-      <div
-        #expandedRowRender="record"
-        style="margin: 0">
-        <a-row
-          :gutter="24"
-          :style="{ marginBottom: '12px' }">
-          <a-col :span="12" v-for="(role, index) in record.permissions" :key="index" :style="{ marginBottom: '12px' }">
-            <a-col :span="4">
-              <span>{{ role.permissionName }}：</span>
-            </a-col>
-            <a-col :span="20" v-if="role.actionEntitySet.length > 0">
-              <a-tag color="cyan" v-for="(action, k) in role.actionEntitySet" :key="k">{{ action.describe }}</a-tag>
-            </a-col>
-            <a-col :span="20" v-else>-</a-col>
-          </a-col>
-        </a-row>
-      </div>
-      <span #action="{text, record}">
-        <a @click="$refs.modal.edit(record)">编辑</a>
+  <ContainerFluid
+    class="bg-color-f role-list"
+  >
+  <a-card :bordered="false">
+    <a-form layout="inline">
+      <a-row :gutter="48">
+        <a-col :md="8" :sm="24">
+          <a-form-item label="角色ID">
+            <a-input placeholder="请输入" class="abc"/>
+          </a-form-item>
+        </a-col>
+        <a-col :md="8" :sm="24">
+          <a-form-item label="账号">
+            <a-input placeholder="请输入"/>
+          </a-form-item>
+        </a-col>
+        <a-col :md="8" :sm="24">
+          <a-form-item>
+            <a-button type="primary">查询</a-button>
+            <a-button style="margin-left: 8px">重置</a-button>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col>
+          <a-form-item>
+            <a-button type="primary"><a-icon type="plus" />新增</a-button>
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-form>
+    <a-table :columns="columns" :dataSource="tableData" @expand="handleExpanded" class="role-list-table">
+      <template #description="{description}">
+        <div class="text-ellipsis" style="width: 100px;">{{description}}</div>
+      </template>
+      <!-- 操作 -->
+      <template #operation="record">
+      <span>
+        <a @click="handleEdit(record)">编辑</a>
         <a-divider type="vertical" />
         <a-dropdown>
           <a class="ant-dropdown-link">
@@ -40,23 +57,33 @@
           </a-menu>
         </a-dropdown>
       </span>
-      <p slot="expandedRowRender" slot-scope="record" style="margin: 0">{{record.description}}</p>
+      </template>
+      <!-- 展开内容 -->
+      <template #expandedRowRender="record">
+      <p v-if="record.user">{{record.user}}</p>
+      <div v-else class="flex-row flex-center">
+        <a-spin tip="Loading..."></a-spin>
+      </div>
+      </template>
     </a-table>
-  </div>
+  </a-card>
+  </ContainerFluid>
 </template>
 
 <script>
 const columns = [
-  { title: 'Name', dataIndex: 'name', key: 'name' },
-  { title: 'Age', dataIndex: 'age', key: 'age' },
-  { title: 'Address', dataIndex: 'address', key: 'address' },
-  { title: 'Action', dataIndex: '', key: 'x', scopedSlots: { customRender: 'action' } }
+  { title: '唯一识别码', dataIndex: 'id' },
+  { title: '角色名称', dataIndex: 'name' },
+  { title: '描述', key: 'description', scopedSlots: { customRender: 'description' } },
+  { title: '创建者', dataIndex: 'creator' },
+  { title: '创建时间', dataIndex: 'createTime' },
+  { title: '操作', key: 'operation', scopedSlots: { customRender: 'operation' } }
 ]
 
 const tableData = [
-  { key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
-  { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' },
-  { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }
+  { key: 1, id: 'admin', name: '管理员', creator: 'Jack', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.', createTime: '2019-09-04 10:43' },
+  { key: 2, id: 'svip', name: '超级会员', creator: 'Mark', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.', createTime: '2019-09-04 10:43' },
+  { key: 3, id: 'vip', name: '普通会员', creator: 'Linda', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.', createTime: '2019-09-04 10:43' }
 ]
 export default {
   name: 'RoleList',
@@ -72,10 +99,40 @@ export default {
 
   computed: {},
 
-  methods: {},
+  methods: {
+    handleExpanded (expanded, record) {
+      if (expanded && !record.user) {
+        let index = this.tableData.findIndex(v => v.id === record.id)
+        setTimeout(() => {
+          let item = this.tableData[index]
+          this.tableData.splice(index, 1, { ...item, user: '我是谁' })
+        }, 50000)
+      }
+    },
+    handleEdit (record) {
+      console.log(record)
+    }
+  },
 
   mounted () {}
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
+.role-list
+  .ant-form-item
+    display flex
+    margin-bottom 24px
+    margin-right 0px
+    .ant-form-item-label
+      width auto
+      padding 0 8px 0 0
+      line-height 39.9999px
+    .ant-form-item-control-wrapper
+      flex 1 1
+  .role-list-table
+    .ant-table-content
+      overflow-y auto
+      .ant-table-body
+        min-width 800px
+
 </style>
