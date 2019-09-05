@@ -18,7 +18,9 @@ export default {
 
   methods: {},
 
-  mounted () {}
+  mounted () {
+    console.log('UserDetail')
+  }
 }
 </script>
 <style lang="stylus" scoped>

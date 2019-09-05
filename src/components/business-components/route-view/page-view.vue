@@ -1,14 +1,14 @@
 <!-- 路由祖级菜单的路由用来做keep-alive -->
 <template>
-  <keep-alive :include="cacheList">
+  <!-- <keep-alive :include="cacheList"> -->
     <router-view></router-view>
-  </keep-alive>
+  <!-- </keep-alive> -->
 </template>
 
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: 'Page-view',
+  name: 'PageView',
 
   data () {
     return {

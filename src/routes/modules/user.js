@@ -33,7 +33,7 @@ const UserList = {
 const UserDetail = {
   path: 'user-detail',
   name: 'UserDetail',
-  component: function ud () { return import(/* webpackChunkName: "UserDetail" */ '@v/account-management/user/user-detail.vue') },
+  component: () => import(/* webpackChunkName: "UserDetail" */ '@v/account-management/user/user-detail.vue'),
   meta: {
     title: '用户详情',
     hideMenu: true
