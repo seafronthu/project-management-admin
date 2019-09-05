@@ -1,4 +1,5 @@
 import { arrageArrToObj } from './businessUtils'
+import { PageView, ParentView } from '@business/route-view'
 
 /**
  * 把类似驼峰的MyUserInfo 转换成 my-user-info 和 my_user_info
@@ -81,7 +82,7 @@ function arrageObjToRouterTree ({ obj, parentId = 0, routers, times = 0, breadcr
         //   routerObj.path = '/' + routeObj.path // 祖级路由要加/
         //   routerObj.component = () => import('@business/layout')
         // } else if (times > 0) {
-        routerObj.component = component || (() => import('@business/parent-view'))
+        routerObj.component = component || (times === 0 ? PageView : ParentView)
         // }
         obj[id].forEach(its => {
           let genre = its.genre

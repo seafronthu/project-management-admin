@@ -1,10 +1,9 @@
 <!-- 二级头 -->
 <template>
     <div class="second-head flex-row flex-start-center">
-      <a class="trigger" href="javascript: void 0">
+      <a class="trigger" href="javascript: void 0" @click="handleCollapsed">
         <a-icon
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-          @click="handleCollapsed"
         />
       </a>
       <HeadBreadcrumb @trigger-click="handleRouter" :list="breadcrumbList"/>

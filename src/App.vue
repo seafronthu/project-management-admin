@@ -4,7 +4,9 @@
   </div>
 </template>
 <script>
+import { mixin } from '@l/mixin'
 export default {
+  mixins: [mixin],
   data () {
     return {
 

@@ -18,7 +18,9 @@ export default {
 
   methods: {},
 
-  mounted () {}
+  mounted () {
+    console.log('UserList', '缓存')
+  }
 }
 </script>
 <style lang="stylus" scoped>

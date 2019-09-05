@@ -5,8 +5,8 @@
     :form="form"
     @submit="handleSubmit"
   >
-    <a-row>
-      <a-col :span="11">
+    <a-row :gutter="24">
+      <a-col :md="24" :lg="12">
         <a-form-item>
           <template v-slot:label>
             <span
@@ -20,8 +20,7 @@
           />
         </a-form-item>
       </a-col>
-      <a-col :span="2"></a-col>
-      <a-col :span="11">
+      <a-col :md="24" :lg="12">
         <a-form-item>
           <template v-slot:label>
             <span
@@ -36,8 +35,8 @@
         </a-form-item>
       </a-col>
     </a-row>
-    <a-row>
-      <a-col :span="11">
+    <a-row :gutter="24">
+      <a-col :md="24" :lg="12">
         <a-form-item>
           <template v-slot:label>
             <span
@@ -51,8 +50,7 @@
           />
         </a-form-item>
       </a-col>
-      <a-col :span="2"></a-col>
-      <a-col :span="11">
+      <a-col :md="24" :lg="12">
         <a-form-item>
           <template v-slot:label>
             <span
@@ -67,8 +65,8 @@
         </a-form-item>
       </a-col>
     </a-row>
-    <a-row>
-      <a-col :span="11">
+    <a-row :gutter="24">
+      <a-col :md="24" :lg="12">
         <a-form-item>
           <template v-slot:label>
             <span
@@ -84,8 +82,7 @@
             ]" />
         </a-form-item>
       </a-col>
-      <a-col :span="2"></a-col>
-      <a-col :span="11">
+      <a-col :md="24" :lg="12">
         <a-form-item>
           <template v-slot:label>
             <span
@@ -108,8 +105,8 @@
         </a-form-item>
       </a-col>
     </a-row>
-    <a-row>
-      <a-col :span="11">
+    <a-row :gutter="24">
+      <a-col :md="24" :lg="12">
         <a-form-item>
           <template v-slot:label>
             <span
@@ -132,8 +129,7 @@
           </a-select>
         </a-form-item>
       </a-col>
-      <a-col :span="2"></a-col>
-      <a-col :span="11">
+      <a-col :md="24" :lg="12">
         <a-form-item>
           <template v-slot:label>
             <span

@@ -7,9 +7,9 @@
         <div class="close-link flex-row flex-center">
           <IconFont icon="clear" width="1.5em" height="1.5em" />
         </div>
-        <a-menu slot="overlay" @click="(options) => handleMenuClick(options, {index})">
-          <a-menu-item key="closeAll" :disabled="judgeIsCloseOtherFunc(item, 'closeAll', index)">
-            <template v-if="judgeIsCloseOtherFunc(item, 'closeAll', index)">关闭所有</template>
+        <a-menu slot="overlay" @click="handleMenuClick">
+          <a-menu-item key="closeAll" :disabled="judgeIsCloseOtherFunc('closeAll')">
+            <template v-if="judgeIsCloseOtherFunc('closeAll')">关闭所有</template>
             <a v-else href="javascript:;"
             >关闭所有</a>
           </a-menu-item>
@@ -88,9 +88,9 @@
                 <a-menu-item
                   key="closeRight"
                   :name="item"
-                  :disabled="judgeIsCloseOtherFunc(item, 'closeRight', index)"
+                  :disabled="judgeIsCloseOtherFunc('closeRight', index)"
                 >
-                  <template v-if="judgeIsCloseOtherFunc(item, 'closeRight', index)">关闭右侧</template>
+                  <template v-if="judgeIsCloseOtherFunc('closeRight', index)">关闭右侧</template>
                   <a
                     v-else
                     href="javascript:;"
@@ -99,9 +99,9 @@
                 <a-menu-item
                   key="closeLeft"
                   :name="item"
-                  :disabled="judgeIsCloseOtherFunc(item, 'closeLeft', index)"
+                  :disabled="judgeIsCloseOtherFunc('closeLeft', index)"
                 >
-                  <template v-if="judgeIsCloseOtherFunc(item, 'closeLeft', index)">关闭左侧</template>
+                  <template v-if="judgeIsCloseOtherFunc( 'closeLeft', index)">关闭左侧</template>
                   <a
                     v-else
                     href="javascript:;"
@@ -110,9 +110,9 @@
                 <a-menu-item
                   key="closeOther"
                   :name="item"
-                  :disabled="judgeIsCloseOtherFunc(item, 'closeOther', index)"
+                  :disabled="judgeIsCloseOtherFunc( 'closeOther', index)"
                 >
-                  <template v-if="judgeIsCloseOtherFunc(item, 'closeOther', index)">关闭其它</template>
+                  <template v-if="judgeIsCloseOtherFunc( 'closeOther', index)">关闭其它</template>
                   <a
                     v-else
                     href="javascript:;"
@@ -174,7 +174,7 @@ export default {
   },
   methods: {
     // 判断是否可以关闭其它标签页 true是不能选择
-    judgeIsCloseOtherFunc (item, type, index) {
+    judgeIsCloseOtherFunc (type, index) {
       switch (type) {
         case 'closeRight':
           return !this.list.slice(index + 1).some(v => this.judgeIsCloseCurrentdFunc(v))
@@ -241,12 +241,14 @@ export default {
     },
     // 选中的标签页
     chooseNavTag (item) {
-      this.$nextTick(() => {
-        let tabNavRef = this.$refs.tabNavRef
-        let index = this.list.findIndex(v => isSameRoute(item, v))
-        let ele = tabNavRef[index].$el
-        this.chooseToMoveFunc(ele)
-      })
+      if (!item.meta.notOpenTab) {
+        this.$nextTick(() => {
+          let tabNavRef = this.$refs.tabNavRef
+          let index = this.list.findIndex(v => isSameRoute(item, v))
+          let ele = tabNavRef[index].$el
+          this.chooseToMoveFunc(ele)
+        })
+      }
     },
     // 得到标签名
     getNameFunc (item) {
@@ -265,7 +267,8 @@ export default {
       this.$emit('trigger-tag-close', { item, type, index })
     },
     // 点击标签页下拉菜单栏
-    handleMenuClick (options, { item, index }) {
+    handleMenuClick (options, obj = {}) {
+      const { item, index } = obj
       this.handleTagClose(item, options.key, index)
     }
   },

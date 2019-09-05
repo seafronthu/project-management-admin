@@ -51,7 +51,7 @@ const meta = {
   /**
    * @description 同时是否只能打开一个标签页
    */
-  notSinglePage: false,
+  notOpenTab: false,
   /**
    * @description 是否隐藏菜单栏
    */

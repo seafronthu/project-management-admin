@@ -5,10 +5,10 @@
   >
   <a-card :bordered="false">
     <a-form layout="inline">
-      <a-row :gutter="48">
+      <a-row :gutter="24">
         <a-col :md="8" :sm="24">
           <a-form-item label="角色ID">
-            <a-input placeholder="请输入" class="abc"/>
+            <a-input placeholder="请输入"/>
           </a-form-item>
         </a-col>
         <a-col :md="8" :sm="24">
@@ -121,7 +121,7 @@ export default {
 .role-list
   .ant-form-item
     display flex
-    margin-bottom 24px
+    margin-bottom 12px
     margin-right 0px
     .ant-form-item-label
       width auto

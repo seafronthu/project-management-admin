@@ -8,8 +8,9 @@
       <div class="route-management-top">
         <RouteOperation @trigger-add="handleAdd" />
       </div>
-      <div class="route-management-container flex-row flex-start-stretch flex-1">
-        <div class="left-menu flex-column flex-start-stretch">
+      <div class="route-management-container flex-1">
+        <a-row type="flex" :gutter="24">
+          <a-col :sm="14" :lg="10" :xs="24">
           <a-input-search
             style="margin-bottom: 8px"
             placeholder="Search"
@@ -31,10 +32,16 @@
               />
             </div>
           </div>
-        </div>
-        <div class="right-container flex-1">
-          <EditRoute :fields="fields" :routeInfo="routeInfo" @trigger-change="handleRouteParamsChange" @trigger-confirm="handleConfirm" />
-        </div>
+          </a-col>
+          <a-col :sm="10" :lg="14" :xs="24">
+             <EditRoute :fields="fields" :routeInfo="routeInfo" @trigger-change="handleRouteParamsChange" @trigger-confirm="handleConfirm" />
+          </a-col>
+        </a-row>
+        <!-- <div class="left-menu flex-column flex-start-stretch">
+        </div> -->
+        <!-- <div class="right-container flex-1">
+
+        </div> -->
       </div>
     </div>
   </ContainerFluid>
@@ -227,28 +234,21 @@ export default {
 <style lang="stylus" scoped>
 .route-management
   padding 15px
-  .route-management-top
-    height 50px
   .route-management-container
-    .left-menu
-      padding 10px 0
-      width 400px
-      .left-menu-container
-        border 1px solid #dcdcdc
-        overflow hidden
-        height 0
-        .left-menu-content
-          height 0
-          overflow-x hidden
-          overflow-y auto
-      .title
-        text-align left
-        font-weight bold
-        padding 0 10px
-        height 40px
-        margin-bottom 0
-        line-height 40px
-        border-bottom 1px solid #dcdcdc
+    .left-menu-container
+      border 1px solid #dcdcdc
+      overflow hidden
+      .left-menu-content
+        overflow-x hidden
+        overflow-y auto
+    .title
+      text-align left
+      font-weight bold
+      padding 0 10px
+      height 40px
+      margin-bottom 0
+      line-height 40px
+      border-bottom 1px solid #dcdcdc
     .right-container
       padding-left 15px
   .route-management-edit

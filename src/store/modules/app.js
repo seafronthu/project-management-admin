@@ -4,6 +4,7 @@ import {
 } from '@/api'
 export default {
   state: {
+    device: null, // 设备
     errorList: [], // 日错误志列表
     // menuList: getLocalStorage(menuStorage) || [], // 菜单列表
     tabNavList: [], // 选项卡导航
@@ -16,6 +17,10 @@ export default {
   //   }// 菜单列表
   // },
   mutations: {
+    // 切换设备
+    APP_TOGGLEDEVICE_MUTATE (state, device) {
+      state.device = device
+    },
     // 错误日志列表添加
     APP_ADDERRORLOG_MUTATE (state, error) {
       state.errorList.unshift(error)

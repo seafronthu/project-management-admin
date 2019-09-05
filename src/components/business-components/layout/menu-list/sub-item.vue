@@ -4,7 +4,7 @@
     v-bind="$props"
     v-on="$listeners">
     <span slot="title">
-      <a-icon :type="subMenuInfo.icon" /><span>{{subMenuInfo.title}}</span></span>
+      <a-icon v-if="subMenuInfo.icon" :type="subMenuInfo.icon" /><span>{{subMenuInfo.title}}</span></span>
     <template v-for="items of subMenuInfo.children">
       <template v-if="isSubMenu(items)">
         <SubItem
@@ -18,7 +18,7 @@
           v-if="isShowMenu(items)"
           :key="items.name"
         >
-          <a-icon :type="items.icon" /><span>{{items.title}}</span></a-menu-item>
+          <a-icon v-if="items.icon" :type="items.icon" /><span>{{items.title}}</span></a-menu-item>
       </template>
     </template>
   </a-sub-menu>

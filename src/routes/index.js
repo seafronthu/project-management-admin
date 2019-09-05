@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import allRouter from './router'
 import { setTitle } from '@/lib/businessUtils'
-import { Error404, Home } from './base'
+import { Error404, Home, ReplacePage } from './base'
 import notification from 'ant-design-vue/es/notification'
 import 'nprogress/nprogress.css' // progress bar style
 import NProgress from 'nprogress' // progress bar
@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
                   path: '/',
                   name: 'Layout',
                   component: Layout,
-                  children: [...store.getters.routerList]
+                  children: [ReplacePage, ...store.getters.routerList]
                 }, Error404]
               router.addRoutes(routerList)
               ++addErr

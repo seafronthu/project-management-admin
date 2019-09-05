@@ -24,8 +24,19 @@ const Home = {
     notClosed: true
   }
 }
+const ReplacePage = {
+  path: '/replace-page',
+  name: 'ReplacePage',
+  component: () => import(/* webpackChunkName: "ReplacePage" */ '@v/other/replace-page.vue'),
+  meta: {
+    title: '',
+    notCache: true,
+    notOpenTab: true
+  }
+}
 export {
   Error404,
   Login,
-  Home
+  Home,
+  ReplacePage
 }

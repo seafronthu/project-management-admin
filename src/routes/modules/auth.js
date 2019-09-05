@@ -2,7 +2,8 @@ const AuthManagement = {
   path: 'auth-management',
   name: 'AuthManagement',
   meta: {
-    title: '权限管理'
+    title: '权限管理',
+    icon: 'team'
   }
 }
 const RouteManagement = {

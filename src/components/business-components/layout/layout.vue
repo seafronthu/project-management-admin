@@ -7,41 +7,51 @@
         style="top:0;left:0;"
       >
         <TopHead>
-          <FullScreen />
-          <ErrorStore />
-          <HeaderMessage />
-          <HeaderUser />
+          <template #left>
+            <Logo v-if="!isMobile" />
+          </template>
+          <template #right>
+            <FullScreen />
+            <ErrorStore />
+            <HeaderMessage />
+            <HeaderUser />
+          </template>
         </TopHead>
       </a-layout-header>
       <a-layout>
-        <a-layout-sider
-          :trigger="null"
-          collapsible
-          v-model="collapsed"
-          theme="green"
-          class="layout-sider"
+        <a-drawer
+          v-if="isMobile"
+          wrapClassName="layout-drawer"
+          placement="left"
+          :closable="false"
+          @close="handleClose"
+          :visible="collapsed"
         >
-          <!-- <a-drawer
-            :placement="left"
-            :closable="false"
-            @close="onClose"
-            :visible="visible"
-          > -->
             <MenuList
-              :collapsed="collapsed"
-              theme="green"
+              :width="siderWidth"
+              :collapsed="false"
+              :collapsible="true"
+              @trigger-router="handleMenuSelect"
               :menu-list="menuList"
             />
-          <!-- </a-drawer> -->
-        </a-layout-sider>
+        </a-drawer>
+          <MenuList
+            v-else
+            :width="siderWidth"
+            :collapsed="collapsed"
+            :collapsible="true"
+            :menu-list="menuList"
+          />
         <a-layout
           class="layout-anim"
           :class="{'layout-anim-short': collapsed}"
+          :style="layoutLeft"
         >
           <a-layout-header
             class="layout-header layout-anim layout-nav-tag"
             style="background-color:#ffffff;"
             :class="{'layout-anim-short': collapsed}"
+            :style="layoutLeft"
           >
             <secondHead
               :collapsed="collapsed"
@@ -59,10 +69,8 @@
           <a-layout style="padding-top:88px;">
             <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
             <a-layout-content>
-              <transition :name="transitionName">
-                <keep-alive>
-                  <router-view />
-                </keep-alive>
+              <transition>
+                  <router-view/>
               </transition>
             </a-layout-content>
           </a-layout>
@@ -80,17 +88,20 @@ import SecondHead from './second-head'
 import HeaderUser from './header-user'
 import ErrorStore from './error-store'
 import FullScreen from './full-screen'
+import Logo from './logo'
 import HeaderMessage from './header-message'
+import { deviceMixin } from '@l/mixin'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 // isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
 import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
 import config from '@/config'
 export default {
   name: 'Layout',
-
+  mixins: [deviceMixin],
   data () {
     return {
       collapsed: false,
+      siderWidth: '256px', // menu和左边距大小
       tagChecked: {}, // 当前选中的标签页
       breadcrumbList: [] // 面包屑
     }
@@ -99,21 +110,44 @@ export default {
     ...mapState({
       tabNavList: state => state.app.tabNavList
     }),
-    ...mapGetters(['menuList'])
+    ...mapGetters(['menuList']),
+    layoutLeft () {
+      let paddingLeft
+      if (!this.isMobile) {
+        paddingLeft = this.collapsed ? '80px' : this.siderWidth
+        return { 'padding-left': paddingLeft }
+      }
+      return null
+    },
+    // 是否是其它设备（除了手机和台式之外的设备）
+    isOtherDevice () {
+      return !this.isMobile && !this.isDesktop
+    }
   },
 
   watch: {
     '$route': {
       handler (to, from) {
+        if (to.name === 'ReplacePage') {
+          // 刷新当前路由
+          this.$router.back()
+          return
+        }
         const { tabNavList } = this
         const { name, query, params, meta } = to
         const newTag = { name, query, params, meta }
-        if (!tabNavList.some(v => v.name === name)) {
+        if (!tabNavList.some(v => v.name === name) && !to.meta.notOpenTab) {
           this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
         }
         this.tagChecked = newTag
         let breadcrumb = to.meta && to.meta.breadcrumb
         this.breadcrumbList = [{ name: config.homeName, key: config.homeName, icon: 'home', title: '首页' }, ...(breadcrumb || [])]
+      },
+      immediate: true
+    },
+    isOtherDevice: {
+      handler (val) {
+        this.collapsed = val
       },
       immediate: true
     }
@@ -126,6 +160,7 @@ export default {
     HeaderUser,
     ErrorStore,
     FullScreen,
+    Logo,
     HeaderMessage
   },
 
@@ -151,6 +186,9 @@ export default {
       let beforeArr = []
       let afterArr = []
       switch (type) {
+        case 'refresh':
+          this.$router.push({ name: 'ReplacePage' })
+          return
         case 'closeCurrent':
           tabNavList = tabNavList.filter(v => !isSameRoute(item, v))
           break
@@ -181,6 +219,16 @@ export default {
     },
     handleRouter (name) {
       this.$router.push({ name })
+    },
+    // 手机端关闭menu抽屉触发
+    handleClose () {
+      this.collapsed = false
+    },
+    // 手机端点击menu触发
+    handleMenuSelect () {
+      if (this.isMobile) {
+        this.collapsed = false
+      }
     }
   },
   created () {
@@ -198,7 +246,10 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
+.layout-drawer
+  .ant-drawer-body
+    padding 0
 .layout
   min-height 100vh
   overflow-x hidden
@@ -216,19 +267,11 @@ export default {
       left 0
       top 44px
       z-index 89
-  .layout-sider
-    position fixed
-    left 0
-    top 0
-    z-index 90
-    height 100vh
-    box-sizing border-box
-    padding-top 45px
   .layout-anim
-    padding-left 200px
+    // padding-left 200px
     width 100vw
     transition padding 0.15s ease-in-out
     &.layout-anim-short
-      padding-left 80px
+      // padding-left 80px
       transition padding 0.25s cubic-bezier(0.215, 0.61, 0.355, 1)
 </style>

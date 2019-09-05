@@ -22,6 +22,7 @@ const getters = {
       }
     })
     state.app.tabNavList = tabNavList
+    console.log(List)
     return List
   }
 }

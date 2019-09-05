@@ -67,8 +67,8 @@ module.exports = {
       plugins,
       externals: {
         // wx: 'wx', // 键名是引入的名字 键值是全局变量名
-        vue: 'Vue',
-        'ant-design-vue': 'antd',
+        // vue: 'Vue',
+        // 'ant-design-vue': 'antd',
         jsencrypt: 'JSEncrypt',
         // vant: 'vant',
         moment: 'moment'

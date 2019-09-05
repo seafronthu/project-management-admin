@@ -1,11 +1,11 @@
 <!-- 顶部导航 -->
 <template>
   <div class="top-head flex-row flex-between-center height-full">
-    <div class="logo-container">
-      <div class="logo" />
+    <div class="top-head-left">
+      <slot name="left"></slot>
     </div>
     <div class="flex-1 height-full flex-row flex-end-stretch" style="padding: 0 15px;">
-      <slot></slot>
+      <slot name="right"></slot>
     </div>
     <!-- collapsed按钮 -->
   </div>
@@ -35,11 +35,6 @@ export default {
   height 45px
   line-height 35px
   background-color #008678
-  .logo-container
-    width 200px
+  .top-head-left
     height 100%
-    padding 5px 10px
-    .logo
-      height 100%
-      background rgba(255, 255, 255, 0.2)
 </style>

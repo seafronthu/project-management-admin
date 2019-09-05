@@ -17,7 +17,7 @@
       <span>{{itemData.title}}</span>
     </template>
     <template v-else>
-      <a-icon :type="itemData.icon" />
+      <a-icon v-if="itemData.icon" :type="itemData.icon" />
       <span>{{itemData.title}}</span>
     </template>
   </span>

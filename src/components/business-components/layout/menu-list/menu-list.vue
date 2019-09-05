@@ -1,6 +1,14 @@
 <!-- 菜单 -->
 <template>
-  <div>
+  <a-layout-sider
+    :trigger="null"
+    :theme="theme"
+    :width="width"
+    :collapsible="collapsible"
+    v-model="collapsed"
+    class="layout-sider ant-layout-sider-green"
+  >
+    <Logo />
     <a-menu
       mode="inline"
       :theme="theme"
@@ -10,7 +18,7 @@
       :openKeys="openKeys"
       :defaultSelectedKeys="[]"
       :selectedKeys="selectedKeys"
-      class="not-select"
+      class="not-select ant-menu-green"
     >
       <template v-for="items of menuList">
         <template v-if="isSubMenu(items)">
@@ -30,23 +38,36 @@
             v-if="isShowMenu(items)"
             :key="items.name"
           >
-            <a-icon :type="items.icon" /><span>{{items.title}}</span>
+            <a-icon
+              v-if="items.icon"
+              :type="items.icon"
+            /><span>{{items.title}}</span>
           </a-menu-item>
         </template>
       </template>
     </a-menu>
-  </div>
+  </a-layout-sider>
 </template>
 
 <script>
 import mixin from './mixin'
+import Logo from '../logo'
 // import SubItem from './sub-item.vue'
 import SubItemFunctional from './sub-item-functional.vue'
 export default {
   name: 'MenuList',
   mixins: [mixin],
   props: {
-    theme: String,
+    width: String,
+    theme: {
+      type: String,
+      default: 'light'
+    },
+    collapsible: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     collapsed: {
       type: Boolean,
       required: false,
@@ -73,6 +94,7 @@ export default {
   // },
   components: {
     // SubItem
+    Logo,
     SubItemFunctional
   },
 
@@ -123,7 +145,6 @@ export default {
       }
     },
     onOpenChange (openKeys) {
-      console.log(openKeys)
       this.openKeys = openKeys
       // const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1)
       // if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -133,6 +154,7 @@ export default {
       // }
     },
     handleRouter ({ item, key, keyPath }) {
+      this.$emit('trigger-router')
       this.$router.push({
         name: key
       })
@@ -142,4 +164,12 @@ export default {
   }
 }
 </script>
-<style lang="stylus"></style>
+<style lang="stylus">
+.layout-sider
+  position fixed
+  left 0
+  top 0
+  z-index 90
+  height 100vh
+  box-sizing border-box
+</style>

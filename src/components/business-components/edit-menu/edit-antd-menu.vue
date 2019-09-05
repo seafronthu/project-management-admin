@@ -7,7 +7,6 @@
       @openChange="handleOpen"
       @click="handleClick"
       @select="handleSelect"
-      :defaultOpenKeys="defaultOpenKeys"
       :openKeys="openKeys"
       :defaultSelectedKeys="defaultSelectedKeys"
       :selectedKeys="selectedKeys"

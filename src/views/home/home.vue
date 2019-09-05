@@ -18,7 +18,9 @@ export default {
 
   methods: {},
 
-  mounted () {}
+  mounted () {
+    console.log('缓存了吗')
+  }
 }
 </script>
 <style lang="stylus" scoped>
