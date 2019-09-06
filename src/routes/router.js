@@ -45,6 +45,10 @@ const meta = {
    */
   notClosed: false,
   /**
+   * @description 是否有面包屑
+   */
+  notBreadcrumb: false,
+  /**
    * @description 是否放在缓存即keep-alive
    */
   notCache: false,

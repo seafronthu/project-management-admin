@@ -1,29 +1,31 @@
 
-import {
-  arrageRouterToMenu
-} from '@l/menuManager'
-import setRouter from '@l/routerManager'
-import routers from '@/routes/modules'
-setRouter({ routers })
+import { arrageMenu, arrageRoutes } from '@l/arrangeAuthManage'
+import routes from '@/routes/modules'
 const getters = {
-  menuList: (state, getters) => {
-    const list = arrageRouterToMenu(getters.routerList)
+  menuList: state => {
+    const list = arrageMenu({
+      backstageRoutes: state.app.authorizationList,
+      frontStageRoutes: routes,
+      parentId: 0
+    })
     return list
   },
   routerList: state => {
-    let peerRouting = []
     let baseRouterList = state.app.baseRouterList
-    const List = setRouter({ routers, authorization: state.app.authorizationList, peerRouting })
-    let routerMerge = [...peerRouting, ...baseRouterList]
+    const routeList = arrageRoutes({
+      backstageRoutes: state.app.authorizationList,
+      frontStageRoutes: routes
+    })
+    let routerMerge = [...routeList, ...baseRouterList]
     let tabNavList = []
     routerMerge.forEach(v => {
       if (v.meta && v.meta.notClosed) { // 默认添加不能关闭的标签页
         tabNavList.push(v)
       }
     })
+    console.log(routeList)
     state.app.tabNavList = tabNavList
-    console.log(List)
-    return List
+    return routeList
   }
 }
 export default getters

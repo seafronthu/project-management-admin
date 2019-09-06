@@ -2,7 +2,7 @@
 <template>
   <a-breadcrumb class="not-select">
     <a-breadcrumb-item v-for="(items, index) of list" :key="items.key" class="weight-bold">
-      <a v-if="(index === 0 && list.length > 1) || (index !== list.length - 1 && items.name)" href="javascript: void 0;" @click="handleClick(items.name)">
+      <a v-if="(index === 0 && list.length > 1) || (index !== list.length - 1 && items.component)" href="javascript: void 0;" @click="handleClick(items.name)">
         <a-icon v-if="items.icon" :type="items.icon" />
         <span class="margin-left-4">{{items.title}}</span>
       </a>

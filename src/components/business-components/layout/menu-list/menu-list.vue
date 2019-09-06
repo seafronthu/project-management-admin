@@ -110,7 +110,7 @@ export default {
       }
     },
     '$route': {
-      handler () {
+      handler (val) {
         this.handleSelected()
       },
       immediate: true
@@ -120,17 +120,22 @@ export default {
     handleSelected () {
       const {
         name,
-        matched,
-        meta
+        meta,
+        meta: {
+          matched
+        }
       } = this.$route
       if (meta.hideMenu) { // 菜单栏是隐藏的
+        this.selectedKeys = []
+        this.openKeys = []
+        this.cachedOpenKeys = []
         return
       }
       // 选中的menu-item
       const len = matched.length
       const openKeys = [] // 选中的sub-menu
       if (len > 1) {
-        for (let i = 1; i < len - 1; ++i) {
+        for (let i = 0; i < len - 1; ++i) {
           const items = matched[i]
           if (!items.meta || !items.meta.hideMenu) {
             openKeys.push(items.name)

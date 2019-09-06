@@ -69,9 +69,11 @@
           <a-layout style="padding-top:88px;">
             <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
             <a-layout-content>
-              <transition>
+              <!-- <transition> -->
+                <keep-alive :include="cacheList">
                   <router-view/>
-              </transition>
+                </keep-alive>
+              <!-- </transition> -->
             </a-layout-content>
           </a-layout>
         </a-layout>
@@ -122,6 +124,10 @@ export default {
     // 是否是其它设备（除了手机和台式之外的设备）
     isOtherDevice () {
       return !this.isMobile && !this.isDesktop
+    },
+    // 缓存列表
+    cacheList () {
+      return [...this.tabNavList.length ? this.tabNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
     }
   },
 

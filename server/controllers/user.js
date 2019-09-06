@@ -4,15 +4,6 @@ const userModels = require('../models/user')
 const { sendRespond } = require('../lib/utils')
 const ROUTER = [
   {
-    id: '1',
-    parentId: '0',
-    title: '首页',
-    href: '',
-    keywords: '牛皮牛皮',
-    genre: 'detail',
-    component: 'Home'
-  },
-  {
     id: '2',
     parentId: '0',
     title: 'API开发管理',
