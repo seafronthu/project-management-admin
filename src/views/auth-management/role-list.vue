@@ -26,7 +26,7 @@
       <a-row>
         <a-col>
           <a-form-item>
-            <a-button type="primary"><a-icon type="plus" />新增</a-button>
+            <a-button type="primary" @click="handleAdd"><a-icon type="plus" />新增</a-button>
           </a-form-item>
         </a-col>
       </a-row>
@@ -67,10 +67,12 @@
       </template>
     </a-table>
   </a-card>
+  <OperateRoleModel :visible="visible" :fields="fields"/>
   </ContainerFluid>
 </template>
 
 <script>
+import OperateRoleModel from './components/operate-role-model.vue'
 const columns = [
   { title: '唯一识别码', dataIndex: 'id' },
   { title: '角色名称', dataIndex: 'name' },
@@ -91,15 +93,28 @@ export default {
   data () {
     return {
       columns,
-      tableData
+      tableData,
+      visible: false,
+      fields: {
+        id: '',
+        name: '',
+        description: '',
+        createRoleNum: '',
+        createUserNum: ''
+      }
     }
   },
 
-  components: {},
+  components: {
+    OperateRoleModel
+  },
 
   computed: {},
 
   methods: {
+    handleAdd () {
+      this.visible = true
+    },
     handleExpanded (expanded, record) {
       if (expanded && !record.user) {
         let index = this.tableData.findIndex(v => v.id === record.id)

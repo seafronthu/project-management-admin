@@ -34,7 +34,7 @@
           </div>
           </a-col>
           <a-col :sm="10" :lg="14" :xs="24">
-             <EditRoute :fields="fields" :routeInfo="routeInfo" @trigger-change="handleRouteParamsChange" @trigger-confirm="handleConfirm" />
+             <OperateRoute :fields="fields" :routeInfo="routeInfo" @trigger-change="handleRouteParamsChange" @trigger-confirm="handleConfirm" />
           </a-col>
         </a-row>
         <!-- <div class="left-menu flex-column flex-start-stretch">
@@ -50,7 +50,7 @@
 <script>
 import { EditAntdMenu } from '@business/edit-menu'
 import { arrageDataToTree } from '@l/businessUtils'
-import EditRoute from './components/edit-route'
+import OperateRoute from './components/operate-route'
 import { createRouteApi, updateRouteApi, getRouteApi } from '@/api'
 import RouteOperation from './components/route-operation'
 export default {
@@ -100,7 +100,7 @@ export default {
   },
   components: {
     EditAntdMenu,
-    EditRoute,
+    OperateRoute,
     RouteOperation
   },
   methods: {
