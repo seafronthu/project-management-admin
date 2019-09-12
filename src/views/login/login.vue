@@ -22,7 +22,6 @@
             message="Alert Message Text"
             type="success"
             closable
-            :afterClose="handleClose"
           />
         </li>
         <!-- 账号 -->
@@ -71,7 +70,7 @@
           </div>
         </li>
         <li class="login-remember">
-          <a-checkbox @change="onChange">自动登录</a-checkbox>
+          <a-checkbox>自动登录</a-checkbox>
         </li>
         <li class="login-btn">
           <a-button

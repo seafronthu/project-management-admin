@@ -1,6 +1,8 @@
 
-const returnMessage = require('../config/message')
+const { returnMessage, USER_CODE } = require('../config/message')
 const userModels = require('../models/user')
+const { PASSWORD_SUFFIX } = require('../config')
+const { md5 } = require('../lib/cypher')
 const { sendRespond } = require('../lib/utils')
 const ROUTER = [
   {
@@ -88,10 +90,18 @@ const ROUTER = [
 ]
 
 exports.login = async cxt => {
-  let data = {
-    token: '11111'
+  let { request: { body: { account, password } } } = cxt
+  if (typeof password === 'string' && password.length <= 30) {
+    password = md5(password + PASSWORD_SUFFIX, 2)
+    const [error, results] = await userModels.login(cxt.sql_connection, { account, password })
+    if (error) {
+      sendRespond({ cxt, data: error, code: 500 })
+      return
+    }
+    sendRespond({ cxt, data: { toekn: 111 }, code: 200 })
+    return
   }
-  sendRespond({ cxt, data, message: returnMessage(200) })
+  sendRespond({ cxt, code: USER_CODE[4004] })
 }
 exports.getUserInfo = async cxt => {
   let data = {
@@ -106,7 +116,7 @@ exports.getUserAthority = async cxt => {
   let data = {
     list: ROUTER
   }
-  sendRespond({ cxt, data, message: returnMessage(200) })
+  sendRespond({ cxt, data, code: 200 })
 }
 exports.getRoute = async cxt => {
   const [error, results] = await userModels.getRoute(cxt.sql_connection)
@@ -114,7 +124,7 @@ exports.getRoute = async cxt => {
     sendRespond({ cxt, data: error, code: 500, status: 500, message: error.message })
     return
   }
-  sendRespond({ cxt, data: results[0], message: returnMessage(200) })
+  sendRespond({ cxt, data: results[0], code: 200 })
 }
 // 创建路由
 exports.createRoute = async cxt => {

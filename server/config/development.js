@@ -6,6 +6,7 @@ const config = {
   hostname: '127.0.0.1',
   port: 9527,
   key: '', //
+  PASSWORD_SUFFIX: 'current_20190912',
   MYSQL_HOST: localSql.MYSQL_HOST,
   MYSQL_PORT: localSql.MYSQL_PORT,
   MYSQL_USER: localSql.MYSQL_USER,
