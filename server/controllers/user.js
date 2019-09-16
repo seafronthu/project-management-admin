@@ -98,10 +98,13 @@ exports.login = async cxt => {
       sendRespond({ cxt, data: error, code: 500 })
       return
     }
-    sendRespond({ cxt, data: { toekn: 111 }, code: 200 })
+    if (results[0].length === 0) {
+      sendRespond({ cxt, code: 4003 })
+      return
+    }
     return
   }
-  sendRespond({ cxt, code: USER_CODE[4004] })
+  sendRespond({ cxt, code: 4004 })
 }
 exports.getUserInfo = async cxt => {
   let data = {

@@ -1,9 +1,37 @@
-const crypto = require('crypto')
-function md5 (str, times = 1, encoding = 'hex') {
-  for (let i = 0; i < times; ++i) {
-    const hash = crypto.createHash('md5')
-    str = hash.update(str).digest(encoding)
+var redis = require('redis')
+var client = redis.createClient()
+
+// if you'd like to select database 3, instead of 0 (default), call
+// client.select(3, function() { /* ... */ });
+
+client.on('error', function (err) {
+  console.log('Error ' + err)
+})
+
+// while (len < 10) {
+//   len ++
+//   client.set('string key', len, redis.print)
+// }
+client.info(function (err, res) {
+  console.log(err)
+  console.log(res)
+})
+// client.set('string key', 'string val', redis.print)
+// client.get('string key', redis.print)
+// client.hset('hash key', 'hashtest 1', 'some value', redis.print)
+// client.hmset(['hash key', 'hashtest 2', 'some other value', 'hashtest 3', 'some third value'], redis.print)
+// client.hgetall('hash key', function (err, replies) {
+//   console.log(err)
+//   console.log(replies)
+// })
+client.hkeys('hash key', function (err, replies) {
+  if (err) {
+    console.log(err)
+    return
   }
-  return str
-}
-console.log(md5('a', 2))
+  console.log(replies.length + ' replies:')
+  replies.forEach(function (reply, i) {
+    console.log('    ' + i + ': ' + reply)
+  })
+  client.quit()
+})

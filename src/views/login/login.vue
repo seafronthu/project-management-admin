@@ -114,7 +114,7 @@ export default {
       this[name] = ''
     },
     handleLogin () {
-      this.USER_LOGIN_ACTION({ account: '18888727875', password: 'admin' }).then(res => {
+      this.USER_LOGIN_ACTION({ account: '18888727875', password: 'hu10086.1' }).then(res => {
         if (res.code === 200) {
           location.href = '/home'
         }

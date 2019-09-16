@@ -2,7 +2,7 @@ const { errorCaptured } = require('../lib/utils')
 // 登录
 exports.login = async (connection, { account, password }) => {
   let conc = await connection
-  return errorCaptured(conc.execute.bind(conc), `SELECT id from USER WHERE account="${account}" AND password="${password}" AND tag=0`) // await connection.execute
+  return errorCaptured(conc.execute.bind(conc), `SELECT * from USER WHERE account="${account}" AND password="${password}" AND tag=0`) // await connection.execute
 }
 // 获取路由
 exports.getRoute = async (connection) => {
