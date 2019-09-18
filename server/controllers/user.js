@@ -1,5 +1,5 @@
 
-const { returnMessage, USER_CODE } = require('../config/message')
+// const { returnMessage, USER_CODE } = require('../config/message')
 const userModels = require('../models/user')
 const { PASSWORD_SUFFIX } = require('../config')
 const { md5 } = require('../lib/cypher')
@@ -102,6 +102,7 @@ exports.login = async cxt => {
       sendRespond({ cxt, code: 4003 })
       return
     }
+    sendRespond({ cxt, code: 200, data: { token: 1111 } })
     return
   }
   sendRespond({ cxt, code: 4004 })
@@ -112,7 +113,7 @@ exports.getUserInfo = async cxt => {
     age: '18',
     sex: '1'
   }
-  sendRespond({ cxt, data, message: returnMessage(200) })
+  sendRespond({ cxt, data, message: 200 })
 }
 // 获取用户权限
 exports.getUserAthority = async cxt => {
@@ -139,7 +140,7 @@ exports.createRoute = async cxt => {
     return
   }
   const { insertId } = results[0]
-  sendRespond({ cxt, data: { id: insertId }, message: returnMessage(200) })
+  sendRespond({ cxt, data: { id: insertId }, message: 200 })
 }
 // 修改路由
 exports.updateRoute = async cxt => {
@@ -150,5 +151,5 @@ exports.updateRoute = async cxt => {
     sendRespond({ cxt, data: error, code: 500, status: 500, message: error.message })
     return
   }
-  sendRespond({ cxt, data: results[0], message: returnMessage(200) })
+  sendRespond({ cxt, data: results[0], message: 200 })
 }
