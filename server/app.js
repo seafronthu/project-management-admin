@@ -4,11 +4,13 @@ const path = require('path')
 const staticCache = require('koa-static-cache') // 静态资源
 const bodyParser = require('koa-bodyparser') // 请求内容
 const mysql = require('./lib/mysql')
+const redisClient = require('./lib/redisClient')
 // const Router = require('koa-router')()
 const config = require('./config')
 const { port } = config
 const app = new Koa()
 app.context.sql_connection = mysql
+app.context.redisClient = redisClient
 app.use(staticCache(path.join(__dirname, '../dist'), {
   maxAge: 365 * 24 * 60 * 60,
   gzip: true

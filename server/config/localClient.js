@@ -1,0 +1,10 @@
+module.exports = {
+  MYSQL_HOST: '47.98.107.252',
+  MYSQL_PORT: '10001',
+  MYSQL_USER: 'hhf',
+  MYSQL_PASSWORD: '^2JbFx.4PMZK9rzki!yT',
+  MYSQL_DATABASE: 'myproject',
+  REDIS_HOST: '47.98.107.252',
+  REDIS_PORT: '10002',
+  REDIS_PASSWORD: '@SDGwUY+5-0Q9NI7uHuADg4-urp-1n'
+}
