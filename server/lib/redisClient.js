@@ -5,4 +5,10 @@ const redis = new Redis({
   port: config.REDIS_PORT,
   password: config.REDIS_PASSWORD
 })
+redis.on('connect', m => {
+  console.log(m)
+})
+redis.on('error', m => {
+  console.log(m)
+})
 exports = module.exports = redis

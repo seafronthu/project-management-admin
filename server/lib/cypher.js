@@ -12,13 +12,44 @@ function md5 (str, times = 1, encoding = 'hex') {
  * @param {*} key
  */
 function encryptRsa (data, key) {
-  // 注意，第二个参数是Buffer类型
-  console.log(key, Buffer.from(data))
-  return crypto.publicEncrypt(key, Buffer.from(data))
+  // 注意，第二个参数是Buffer类型 填充方式：crypto.constants.RSA_NO_PADDING, crypto.constants.RSA_PKCS1_PADDING, or crypto.constants.RSA_PKCS1_OAEP_PADDING.
+  let obj = Object.prototype.toString.call(key) === '[object Object]' ? key : {
+    key
+  }
+  let padding = obj.padding
+  switch (padding) {
+    case 'RSA_PKCS1_OAEP_PADDING':
+      padding = crypto.constants.RSA_PKCS1_OAEP_PADDING
+      break
+    case 'RSA_NO_PADDING':
+      padding = crypto.constants.RSA_NO_PADDING
+      break
+    default:
+      padding = crypto.constants.RSA_PKCS1_PADDING
+      break
+  }
+  obj.padding = padding
+  return crypto.publicEncrypt(obj, Buffer.from(data)).toString('base64')
 }
 function decryptRsa (encryptData, key) {
+  let obj = Object.prototype.toString.call(key) === '[object Object]' ? key : {
+    key
+  }
+  let padding = obj.padding
+  switch (padding) {
+    case 'RSA_PKCS1_OAEP_PADDING':
+      padding = crypto.constants.RSA_PKCS1_OAEP_PADDING
+      break
+    case 'RSA_NO_PADDING':
+      padding = crypto.constants.RSA_NO_PADDING
+      break
+    default:
+      padding = crypto.constants.RSA_PKCS1_PADDING
+      break
+  }
+  obj.padding = padding
   // 注意，encrypted是Buffer类型
-  return crypto.privateDecrypt(key, encryptData)
+  return crypto.privateDecrypt(obj, Buffer.from(encryptData, 'base64')).toString()
 }
 /**
  * 创建rsa公私钥
@@ -34,7 +65,7 @@ function createRsaKey (publicKeyEncoding = {
   format: 'pem'
   // cipher: 'aes-256-cbc',
   // passphrase: ''
-}, modulusLength = 4096) {
+}, modulusLength = 2048) {
   const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
     modulusLength,
     publicKeyEncoding,
