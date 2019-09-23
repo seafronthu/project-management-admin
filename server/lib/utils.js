@@ -6,7 +6,12 @@ const CODE = require('../config/message')
  */
 async function errorCaptured (asyncFunc, ...arg) {
   try {
-    let res = await asyncFunc(...arg)
+    let res
+    if (Object.prototype.toString.call(asyncFunc) === '[object Promise]') {
+      res = await asyncFunc
+    } else {
+      res = await asyncFunc(...arg)
+    }
     return [null, res]
   } catch (err) {
     console.log(asyncFunc.toString(), arg, err, 'err')

@@ -1,9 +1,12 @@
 
 // const { returnMessage, USER_CODE } = require('../config/message')
-const userModels = require('../models/user')
+const userModels = require('../models/user') // mysql操作\
+const userService = require('../service/user') // redis操作
 const { PASSWORD_SUFFIX } = require('../config')
-const { md5 } = require('../lib/cypher')
+const { PUBLIC_KEY } = require('../config/basicConfig')
+const { md5, encryptRsa } = require('../lib/cypher')
 const { sendRespond } = require('../lib/utils')
+// const moment = require('moment')
 const ROUTER = [
   {
     id: '2',
@@ -102,8 +105,19 @@ exports.login = async cxt => {
       sendRespond({ cxt, code: 4003 })
       return
     }
-    sendRespond({ cxt, code: 200, data: { token: 1111 } })
-    return
+    const { id, account: account2, auth, roleId } = results[0][0]
+    // const [error2, results2] = await userService.login(cxt.redisClient, { id, account: account2, auth, roleId })
+    let date = new Date().getTime()
+    const [error2, results2] = await userService.login(cxt.redisClient, { id, account: account2, auth, roleId, date })
+    if (error2) {
+      sendRespond({ cxt, data: error2, code: 500 })
+      return
+    }
+    if (results2.length > 1 && results2[1][1] === 1) {
+      let token = encryptRsa(`id=${id}&date=${date}`, PUBLIC_KEY)
+      sendRespond({ cxt, code: 200, data: { token } })
+      return
+    }
   }
   sendRespond({ cxt, code: 4004 })
 }
