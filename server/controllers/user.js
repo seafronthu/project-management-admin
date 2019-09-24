@@ -92,78 +92,86 @@ const ROUTER = [
 
 ]
 
-exports.login = async cxt => {
-  let { request: { body: { account, password } } } = cxt
+exports.login = async ctx => {
+  ctx.req.on('close', function (err, result) {
+    console.log(err, result, 'close')
+    console.log(ctx.res.finished)
+  })
+  ctx.req.on('end', function (err, result) {
+    console.log(err, result, 'end')
+    console.log(ctx.res.finished)
+  })
+  let { request: { body: { account, password } } } = ctx
   if (typeof password === 'string' && password.length <= 30) {
-    password = md5(password + PASSWORD_SUFFIX, 2)
-    const [error, results] = await userModels.login(cxt.sql_connection, { account, password })
-    if (error) {
-      sendRespond({ cxt, data: error, code: 500 })
+    password = md5(password + PASSWORD_SUFFIX, 2) // 登录密码md5两次加密
+    const [error, results] = await userModels.login(ctx.sql_connection, { account, password }) // 数据库得到用户信息
+    if (error) { // 数据库错误日志收集
+      sendRespond({ ctx, data: error, code: 500 })
       return
     }
-    if (results[0].length === 0) {
-      sendRespond({ cxt, code: 4003 })
+    if (results[0].length === 0) { // 没有该用户
+      sendRespond({ ctx, code: 4003 })
       return
     }
     const { id, account: account2, auth, roleId } = results[0][0]
-    // const [error2, results2] = await userService.login(cxt.redisClient, { id, account: account2, auth, roleId })
-    let date = new Date().getTime()
-    const [error2, results2] = await userService.login(cxt.redisClient, { id, account: account2, auth, roleId, date })
-    if (error2) {
-      sendRespond({ cxt, data: error2, code: 500 })
+    // const [error2, results2] = await userService.login(ctx.redisClient, { id, account: account2, auth, roleId })
+    let date = new Date().getTime() // 用作单点登录校验同时存在redis和token中
+    const [error2, results2] = await userService.login(ctx.redisClient, { id, account: account2, auth, roleId, date }) // redis储存登录信息
+    if (error2) { // redis错误日志收集
+      sendRespond({ ctx, data: error2, code: 500 })
       return
     }
-    if (results2.length > 1 && results2[1][1] === 1) {
-      let token = encryptRsa(`id=${id}&date=${date}`, PUBLIC_KEY)
-      sendRespond({ cxt, code: 200, data: { token } })
+    if (results2.length > 1 && results2[0][1] === 1) { // 登录成功
+      let token = encryptRsa(`id=${id}&date=${date}`, PUBLIC_KEY) // 根据密钥生成token
+      sendRespond({ ctx, code: 200, data: { token } })
       return
     }
   }
-  sendRespond({ cxt, code: 4004 })
+  sendRespond({ ctx, code: 4004 })
 }
-exports.getUserInfo = async cxt => {
+exports.getUserInfo = async ctx => {
   let data = {
     name: '胡哥',
     age: '18',
     sex: '1'
   }
-  sendRespond({ cxt, data, message: 200 })
+  sendRespond({ ctx, data, message: 200 })
 }
 // 获取用户权限
-exports.getUserAthority = async cxt => {
+exports.getUserAthority = async ctx => {
   let data = {
     list: ROUTER
   }
-  sendRespond({ cxt, data, code: 200 })
+  sendRespond({ ctx, data, code: 200 })
 }
-exports.getRoute = async cxt => {
-  const [error, results] = await userModels.getRoute(cxt.sql_connection)
+exports.getRoute = async ctx => {
+  const [error, results] = await userModels.getRoute(ctx.sql_connection)
   if (error) {
-    sendRespond({ cxt, data: error, code: 500, status: 500, message: error.message })
+    sendRespond({ ctx, data: error, code: 500, status: 500, message: error.message })
     return
   }
-  sendRespond({ cxt, data: results[0], code: 200 })
+  sendRespond({ ctx, data: results[0], code: 200 })
 }
 // 创建路由
-exports.createRoute = async cxt => {
-  let { request: { body: { component, parentId, title, description, genre, buttonType } } } = cxt
-  const [error, results] = await userModels.createRoute(cxt.sql_connection, { component, parentId, title, description, genre, buttonType })
+exports.createRoute = async ctx => {
+  let { request: { body: { component, parentId, title, description, genre, buttonType } } } = ctx
+  const [error, results] = await userModels.createRoute(ctx.sql_connection, { component, parentId, title, description, genre, buttonType })
   console.log(results, 'create')
   if (error) {
-    sendRespond({ cxt, data: error, code: 500, status: 500, message: error.message })
+    sendRespond({ ctx, data: error, code: 500, status: 500, message: error.message })
     return
   }
   const { insertId } = results[0]
-  sendRespond({ cxt, data: { id: insertId }, message: 200 })
+  sendRespond({ ctx, data: { id: insertId }, message: 200 })
 }
 // 修改路由
-exports.updateRoute = async cxt => {
-  let { request: { body: { component, parentId, title, description, genre, buttonType } } } = cxt
-  const [error, results] = await userModels.updateRoute(cxt.sql_connection, { component, parentId, title, description, genre, buttonType })
+exports.updateRoute = async ctx => {
+  let { request: { body: { component, parentId, title, description, genre, buttonType } } } = ctx
+  const [error, results] = await userModels.updateRoute(ctx.sql_connection, { component, parentId, title, description, genre, buttonType })
   console.log(results, 'update')
   if (error) {
-    sendRespond({ cxt, data: error, code: 500, status: 500, message: error.message })
+    sendRespond({ ctx, data: error, code: 500, status: 500, message: error.message })
     return
   }
-  sendRespond({ cxt, data: results[0], message: 200 })
+  sendRespond({ ctx, data: results[0], message: 200 })
 }

@@ -23,6 +23,7 @@ async function errorCaptured (asyncFunc, ...arg) {
  * @param {JSON} {cxt: JSON, data: JSON, code: Number} 对象
  */
 function sendRespond ({ cxt, data = {}, code = 200, status = 200, message, contentType = 'json' }) {
+  console.log(cxt.type, 1)
   cxt.type = contentType
   cxt.status = status
   cxt.body = JSON.stringify({
@@ -31,5 +32,10 @@ function sendRespond ({ cxt, data = {}, code = 200, status = 200, message, conte
     message: message || CODE[code]
   })
 }
+// function overTime (cxt, { timeout = 20000 }) {
+//   let timer = setTimeout(() => {
+
+//   }, timeout)
+// }
 exports.errorCaptured = errorCaptured
 exports.sendRespond = sendRespond
