@@ -4,6 +4,7 @@ function loginApi (data) {
   return HttpReq.jsonPost({
     url: '/user/login',
     data,
+    timeout: 5000,
     notLogin: true
   })
 }

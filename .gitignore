@@ -4,6 +4,7 @@ node_modules
 /server/config/localClient.js
 /server/config/id_rsa.pub
 /server/config/id_rsa
+/server/logs
 
 # local env files
 .env.local

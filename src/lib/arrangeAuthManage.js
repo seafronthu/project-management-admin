@@ -146,22 +146,22 @@ function arrageObjToRouterTree ({
 }
 /**
  * 合并路由
- * @param {{backstageRoutes:JSON, frontStageRoutes: JSON}} {backstageRoutes 后台路由, frontStageRoutes 前台路由}
+ * @param {{backstageRoutes:JSON, frontstageRoutes: JSON}} {backstageRoutes 后台路由, frontstageRoutes 前台路由}
  * @returns {JSON} 返回合并的路由数据
  */
 function backFrontRoutesConcat ({
   backstageRoutes,
-  frontStageRoutes
+  frontstageRoutes
 }) {
   let arr = []
   let objRoute = arrageArrToObj(backstageRoutes) // 以parentId为键名的JSON对象
   backstageRoutes.forEach((items, index) => {
-    if (items.genre === 'menu' || items.genre === 'list' || items.genre === 'detail') {
-      if (!frontStageRoutes[items.component]) {
+    if (items.genre === 'MENU' || items.genre === 'LIST' || items.genre === 'DETAIL') {
+      if (!frontstageRoutes[items.component]) {
         return
       }
       // 合并前后端路由
-      let route = frontStageRoutes[items.component]
+      let route = frontstageRoutes[items.component]
       let meta = route.meta || {}
       let routeObj = {
         name: route.name,
@@ -186,7 +186,7 @@ function backFrontRoutesConcat ({
         objRoute[items.id].forEach(its => {
           let genre = its.genre
           let buttonType = its.buttonType
-          if (genre === 'button' && buttonType !== 'other') { // 按钮权限 增删改
+          if (genre === 'BUTTON' && buttonType !== 'OTHER') { // 按钮权限 增删改
             let buttonArray = routeObj.meta[buttonType]
             if (Array.isArray(buttonArray)) {
               routeObj.meta[buttonType].push(its.component)
@@ -203,18 +203,19 @@ function backFrontRoutesConcat ({
 }
 /**
  * 合并整理路由
- * @param {{backstageRoutes:JSON, frontStageRoutes: JSON}} {backstageRoutes 后台路由, frontStageRoutes 前台路由}
+ * @param {{backstageRoutes:JSON, frontstageRoutes: JSON}} {backstageRoutes 后台路由, frontstageRoutes 前台路由}
  * @returns {JSON} 返回合并的路由数据
  */
 function arrageRoutes ({
   backstageRoutes,
-  frontStageRoutes,
+  frontstageRoutes,
   parentId = 0
 }) {
   let routeConcatArr = backFrontRoutesConcat({
     backstageRoutes,
-    frontStageRoutes
+    frontstageRoutes
   })
+  console.log(routeConcatArr)
   let tempArr = routeConcatArr.map(v => ({ ...v })) // 浅拷贝数据 防止叠加path
   return routeConcatArr.map(v => {
     // 面包屑
@@ -271,11 +272,11 @@ function arrageRoutes ({
 }
 /**
  * 整理成树状menu
- * @param {{frontStageRoutes: Array, menuArrangement: JSON, parentId: Number}} {frontStageRoutes: 前端路由, menuArrangement: 整理后的后端路由, parentId: 父级id}
+ * @param {{frontstageRoutes: Array, menuArrangement: JSON, parentId: Number}} {frontstageRoutes: 前端路由, menuArrangement: 整理后的后端路由, parentId: 父级id}
  * @returns {JSON[]}
  */
 function arrageMenuTree ({
-  frontStageRoutes,
+  frontstageRoutes,
   menuArrangement,
   parentId = 0
 }) {
@@ -283,7 +284,7 @@ function arrageMenuTree ({
   let parentArr = []
   arr.forEach(items => {
     // 合并菜单
-    if (items.genre === 'menu' || items.genre === 'list' || items.genre === 'detail') {
+    if (items.genre === 'MENU' || items.genre === 'LIST' || items.genre === 'DETAIL') {
       // const routeObj = routers[items.component] ? routers[items.component] : { // 父级路由
       //   name: items.component,
       //   path: componentNameConversion(items.component)['-'],
@@ -291,7 +292,7 @@ function arrageMenuTree ({
       //   meta: {}
       // }
       // parentRoute.meta.detail = true
-      const routeObj = frontStageRoutes[items.component] || {}
+      const routeObj = frontstageRoutes[items.component] || {}
       const meta = routeObj.meta || {}
       if (!meta || !meta.hideMenu) {
         let id = items.id
@@ -307,7 +308,7 @@ function arrageMenuTree ({
         if (menuArrangement[id]) {
           let children = arrageMenuTree({
             menuArrangement,
-            frontStageRoutes,
+            frontstageRoutes,
             parentId: id
           })
           if (children.length > 0) {
@@ -322,11 +323,11 @@ function arrageMenuTree ({
 }
 function arrageMenu ({
   backstageRoutes,
-  frontStageRoutes,
+  frontstageRoutes,
   parentId = 0
 }) {
   return arrageMenuTree({
-    frontStageRoutes,
+    frontstageRoutes,
     menuArrangement: arrageArrToObj(backstageRoutes),
     parentId
   })

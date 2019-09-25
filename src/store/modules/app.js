@@ -51,7 +51,7 @@ export default {
       try {
         const res = await getUserAthorityApi()
         if (res.code === 200) {
-          const authRouter = res.data.list
+          const authRouter = res.data
           commit('APP_ADDBASEROUTERLIST_MUTATE', baseRouterList) // 添加默认路由
           commit('APP_ADDUSERATHORITYAPI_MUTATE', authRouter) // 添加权限路由
         }

@@ -31,7 +31,7 @@ let createRoute = {
 }
 // 修改路由
 let updateRoute = {
-  method: 'post',
+  method: 'put',
   path: '/user/updateRoute',
   middleware: controllers.updateRoute
 }

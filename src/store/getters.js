@@ -5,16 +5,17 @@ const getters = {
   menuList: state => {
     const list = arrageMenu({
       backstageRoutes: state.app.authorizationList,
-      frontStageRoutes: routes,
+      frontstageRoutes: routes,
       parentId: 0
     })
+    console.log(list)
     return list
   },
   routerList: state => {
     let baseRouterList = state.app.baseRouterList
     const routeList = arrageRoutes({
       backstageRoutes: state.app.authorizationList,
-      frontStageRoutes: routes
+      frontstageRoutes: routes
     })
     let routerMerge = [...routeList, ...baseRouterList]
     let tabNavList = []
@@ -23,7 +24,6 @@ const getters = {
         tabNavList.push(v)
       }
     })
-    console.log(routeList)
     state.app.tabNavList = tabNavList
     return routeList
   }

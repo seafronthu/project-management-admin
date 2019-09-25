@@ -20,9 +20,9 @@ let str = 'hello word 您好啊！'
 let publicKey = fs.readFileSync(path.resolve(__dirname, './config/id_rsa.pub'))
 let privateKey = fs.readFileSync(path.resolve(__dirname, './config/id_rsa'))
 let enData = encryptRsa(str, publicKey)
-console.log(enData)
-fs.writeFileSync(path.resolve(__dirname, './config/base64'), enData)
-let deData = decryptRsa(enData, privateKey)
+console.log(enData.replace(/2/g, 1))
+// fs.writeFileSync(path.resolve(__dirname, './config/base64'), enData)
+let deData = decryptRsa(enData.replace(/2/g, 1), privateKey)
 console.log(deData)
 // utils.js
 // const crypto = require('crypto')

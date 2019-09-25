@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const { collectLog } = require('./utils')
 function md5 (str, times = 1, encoding = 'hex') {
   for (let i = 0; i < times; ++i) {
     const hash = crypto.createHash('md5')
@@ -49,7 +50,16 @@ function decryptRsa (encryptData, key) {
   }
   obj.padding = padding
   // 注意，encrypted是Buffer类型
-  return crypto.privateDecrypt(obj, Buffer.from(encryptData, 'base64')).toString()
+  try {
+    return crypto.privateDecrypt(obj, Buffer.from(encryptData, 'base64')).toString()
+  } catch (error) {
+    collectLog({
+      message: error,
+      collectFile: __filename,
+      collectFunc: 'decryptRsa'
+    })
+    return null
+  }
 }
 /**
  * 创建rsa公私钥

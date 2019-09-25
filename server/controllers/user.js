@@ -5,102 +5,95 @@ const userService = require('../service/user') // redis操作
 const { PASSWORD_SUFFIX } = require('../config')
 const { PUBLIC_KEY } = require('../config/basicConfig')
 const { md5, encryptRsa } = require('../lib/cypher')
-const { sendRespond } = require('../lib/utils')
+// const { delayTime } = require('../lib/utils')
+const { sendRespond, redisUserInfo } = require('../lib/program')
 // const moment = require('moment')
-const ROUTER = [
-  {
-    id: '2',
-    parentId: '0',
-    title: 'API开发管理',
-    href: '',
-    keywords: 'API开发管理',
-    genre: 'list',
-    component: 'ApiManagement'
-  },
-  {
-    id: '3',
-    parentId: '0',
-    title: '账号管理',
-    href: '',
-    keywords: '账号管理',
-    genre: 'menu',
-    component: 'AccountManagement'
-  },
-  {
-    id: '4',
-    parentId: '3',
-    title: '个人中心',
-    href: '',
-    keywords: '个人中心',
-    genre: 'list',
-    component: 'Personal'
-  },
-  {
-    id: '5',
-    parentId: '3',
-    title: '用户中心',
-    href: '',
-    keywords: '用户中心',
-    genre: 'menu',
-    component: 'User'
-  },
-  {
-    id: '6',
-    parentId: '5',
-    title: '用户列表',
-    href: '',
-    keywords: '用户列表',
-    genre: 'list',
-    component: 'UserList'
-  },
-  {
-    id: '7',
-    parentId: '6',
-    title: '用户详情',
-    href: '',
-    keywords: '用户详情',
-    genre: 'detail',
-    component: 'UserDetail'
-  },
-  {
-    id: '8',
-    parentId: '0',
-    title: '权限管理',
-    href: '',
-    keywords: '权限管理',
-    genre: 'menu',
-    component: 'AuthManagement'
-  },
-  {
-    id: '9',
-    parentId: '8',
-    title: '路由管理',
-    href: '',
-    keywords: '路由管理',
-    genre: 'list',
-    component: 'RouteManagement'
-  },
-  {
-    id: '10',
-    parentId: '8',
-    title: '角色列表',
-    href: '',
-    keywords: '路由管理',
-    genre: 'list',
-    component: 'RoleList'
-  }
+// const ROUTER = [
+//   {
+//     id: '2',
+//     parentId: '0',
+//     title: 'API开发管理',
+//     href: '',
+//     keywords: 'API开发管理',
+//     genre: 'list',
+//     component: 'ApiManagement'
+//   },
+//   {
+//     id: '3',
+//     parentId: '0',
+//     title: '账号管理',
+//     href: '',
+//     keywords: '账号管理',
+//     genre: 'menu',
+//     component: 'AccountManagement'
+//   },
+//   {
+//     id: '4',
+//     parentId: '3',
+//     title: '个人中心',
+//     href: '',
+//     keywords: '个人中心',
+//     genre: 'list',
+//     component: 'Personal'
+//   },
+//   {
+//     id: '5',
+//     parentId: '3',
+//     title: '用户中心',
+//     href: '',
+//     keywords: '用户中心',
+//     genre: 'menu',
+//     component: 'User'
+//   },
+//   {
+//     id: '6',
+//     parentId: '5',
+//     title: '用户列表',
+//     href: '',
+//     keywords: '用户列表',
+//     genre: 'list',
+//     component: 'UserList'
+//   },
+//   {
+//     id: '7',
+//     parentId: '6',
+//     title: '用户详情',
+//     href: '',
+//     keywords: '用户详情',
+//     genre: 'detail',
+//     component: 'UserDetail'
+//   },
+//   {
+//     id: '8',
+//     parentId: '0',
+//     title: '权限管理',
+//     href: '',
+//     keywords: '权限管理',
+//     genre: 'menu',
+//     component: 'AuthManagement'
+//   },
+//   {
+//     id: '9',
+//     parentId: '8',
+//     title: '路由管理',
+//     href: '',
+//     keywords: '路由管理',
+//     genre: 'list',
+//     component: 'RouteManagement'
+//   },
+//   {
+//     id: '10',
+//     parentId: '8',
+//     title: '角色列表',
+//     href: '',
+//     keywords: '路由管理',
+//     genre: 'list',
+//     component: 'RoleList'
+//   }
 
-]
+// ]
 
 exports.login = async ctx => {
-  ctx.req.on('close', function (err, result) {
-    console.log(err, result, 'close')
-    console.log(ctx.res.finished)
-  })
-  ctx.req.on('end', function (err, result) {
-    console.log(err, result, 'end')
-    console.log(ctx.res.finished)
-  })
   let { request: { body: { account, password } } } = ctx
   if (typeof password === 'string' && password.length <= 30) {
     password = md5(password + PASSWORD_SUFFIX, 2) // 登录密码md5两次加密
@@ -121,7 +114,7 @@ exports.login = async ctx => {
       sendRespond({ ctx, data: error2, code: 500 })
       return
     }
-    if (results2.length > 1 && results2[0][1] === 1) { // 登录成功
+    if (results2.length > 1 && results2[0][1] === 'OK') { // 登录成功
       let token = encryptRsa(`id=${id}&date=${date}`, PUBLIC_KEY) // 根据密钥生成token
       sendRespond({ ctx, code: 200, data: { token } })
       return
@@ -129,20 +122,57 @@ exports.login = async ctx => {
   }
   sendRespond({ ctx, code: 4004 })
 }
+// 获取用户信息
 exports.getUserInfo = async ctx => {
-  let data = {
-    name: '胡哥',
-    age: '18',
-    sex: '1'
+  let token = ctx.headers['token']
+  let result = await redisUserInfo(ctx.redisClient, { token }) // 从redis得到用户令牌信息
+  const {
+    code,
+    id
+    // roleId,
+    // auth
+  } = result
+  if (code !== 200) {
+    sendRespond({ ctx, code })
+    return
   }
-  sendRespond({ ctx, data, message: 200 })
+  const [error2, results2] = await userModels.getUserInfo(ctx.sql_connection, { id })
+  if (error2) { // redis错误日志收集
+    sendRespond({ ctx, data: error2, code: 500 })
+    return
+  }
+  if (results2[0].length === 0) { // 没有该用户
+    sendRespond({ ctx, code: 4007 })
+    return
+  }
+  const data = results2[0][0]
+  sendRespond({ ctx, data })
 }
 // 获取用户权限
 exports.getUserAthority = async ctx => {
-  let data = {
-    list: ROUTER
+  let token = ctx.headers['token']
+  let result = await redisUserInfo(ctx.redisClient, { token }) // 从redis得到用户令牌信息
+  const {
+    code,
+    // id
+    roleId,
+    auth
+  } = result
+  if (code !== 200) {
+    sendRespond({ ctx, code })
+    return
   }
-  sendRespond({ ctx, data, code: 200 })
+  // let data = {
+  //   list: ROUTER
+  // }
+  const [error2, results2] = await userModels.getUserAthority(ctx.sql_connection, { roleId, auth }) // 从sql中获得该用户角色下的所有路由权限
+  if (error2) { // redis错误日志收集
+    sendRespond({ ctx, data: error2, code: 500 })
+    return
+  }
+  const data = results2[0]
+  sendRespond({ ctx, data })
+  sendRespond({ ctx, data })
 }
 exports.getRoute = async ctx => {
   const [error, results] = await userModels.getRoute(ctx.sql_connection)
@@ -166,8 +196,8 @@ exports.createRoute = async ctx => {
 }
 // 修改路由
 exports.updateRoute = async ctx => {
-  let { request: { body: { component, parentId, title, description, genre, buttonType } } } = ctx
-  const [error, results] = await userModels.updateRoute(ctx.sql_connection, { component, parentId, title, description, genre, buttonType })
+  let { request: { body: { component, id, title, description, genre, buttonType } } } = ctx
+  const [error, results] = await userModels.updateRoute(ctx.sql_connection, { component, id, title, description, genre, buttonType })
   console.log(results, 'update')
   if (error) {
     sendRespond({ ctx, data: error, code: 500, status: 500, message: error.message })
