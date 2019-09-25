@@ -9,8 +9,8 @@
         shape="circle"
         size="default"
         class="top-user-dropdown-link"
-      >{{avatarValue}}</a-avatar>
-      <span class="top-user-nick">{{avatarValue}}</span>
+      >{{info.nickName}}</a-avatar>
+      <span class="top-user-nick">{{info.nickName}}</span>
     </div>
     <a-menu slot="overlay">
       <a-menu-item><a href="javascript:;">个人中心</a>
@@ -34,7 +34,9 @@
 <script>
 export default {
   name: 'HeaderUser',
-
+  props: {
+    info: Object
+  },
   data () {
     return {
       avatarValue: '锋少'

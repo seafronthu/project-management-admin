@@ -6,22 +6,16 @@ import {
 export default {
   state: {
     token: getToken(),
-    userId: '',
-    userName: '',
-    userHeadImage: ''
+    userInfo: {}
   },
   mutations: {
-    // 设置用户头像
-    USER_SETUSERHEADIMAGE_MUTATE (state, headImgPath) {
-      state.userHeadImage = headImgPath
-    },
-    // 设置用户id
-    USER_SETUSERID_MUTATE (state, userId) {
-      state.userId = userId
-    },
     // 设置用户信息
-    USER_SETUSERINFO_MUTATE (state, userName) {
-      state.name = name
+    USER_SETUSERINFO_MUTATE (state, data) {
+      const userInfo = state.userInfo
+      state.userInfo = {
+        ...userInfo,
+        ...data
+      }
     },
     // 设置token
     USER_SETTOKEN_MUTATE (state, token) {

@@ -200,7 +200,7 @@ export default {
           } else { // 添加
             return createRouteApi({ parentId, component, title, description, genre, buttonType }).then(res => {
               if (res.code === 200) {
-                $this.$message.success(res.message)
+                $this.$message.success('修改成功')
                 $this.successInsert({ parentId, component, title, description, genre, buttonType, id: res.data.id })
                 return
               }

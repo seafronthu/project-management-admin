@@ -14,7 +14,7 @@
             <FullScreen />
             <ErrorStore />
             <HeaderMessage />
-            <HeaderUser />
+            <HeaderUser :info="userInfo"/>
           </template>
         </TopHead>
       </a-layout-header>
@@ -110,7 +110,8 @@ export default {
   },
   computed: {
     ...mapState({
-      tabNavList: state => state.app.tabNavList
+      tabNavList: state => state.app.tabNavList,
+      userInfo: state => state.user.userInfo
     }),
     ...mapGetters(['menuList']),
     layoutLeft () {

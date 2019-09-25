@@ -15,7 +15,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: 'API开发管理',
 //     href: '',
 //     keywords: 'API开发管理',
-//     genre: 'list',
+//     genre: 'LIST',
 //     component: 'ApiManagement'
 //   },
 //   {
@@ -24,7 +24,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: '账号管理',
 //     href: '',
 //     keywords: '账号管理',
-//     genre: 'menu',
+//     genre: 'MENU',
 //     component: 'AccountManagement'
 //   },
 //   {
@@ -33,7 +33,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: '个人中心',
 //     href: '',
 //     keywords: '个人中心',
-//     genre: 'list',
+//     genre: 'LIST',
 //     component: 'Personal'
 //   },
 //   {
@@ -42,7 +42,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: '用户中心',
 //     href: '',
 //     keywords: '用户中心',
-//     genre: 'menu',
+//     genre: 'MENU',
 //     component: 'User'
 //   },
 //   {
@@ -51,7 +51,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: '用户列表',
 //     href: '',
 //     keywords: '用户列表',
-//     genre: 'list',
+//     genre: 'LIST',
 //     component: 'UserList'
 //   },
 //   {
@@ -60,7 +60,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: '用户详情',
 //     href: '',
 //     keywords: '用户详情',
-//     genre: 'detail',
+//     genre: 'DETAIL',
 //     component: 'UserDetail'
 //   },
 //   {
@@ -69,7 +69,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: '权限管理',
 //     href: '',
 //     keywords: '权限管理',
-//     genre: 'menu',
+//     genre: 'MENU',
 //     component: 'AuthManagement'
 //   },
 //   {
@@ -78,7 +78,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: '路由管理',
 //     href: '',
 //     keywords: '路由管理',
-//     genre: 'list',
+//     genre: 'LIST',
 //     component: 'RouteManagement'
 //   },
 //   {
@@ -87,7 +87,7 @@ const { sendRespond, redisUserInfo } = require('../lib/program')
 //     title: '角色列表',
 //     href: '',
 //     keywords: '路由管理',
-//     genre: 'list',
+//     genre: 'LIST',
 //     component: 'RoleList'
 //   }
 
@@ -171,7 +171,8 @@ exports.getUserAthority = async ctx => {
     return
   }
   const data = results2[0]
-  sendRespond({ ctx, data })
+
+  // let data = ROUTER
   sendRespond({ ctx, data })
 }
 exports.getRoute = async ctx => {
@@ -203,5 +204,17 @@ exports.updateRoute = async ctx => {
     sendRespond({ ctx, data: error, code: 500, status: 500, message: error.message })
     return
   }
-  sendRespond({ ctx, data: results[0], message: 200 })
+  let data = results[0]
+  const { affectedRows, changedRows } = data
+  if (affectedRows > 0 && changedRows > 0) {
+    sendRespond({ ctx, message: 200 })
+    return
+  }
+  if (affectedRows > 0 && changedRows === 0) {
+    sendRespond({ ctx, message: 201 })
+    return
+  }
+  if (affectedRows === 0 && changedRows === 0) {
+    sendRespond({ ctx, message: 251 })
+  }
 }

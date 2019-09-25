@@ -1,6 +1,6 @@
 <!-- 角色详情 -->
 <template>
-  <div></div>
+  <div>这是角色详情</div>
 </template>
 
 <script>
