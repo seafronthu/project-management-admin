@@ -215,7 +215,6 @@ function arrageRoutes ({
     backstageRoutes,
     frontstageRoutes
   })
-  console.log(routeConcatArr)
   let tempArr = routeConcatArr.map(v => ({ ...v })) // 浅拷贝数据 防止叠加path
   return routeConcatArr.map(v => {
     // 面包屑

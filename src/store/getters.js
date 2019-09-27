@@ -1,14 +1,14 @@
 
 import { arrageMenu, arrageRoutes } from '@l/arrangeAuthManage'
 import routes from '@/routes/modules'
+import { Home } from '@/routes/base'
 const getters = {
   menuList: state => {
     const list = arrageMenu({
       backstageRoutes: state.app.authorizationList,
-      frontstageRoutes: routes,
+      frontstageRoutes: { Home, ...routes },
       parentId: 0
     })
-    console.log(list)
     return list
   },
   routerList: state => {

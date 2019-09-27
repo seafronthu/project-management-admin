@@ -1,6 +1,10 @@
 import axios from 'axios'
 import qs from 'qs'
 import store from '@/store'
+import route from '@/routes'
+import { message } from 'ant-design-vue'
+import config from '@/config'
+const { initialPageName } = config
 // import { APP_API_NAME } from '@/api'
 // import { checkObjectTool } from './tools'
 // import { getToken, setToken } from './utils'
@@ -43,10 +47,12 @@ axios.interceptors.response.use(response => {
   switch (status) {
     case 200:
       let { data } = response
-      const code = data.return_code
+      const code = data.code
       // 未登录
-      if (code === '400' || code === '401') {
+      if (code === 4001 || code === 4002 || code === 4003 || code === 4004 || code === 4005 || code === 4006 || code === 4007) {
         store.dispatch('USER_LOGOUT_ACTION')
+        message.warning(data.message)
+        route.push(initialPageName)
       }
       return data
     default:
@@ -54,6 +60,7 @@ axios.interceptors.response.use(response => {
       return {}
   }
 }, error => {
+  console.log(error)
   // 网络异常 收集信息
   if (error && error.response) {
     const { response, response: { data, status } } = error

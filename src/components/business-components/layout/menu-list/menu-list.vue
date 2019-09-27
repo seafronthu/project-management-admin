@@ -1,14 +1,15 @@
 <!-- 菜单 -->
 <template>
   <a-layout-sider
+    :class="['layout-sider',`layout-sider-${themeColor}`]"
     :trigger="null"
     :theme="theme"
     :width="width"
     :collapsible="collapsible"
     v-model="collapsed"
-    class="layout-sider ant-layout-sider-green"
   >
     <Logo />
+      <!-- :inlineCollapsed="collapsed" -->
     <a-menu
       mode="inline"
       :theme="theme"
@@ -18,7 +19,7 @@
       :openKeys="openKeys"
       :defaultSelectedKeys="[]"
       :selectedKeys="selectedKeys"
-      class="not-select ant-menu-green"
+      :class="['not-select',`menu-${themeColor}`]"
     >
       <template v-for="items of menuList">
         <template v-if="isSubMenu(items)">
@@ -59,6 +60,10 @@ export default {
   mixins: [mixin],
   props: {
     width: String,
+    themeColor: {
+      type: String,
+      default: ''
+    },
     theme: {
       type: String,
       default: 'light'
@@ -72,7 +77,8 @@ export default {
       type: Boolean,
       required: false,
       default: false
-    }
+    },
+    menuList: Array
   },
   data () {
     return {
@@ -132,7 +138,7 @@ export default {
         return
       }
       // 选中的menu-item
-      const len = matched.length
+      const len = (matched && matched.length) || 0
       const openKeys = [] // 选中的sub-menu
       if (len > 1) {
         for (let i = 0; i < len - 1; ++i) {
@@ -143,10 +149,13 @@ export default {
         }
         // 防止缩小菜单栏每次路由改变会展开二级菜单
         this.collapsed ? (this.cachedOpenKeys = openKeys) : (this.openKeys = openKeys)
-        let vals = matched[len - 1]
-        if (!vals.meta || !vals.meta.hideMenu) {
-          this.selectedKeys = [name]
-        }
+      } else {
+        this.cachedOpenKeys = openKeys
+        this.openKeys = openKeys
+      }
+      // let vals = matched[len - 1]
+      if (!meta || !meta.hideMenu) {
+        this.selectedKeys = [name]
       }
     },
     onOpenChange (openKeys) {

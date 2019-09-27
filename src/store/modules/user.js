@@ -30,16 +30,12 @@ export default {
   actions: {
     // 获取用户信息
     async USER_GETUSERINFO_ACTION ({ commit, state }) {
-      try {
-        let res = await getUserInfoApi()
-        if (res.code === 200) {
-          const data = res.data
-          commit('USER_SETUSERINFO_MUTATE', data)
-        }
-        return res
-      } catch (err) {
-        console.log(err)
+      let res = await getUserInfoApi()
+      if (res.code === 200) {
+        const data = res.data
+        commit('USER_SETUSERINFO_MUTATE', data)
       }
+      return res
     },
     // 登录
     async USER_LOGIN_ACTION ({ commit, dispatch }, { account, password }) {

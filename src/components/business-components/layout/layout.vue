@@ -28,6 +28,7 @@
           :visible="collapsed"
         >
             <MenuList
+            theme-color="green"
               :width="siderWidth"
               :collapsed="false"
               :collapsible="true"
@@ -37,6 +38,7 @@
         </a-drawer>
           <MenuList
             v-else
+            theme-color="green"
             :width="siderWidth"
             :collapsed="collapsed"
             :collapsible="true"

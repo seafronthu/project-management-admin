@@ -22,7 +22,7 @@ const Home = {
   meta: {
     title: '首页',
     notClosed: true,
-    hideMenu: true
+    icon: 'home'
   }
 }
 const ReplacePage = {
