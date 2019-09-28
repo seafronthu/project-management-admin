@@ -49,22 +49,23 @@ router.beforeEach((to, from, next) => {
     if (store.getters.routerList.length === 0) {
       store.dispatch('USER_GETUSERINFO_ACTION').then(res => {
         if (res.code === 200) {
-          store.dispatch('APP_GETUSERATHORITYAPI_ACTION', [Home]).then(res => {
+          store.dispatch('APP_GETUSERATHORITYAPI_ACTION', { Home }).then(res => {
             if (res.code === 200 && store.getters.routerList.length > 0) {
               const routerList = [
+                // {
+                //   path: '/home',
+                //   name: 'Default',
+                //   alias: '/',
+                //   component: Layout,
+                //   meta: {
+                //     title: '首页'
+                //   }
+                //   // children: [Home]
+                // },
                 {
                   path: '/home',
                   name: 'Default',
                   alias: '/',
-                  component: Layout,
-                  meta: {
-                    title: '首页'
-                  },
-                  children: [Home]
-                },
-                {
-                  path: '/',
-                  name: 'Layout',
                   component: Layout,
                   children: [ReplacePage, ...store.getters.routerList]
                 }, Error404]

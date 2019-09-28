@@ -9,7 +9,7 @@ export default {
     // menuList: getLocalStorage(menuStorage) || [], // 菜单列表
     tabNavList: [], // 选项卡导航
     authorizationList: [], // 权限列表
-    baseRouterList: [] // 默认路由
+    baseRouterList: {} // 默认路由
   },
   // getters: {
   //   menuList: (state, getters, rootState) => {
@@ -52,7 +52,7 @@ export default {
         const res = await getUserAthorityApi()
         if (res.code === 200) {
           const authRouter = res.data
-          commit('APP_ADDBASEROUTERLIST_MUTATE', baseRouterList) // 添加默认路由
+          commit('APP_ADDBASEROUTERLIST_MUTATE', { ...baseRouterList }) // 添加默认路由
           commit('APP_ADDUSERATHORITYAPI_MUTATE', authRouter) // 添加权限路由
         }
         return res

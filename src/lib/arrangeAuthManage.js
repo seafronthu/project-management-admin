@@ -291,7 +291,10 @@ function arrageMenuTree ({
       //   meta: {}
       // }
       // parentRoute.meta.detail = true
-      const routeObj = frontstageRoutes[items.component] || {}
+      const routeObj = frontstageRoutes[items.component]
+      if (!routeObj) {
+        return
+      }
       const meta = routeObj.meta || {}
       if (!meta || !meta.hideMenu) {
         let id = items.id

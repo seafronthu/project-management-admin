@@ -27,7 +27,8 @@ const RoleDetail = {
   name: 'RoleDetail',
   component: () => import(/* webpackChunkName: "RoleDetail" */ '@v/auth-management/role-detail.vue'),
   meta: {
-    title: '角色详情'
+    title: '角色详情',
+    hideMenu: true
   }
 }
 export default {

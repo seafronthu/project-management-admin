@@ -27,16 +27,6 @@ async function errorCaptured (asyncFunc, ...arg) {
   }
 }
 
-/**
- * 同步延迟器
- * @param {*} time 延迟时间
- */
-async function delayTime (time = 200, timer) {
-  return new Promise((resolve, reject) => {
-    timer = setTimeout(resolve, time)
-  })
-}
-
 function collectLog ({
   message, // 日志信息
   collectFile = '', // 收集日志方法的文件（包括地址）
@@ -68,6 +58,5 @@ function collectLog ({
 // }
 exports = module.exports = {
   errorCaptured,
-  delayTime,
   collectLog
 }

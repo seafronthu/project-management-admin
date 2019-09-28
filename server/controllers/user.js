@@ -124,8 +124,7 @@ exports.login = async ctx => {
 }
 // 获取用户信息
 exports.getUserInfo = async ctx => {
-  let token = ctx.headers['token']
-  let result = await redisUserInfo(ctx.redisClient, { token }) // 从redis得到用户令牌信息
+  let result = await redisUserInfo(ctx) // 从redis得到用户令牌信息
   const {
     code,
     id
@@ -150,8 +149,7 @@ exports.getUserInfo = async ctx => {
 }
 // 获取用户权限
 exports.getUserAthority = async ctx => {
-  let token = ctx.headers['token']
-  let result = await redisUserInfo(ctx.redisClient, { token }) // 从redis得到用户令牌信息
+  let result = await redisUserInfo(ctx) // 从redis得到用户令牌信息
   const {
     code,
     // id
@@ -176,20 +174,45 @@ exports.getUserAthority = async ctx => {
   sendRespond({ ctx, data })
 }
 exports.getRoute = async ctx => {
+  let result = await redisUserInfo(ctx) // 从redis得到用户令牌信息
+  const {
+    code
+    // id
+    // roleId,
+    // auth
+  } = result
+  if (code !== 200) {
+    sendRespond({ ctx, code })
+    return
+  }
   const [error, results] = await userModels.getRoute(ctx.sql_connection)
   if (error) {
-    sendRespond({ ctx, data: error, code: 500, status: 500, message: error.message })
+    sendRespond({ ctx, data: error, code: 500 })
     return
   }
   sendRespond({ ctx, data: results[0], code: 200 })
 }
 // 创建路由
 exports.createRoute = async ctx => {
+  let result = await redisUserInfo(ctx) // 从redis得到用户令牌信息
+  const {
+    code
+    // id
+    // roleId,
+    // auth
+  } = result
+  if (code !== 200) {
+    sendRespond({ ctx, code })
+    return
+  }
   let { request: { body: { component, parentId, title, description, genre, buttonType } } } = ctx
   const [error, results] = await userModels.createRoute(ctx.sql_connection, { component, parentId, title, description, genre, buttonType })
-  console.log(results, 'create')
   if (error) {
-    sendRespond({ ctx, data: error, code: 500, status: 500, message: error.message })
+    if (error.code === 'ER_DUP_ENTRY') {
+      sendRespond({ ctx, code: 252 })
+      return
+    }
+    sendRespond({ ctx, data: error, code: 500 })
     return
   }
   const { insertId } = results[0]
@@ -197,24 +220,34 @@ exports.createRoute = async ctx => {
 }
 // 修改路由
 exports.updateRoute = async ctx => {
+  let result = await redisUserInfo(ctx) // 从redis得到用户令牌信息
+  const {
+    code
+    // id
+    // roleId,
+    // auth
+  } = result
+  if (code !== 200) {
+    sendRespond({ ctx, code })
+    return
+  }
   let { request: { body: { component, id, title, description, genre, buttonType } } } = ctx
   const [error, results] = await userModels.updateRoute(ctx.sql_connection, { component, id, title, description, genre, buttonType })
-  console.log(results, 'update')
   if (error) {
-    sendRespond({ ctx, data: error, code: 500, status: 500, message: error.message })
+    sendRespond({ ctx, data: error, code: 500 })
     return
   }
   let data = results[0]
   const { affectedRows, changedRows } = data
   if (affectedRows > 0 && changedRows > 0) {
-    sendRespond({ ctx, message: 200 })
+    sendRespond({ ctx, code: 200 })
     return
   }
   if (affectedRows > 0 && changedRows === 0) {
-    sendRespond({ ctx, message: 201 })
+    sendRespond({ ctx, code: 201 })
     return
   }
   if (affectedRows === 0 && changedRows === 0) {
-    sendRespond({ ctx, message: 251 })
+    sendRespond({ ctx, code: 251 })
   }
 }

@@ -107,6 +107,7 @@ export default {
       collapsed: false,
       siderWidth: '256px', // menu和左边距大小
       tagChecked: {}, // 当前选中的标签页
+      initBreadcrumb: [],
       breadcrumbList: [] // 面包屑
     }
   },
@@ -115,7 +116,7 @@ export default {
       tabNavList: state => state.app.tabNavList,
       userInfo: state => state.user.userInfo
     }),
-    ...mapGetters(['menuList']),
+    ...mapGetters(['menuList', 'routerList']),
     layoutLeft () {
       let paddingLeft
       if (!this.isMobile) {
@@ -145,14 +146,13 @@ export default {
         const { tabNavList } = this
         const { name, query, params, meta } = to
         const newTag = { name, query, params, meta }
-        if (!tabNavList.some(v => v.name === name) && !to.meta.notOpenTab) {
+        if (!tabNavList.some(v => v.name === name) && !meta.notOpenTab) {
           this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
         }
         this.tagChecked = newTag
-        let breadcrumb = to.meta && to.meta.breadcrumb
-        this.breadcrumbList = [{ name: config.homeName, key: config.homeName, icon: 'home', title: '首页' }, ...(breadcrumb || [])]
-      },
-      immediate: true
+        let breadcrumb = config.homeName[0] === name ? [] : meta && meta.breadcrumb
+        this.breadcrumbList = [...this.initBreadcrumb, ...(breadcrumb || [])]
+      }
     },
     isOtherDevice: {
       handler (val) {
@@ -238,9 +238,21 @@ export default {
       if (this.isMobile) {
         this.collapsed = false
       }
+    },
+    // 首次加载的时候存入 tabnav 和 breadcrumbList的数据
+    handleFirstLoading () {
+      const { name, query, params, meta } = this.$route
+      let homeInfoArr = this.routerList.filter(v => config.homeName.includes(v.name) || (v.name === name && !meta.notOpenTab))
+      const newTag = { name, query, params, meta }
+      this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr])
+      this.tagChecked = newTag
+      this.initBreadcrumb = homeInfoArr.filter(v => config.homeName[0] === v.name).map(v => ({ name: v.name, ...v.meta, key: v.name }))
+      let breadcrumb = config.homeName[0] === name ? [] : meta && meta.breadcrumb
+      this.breadcrumbList = [...this.initBreadcrumb, ...(breadcrumb || [])]
     }
   },
   created () {
+    this.handleFirstLoading()
     // window.addEventListener('popstate', (e) => {
     //   console.log(e)
     // })

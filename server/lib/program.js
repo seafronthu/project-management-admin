@@ -23,7 +23,9 @@ function sendRespond ({ ctx, data = {}, code = 200, status = 200, message, conte
  * @param {{token: String}} {token: 加密令牌}
  * @returns {{code: Number, data: [JSON,undefined]}}
  */
-async function redisUserInfo (redis, { token }) {
+async function redisUserInfo (ctx) {
+  const redis = ctx.redisClient
+  const token = ctx.headers['token']
   let data = decryptRsa(token, PRIVATE_KEY)
   if (!data) { // 非法令牌
     return {

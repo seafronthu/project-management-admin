@@ -3,6 +3,7 @@
   <ContainerFluid
     class="bg-color-f"
     full
+    :spinning="spinning"
   >
     <div class="route-management flex-column flex-start-stretch height-full">
       <div class="route-management-top">
@@ -34,7 +35,9 @@
           </div>
           </a-col>
           <a-col :sm="10" :lg="14" :xs="24">
+            <a-spin :spinning="rightSpinning">
              <OperateRoute :fields="fields" :routeInfo="routeInfo" @trigger-change="handleRouteParamsChange" @trigger-confirm="handleConfirm" />
+            </a-spin>
           </a-col>
         </a-row>
         <!-- <div class="left-menu flex-column flex-start-stretch">
@@ -55,7 +58,10 @@ import { createRouteApi, updateRouteApi, getRouteApi } from '@/api'
 import RouteOperation from './components/route-operation'
 export default {
   data () {
+    this.spinningTimer = null
     return {
+      spinning: false, // 容器加载中……
+      rightSpinning: false, // 模拟加载中……（这边虽然没有请求接口，但是让用户感觉在修改）
       defaultOpenKeys: [],
       openKeys: [],
       defaultSelectedKeys: [],
@@ -105,7 +111,9 @@ export default {
   },
   methods: {
     getRoute () {
+      this.spinning = true
       getRouteApi().then(res => {
+        this.spinning = false
         if (res.code === 200) {
           this.routeList = res.data
         }
@@ -170,8 +178,11 @@ export default {
     },
     // 路由操作
     handleEdit ({ item, key, keyPath, itemData }) {
+      this.rightSpinning = true
+      this.spinningTimer = setTimeout(() => {
+        this.rightSpinning = false
+      }, 1000)
       const handleMethod = `handle${key.replace(key[0], key[0].toUpperCase())}`
-      console.log(handleMethod)
       this[handleMethod]({ item, key, keyPath, itemData })
     },
     // 路由参数修改
@@ -187,24 +198,35 @@ export default {
       const { component, title, description, genre, buttonType } = fields
       let $this = this
       let typeName = id ? '修改' : '新增'
-      this.$confirm({
+      $this.$confirm({
         title: `你确定${typeName}路由权限吗？`,
         content: '请慎重操作',
         onOk () {
           if (id) { // 修改
             return updateRouteApi({ component, title, description, genre, buttonType, id }).then(res => {
               if (res.code === 200) {
-
+                $this.succcessUpdate({ parentId, component, title, description, genre, buttonType, id })
+                $this.$success({
+                  title: '修改成功！'
+                })
+              } else if (res.code) {
+                $this.$warning({
+                  title: res.message
+                })
               }
             })
           } else { // 添加
             return createRouteApi({ parentId, component, title, description, genre, buttonType }).then(res => {
               if (res.code === 200) {
-                $this.$message.success('修改成功')
                 $this.successInsert({ parentId, component, title, description, genre, buttonType, id: res.data.id })
-                return
+                $this.$success({
+                  title: '保存成功！'
+                })
+              } else if (res.code) {
+                $this.$warning({
+                  title: res.message
+                })
               }
-              $this.$message.warning(res.message)
             })
           }
         },
@@ -226,6 +248,10 @@ export default {
   },
   created () {
     this.getRoute()
+  },
+  beforeDestroy () {
+    clearTimeout(this.spinningTimer)
+    this.spinningTimer = null
   },
   mounted () {
   }

@@ -13,6 +13,17 @@ function getUrlKeyPair (url) {
   })
   return obj
 }
+/**
+ * 同步延迟器
+ * @param {*} time 延迟时间
+ */
+async function delayTime (time = 200, timer) {
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(resolve, time)
+  })
+}
+
 exports = module.exports = {
-  getUrlKeyPair
+  getUrlKeyPair,
+  delayTime
 }

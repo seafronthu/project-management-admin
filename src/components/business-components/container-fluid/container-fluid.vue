@@ -1,8 +1,10 @@
 <!-- 100%容器  -->
 <template>
-  <div class="container-fluid" ref="fluid" :style="{height: full ? height : null}" >
-    <slot></slot>
-  </div>
+  <a-spin :spinning="spinning" :tip="spinTip" :size="spinSize">
+    <div class="container-fluid" ref="fluid" :style="{height: full ? height : null}" >
+      <slot></slot>
+    </div>
+  </a-spin>
 </template>
 
 <script>
@@ -12,6 +14,18 @@ export default {
     full: {
       type: Boolean,
       default: false
+    },
+    spinning: {
+      type: Boolean,
+      default: false
+    },
+    spinTip: {
+      type: String,
+      default: 'Loading……'
+    },
+    spinSize: {
+      type: String,
+      default: 'large'
     }
   },
   data () {

@@ -38,9 +38,9 @@ export default {
     pro: 'http://api.seafronthu.com'
   },
   /**
-   * @description 默认打开的首页的路由name值，默认为home
+   * @description 默认打开的时候展示的tagnav路由name值 首页的为第一个
    */
-  homeName: 'Home',
+  homeName: ['Home'],
   /**
    * @description 初始页为登录页
    */
