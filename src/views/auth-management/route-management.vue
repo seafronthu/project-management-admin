@@ -206,26 +206,18 @@ export default {
             return updateRouteApi({ component, title, description, genre, buttonType, id }).then(res => {
               if (res.code === 200) {
                 $this.succcessUpdate({ parentId, component, title, description, genre, buttonType, id })
-                $this.$success({
-                  title: '修改成功！'
-                })
+                $this.$message.succuss('修改成功！')
               } else if (res.code) {
-                $this.$warning({
-                  title: res.message
-                })
+                $this.$message.warning(res.message)
               }
             })
           } else { // 添加
             return createRouteApi({ parentId, component, title, description, genre, buttonType }).then(res => {
               if (res.code === 200) {
                 $this.successInsert({ parentId, component, title, description, genre, buttonType, id: res.data.id })
-                $this.$success({
-                  title: '保存成功！'
-                })
+                $this.$message.succuss('保存成功！')
               } else if (res.code) {
-                $this.$warning({
-                  title: res.message
-                })
+                $this.$message.warning(res.message)
               }
             })
           }

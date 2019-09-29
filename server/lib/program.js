@@ -1,4 +1,4 @@
-const redisConfig = require('../config/redisConfig')
+const redisKey = require('../config/redisKey')
 // const { errorCaptured } = require('../lib/utils')
 const { getUrlKeyPair } = require('../tools/tool')
 const CODE = require('../config/message')
@@ -34,7 +34,7 @@ async function redisUserInfo (ctx) {
   }
   let urlObj = getUrlKeyPair(data)
   let { id, date } = urlObj
-  const keyName = `${redisConfig.login}_${id}`
+  const keyName = `${redisKey.login}_${id}`
   // let hgetVal = await redis.hget(keyName, 'id')
   // let time = await redis.ttl(keyName)
   // let hkeysVal = await redis.hkeys(keyName)

@@ -15,8 +15,10 @@
   <a-menu
     style="width: 256px"
     :defaultSelectedKeys="['1']"
+    @openChange="onOpenChange"
     :defaultOpenKeys="['sub1']"
     :mode="mode"
+    :openKeys="openKeys"
     :theme="theme"
   >
     <a-menu-item key="1">
@@ -31,6 +33,10 @@
       <span slot="title"><a-icon type="appstore" /><span>Navigation Three</span></span>
       <a-menu-item key="3">Option 3</a-menu-item>
       <a-menu-item key="4">Option 4</a-menu-item>
+      <a-sub-menu key="sub1-1" title="Submenu">
+        <a-menu-item key="5">Option 5</a-menu-item>
+        <a-menu-item key="6">Option 6</a-menu-item>
+      </a-sub-menu>
       <a-sub-menu key="sub1-2" title="Submenu">
         <a-menu-item key="5">Option 5</a-menu-item>
         <a-menu-item key="6">Option 6</a-menu-item>
@@ -51,7 +57,9 @@ export default {
   data () {
     return {
       mode: 'inline',
-      theme: 'light'
+      theme: 'light',
+      rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
+      openKeys: ['sub1']
     }
   },
   methods: {
@@ -60,6 +68,14 @@ export default {
     },
     changeTheme (checked) {
       this.theme = checked ? 'dark' : 'light'
+    },
+    onOpenChange (openKeys) {
+      const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1)
+      if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+        this.openKeys = openKeys
+      } else {
+        this.openKeys = latestOpenKey ? [latestOpenKey] : []
+      }
     }
   }
 }

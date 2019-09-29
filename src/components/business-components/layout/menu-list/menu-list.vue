@@ -86,7 +86,8 @@ export default {
       defaultSelectedKeys: [],
       selectedKeys: [], // 选中的menuitem
       openKeys: [], // 展开的submenu
-      cachedOpenKeys: [] // 缓存的submenu 防止菜单栏缩小的时候会自动展开二级菜单或者放大菜单栏 没有展开二级菜单
+      cachedOpenKeys: [], // 缓存的submenu 防止菜单栏缩小的时候会自动展开二级菜单或者放大菜单栏 没有展开二级菜单
+      levelMenu: [] // 点击菜单，收起其他展开的所有菜单，保持菜单聚焦简洁
     }
   },
   // beforeRouteUpdate (to, from, next) {
@@ -159,19 +160,37 @@ export default {
       }
     },
     onOpenChange (openKeys) {
-      this.openKeys = openKeys
-      // const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1)
+      console.log(this.menuList)
+      const latestOpenKey = openKeys.find(key => !this.openKeys.includes(key))
+      // console.log(openKeys, latestOpenKey)
       // if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      //   this.openKeys = openKeys
+      this.openKeys = openKeys
       // } else {
       //   this.openKeys = latestOpenKey ? [latestOpenKey] : []
       // }
+      // this.openKeys = latestOpenKey ? [latestOpenKey] : []
     },
     handleRouter ({ item, key, keyPath }) {
       this.$emit('trigger-router')
       this.$router.push({
         name: key
       })
+    },
+    levalMenuFunc (menuList) {
+      let nodes = []
+      let stack = menuList.map(v => v)
+      if (menuList) {
+      // 广度优先遍历BFS
+        while (stack.length > 0) {
+          let item = stack.shift()
+          nodes.push(item.name)
+          if (item.children && item.children.length > 0) {
+            item.children.forEach(its => {
+              stack.push(its)
+            })
+          }
+        }
+      }
     }
   },
   created () {
