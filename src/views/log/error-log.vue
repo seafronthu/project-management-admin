@@ -113,11 +113,11 @@ export default {
   computed: {
     ...mapState({
       errorList: state => state.app.errorList
-    }),
+    })
   //   tableData () {
   //     // this.errorList.map(v => {})
   //   }
-  // },
+  },
 
   methods: {
     handleAdd () {
