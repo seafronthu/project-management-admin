@@ -71,11 +71,11 @@
           <a-layout style="padding-top:88px;">
             <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
             <a-layout-content>
-              <!-- <transition> -->
+              <transition name="page-slide-fade">
                 <keep-alive :include="cacheList">
                   <router-view/>
                 </keep-alive>
-              <!-- </transition> -->
+              </transition>
             </a-layout-content>
           </a-layout>
         </a-layout>

@@ -55,6 +55,7 @@ import mixin from './mixin'
 import Logo from '../logo'
 // import SubItem from './sub-item.vue'
 import SubItemFunctional from './sub-item-functional.vue'
+import { gradeChildren } from '@l/businessUtils'
 export default {
   name: 'MenuList',
   mixins: [mixin],
@@ -160,15 +161,22 @@ export default {
       }
     },
     onOpenChange (openKeys) {
-      console.log(this.menuList)
-      const latestOpenKey = openKeys.find(key => !this.openKeys.includes(key))
-      // console.log(openKeys, latestOpenKey)
-      // if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      this.openKeys = openKeys
-      // } else {
-      //   this.openKeys = latestOpenKey ? [latestOpenKey] : []
-      // }
-      // this.openKeys = latestOpenKey ? [latestOpenKey] : []
+      const { openKeys: openOldKeys, levelMenu } = this
+      // 只打开一个menu逻辑
+      const latestOpenKey = openKeys.find(key => !openOldKeys.includes(key))
+      // 关闭自己
+      if (!latestOpenKey) {
+        this.openKeys = openKeys
+      }
+      for (let i = 0; i < levelMenu.length; ++i) {
+        for (let j = 0; j < levelMenu[i].length; ++j) {
+          let item = levelMenu[i][j]
+          if (item === latestOpenKey) {
+            this.openKeys = openKeys.filter(v => !levelMenu[i].includes(v) || latestOpenKey === v)
+            return
+          }
+        }
+      }
     },
     handleRouter ({ item, key, keyPath }) {
       this.$emit('trigger-router')
@@ -177,23 +185,13 @@ export default {
       })
     },
     levalMenuFunc (menuList) {
-      let nodes = []
-      let stack = menuList.map(v => v)
-      if (menuList) {
-      // 广度优先遍历BFS
-        while (stack.length > 0) {
-          let item = stack.shift()
-          nodes.push(item.name)
-          if (item.children && item.children.length > 0) {
-            item.children.forEach(its => {
-              stack.push(its)
-            })
-          }
-        }
-      }
+
     }
   },
   created () {
+    if (this.menuList.length > 0) {
+      this.levelMenu = gradeChildren(this.menuList)
+    }
   }
 }
 </script>

@@ -195,6 +195,41 @@ function arrageObjToTree (obj, parentId = '0') {
 function arrageDataToTree (arr, parentId = '0') {
   return arrageObjToTree(arrageArrToObj(arr), parentId)
 }
+function gradeChildren (list) {
+  let nodes = []
+  if (list) {
+    let stack = list.map(v => v)
+    // 广度优先遍历BFS
+    let len = stack.length
+    let l = len
+    let lev = 0 // level
+    let cur = 0 // 当前数组下标
+    // 当前下标小于数组长度的时候
+    while (cur < l) {
+      let item = stack[cur]
+      // 当前level小标下 未存在数组则增加一个小标数组，存在就添加一个数据
+      if (nodes[lev]) {
+        nodes[lev].push(item.name)
+      } else {
+        nodes[lev] = [item.name]
+      }
+      ++cur
+      if (item.children && item.children.length > 0) {
+        item.children.forEach(its => {
+        // 核心 有子级就增加到栈中，并且长度加一
+          stack.push(its)
+          ++l
+        })
+      }
+      // 当前数组下标 超出上一个数组的长度即为认定下一个level 那么level加1 长度与当前数据长度相同
+      if (cur >= len) {
+        ++lev
+        len = l
+      }
+    }
+  }
+  return nodes
+}
 export {
   setToken, // 设置token
   getToken, // 获取token
@@ -210,5 +245,6 @@ export {
   getKey, // 得到子组件上的key值
   arrageArrToObj, // 整理数组parentId为键名键值为该值下的数组
   arrageObjToTree, // 将数据根据父子级变成树结构
-  arrageDataToTree // 将[{parentId, id}]数据转成树结构
+  arrageDataToTree, // 将[{parentId, id}]数据转成树结构
+  gradeChildren // 将树级结构的数据分级成二维数组
 }
