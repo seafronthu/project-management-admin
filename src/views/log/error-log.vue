@@ -67,12 +67,10 @@
       </template>
     </a-table>
   </a-card>
-  <OperateRoleModel :visible="visible" :fields="fields"/>
   </ContainerFluid>
 </template>
 
 <script>
-import OperateRoleModel from './components/operate-role-model.vue'
 import { mapState } from 'vuex'
 const columns = [
   { title: '序号', dataIndex: 'number' },
@@ -107,7 +105,7 @@ export default {
   },
 
   components: {
-    OperateRoleModel
+
   },
 
   computed: {
