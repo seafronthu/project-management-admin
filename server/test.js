@@ -1,29 +1,43 @@
-const fs = require('fs')
-const path = require('path')
-const { encryptRsa, decryptRsa } = require('./lib/cypher')
-// const { privateKey, publicKey } = createRsaKey()
-// console.log(privateKey, publicKey)
-// console.log(path.resolve(__dirname, './config/id_rsa.pub'))
-// // fs.mkdirSync('./config/id_rsa.pub')
-// // fs.mkdirSync('./config/id_rsa')
-// fs.writeFile(path.resolve(__dirname, './config/id_rsa.pub'), publicKey, (err) => {
-//   if (err) throw err
-//   console.log('文件已被保存')
-// })
-// fs.writeFile(path.resolve(__dirname, './config/id_rsa'), privateKey, (err) => {
-//   if (err) throw err
-//   console.log('文件已被保存2')
-// })
 
-// const basicConfig = require('./config/basicConfig')
-let str = 'hello word 您好啊！'
-let publicKey = fs.readFileSync(path.resolve(__dirname, './config/id_rsa.pub'))
-let privateKey = fs.readFileSync(path.resolve(__dirname, './config/id_rsa'))
-let enData = encryptRsa(str, publicKey)
-console.log(enData.replace(/2/g, 1))
-// fs.writeFileSync(path.resolve(__dirname, './config/base64'), enData)
-let deData = decryptRsa(enData.replace(/2/g, 1), privateKey)
-console.log(deData)
+let arr = [...Array(100).keys()]
+let promiseArr = []
+let pro = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    console.log(111)
+    resolve()
+  }, 1000)
+})
+for (let i = 0; i < arr.length; i++) {
+  promiseArr.push(pro)
+}
+Promise.all(promiseArr)
+
+// const fs = require('fs')
+// const path = require('path')
+// const { encryptRsa, decryptRsa } = require('./lib/cypher')
+// // const { privateKey, publicKey } = createRsaKey()
+// // console.log(privateKey, publicKey)
+// // console.log(path.resolve(__dirname, './config/id_rsa.pub'))
+// // // fs.mkdirSync('./config/id_rsa.pub')
+// // // fs.mkdirSync('./config/id_rsa')
+// // fs.writeFile(path.resolve(__dirname, './config/id_rsa.pub'), publicKey, (err) => {
+// //   if (err) throw err
+// //   console.log('文件已被保存')
+// // })
+// // fs.writeFile(path.resolve(__dirname, './config/id_rsa'), privateKey, (err) => {
+// //   if (err) throw err
+// //   console.log('文件已被保存2')
+// // })
+
+// // const basicConfig = require('./config/basicConfig')
+// let str = 'hello word 您好啊！'
+// let publicKey = fs.readFileSync(path.resolve(__dirname, './config/id_rsa.pub'))
+// let privateKey = fs.readFileSync(path.resolve(__dirname, './config/id_rsa'))
+// let enData = encryptRsa(str, publicKey)
+// console.log(enData.replace(/2/g, 1))
+// // fs.writeFileSync(path.resolve(__dirname, './config/base64'), enData)
+// let deData = decryptRsa(enData.replace(/2/g, 1), privateKey)
+// console.log(deData)
 // utils.js
 // const crypto = require('crypto')
 
