@@ -1,10 +1,10 @@
 <!-- 100%容器  -->
 <template>
-  <a-spin :spinning="spinning" :tip="spinTip" :size="spinSize">
-    <div class="container-fluid" ref="fluid" :style="{height: full ? height : null}" >
+  <div class="container-fluid" ref="fluid" :style="{height: full ? height : null}">
+    <a-spin :spinning="spinning" :tip="spinTip" :size="spinSize" >
       <slot></slot>
-    </div>
-  </a-spin>
+    </a-spin>
+  </div>
 </template>
 
 <script>
@@ -56,4 +56,8 @@ export default {
   margin 10px 0
   &:hover
     box-shadow 0 0 10px 0 rgba(0,0,0,0.1)
+  .ant-spin-nested-loading
+    height 100%
+    .ant-spin-container
+      height 100%
 </style>

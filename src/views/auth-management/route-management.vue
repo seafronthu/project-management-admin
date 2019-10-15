@@ -87,12 +87,12 @@ export default {
         obj.name = obj.component
         obj.trigger = [
           {
-            type: 'insert',
-            name: '添加子分组'
-          },
-          {
             type: 'update',
             name: '修改'
+          },
+          {
+            type: 'insert',
+            name: '添加子分组'
           },
           {
             type: 'delete',
@@ -206,7 +206,7 @@ export default {
             return updateRouteApi({ component, title, description, genre, buttonType, id }).then(res => {
               if (res.code === 200) {
                 $this.succcessUpdate({ parentId, component, title, description, genre, buttonType, id })
-                $this.$message.succuss('修改成功！')
+                $this.$message.success('修改成功！')
               } else if (res.code) {
                 $this.$message.warning(res.message)
               }
@@ -215,7 +215,7 @@ export default {
             return createRouteApi({ parentId, component, title, description, genre, buttonType }).then(res => {
               if (res.code === 200) {
                 $this.successInsert({ parentId, component, title, description, genre, buttonType, id: res.data.id })
-                $this.$message.succuss('保存成功！')
+                $this.$message.success('保存成功！')
               } else if (res.code) {
                 $this.$message.warning(res.message)
               }
