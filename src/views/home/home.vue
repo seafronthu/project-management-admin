@@ -1,6 +1,10 @@
 <!-- 首页 -->
 <template>
+  <ContainerFluid
+  full
+  >
   <div>home</div>
+  </ContainerFluid>
 </template>
 
 <script>

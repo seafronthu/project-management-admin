@@ -3,7 +3,6 @@
   <ContainerFluid
     class="bg-color-f"
     :spinning="spinning"
-    full
   >
   <a-card hoverable style="width: 300px" v-for="items of Array(30).keys()" :key="items">
     <img

@@ -1,6 +1,6 @@
 <!-- 100%容器  -->
 <template>
-  <div class="container-fluid" ref="fluid" :style="{height: full ? height : null}">
+  <div class="container-fluid" ref="fluid" :style="styleColl">
     <a-spin :spinning="spinning" :tip="spinTip" :size="spinSize" >
       <slot></slot>
     </a-spin>
@@ -26,17 +26,31 @@ export default {
     spinSize: {
       type: String,
       default: 'large'
+    },
+    overflowY: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      height: 'calc(100% - 20px)'
+      height: 'calc(100vh - 153px)'
     }
   },
 
   components: {},
 
-  computed: {},
+  computed: {
+    styleColl () {
+      const {
+        height,
+        full
+      } = this
+      return full ? {
+        height
+      } : null
+    }
+  },
 
   methods: {},
 
@@ -50,12 +64,7 @@ export default {
 </script>
 <style lang="stylus">
 .container-fluid
-  background-color #ffffff
   border-radius 3px
-  transition box-shadow 0.3s ease-in-out
-  margin 10px 0
-  &:hover
-    box-shadow 0 0 10px 0 rgba(0,0,0,0.1)
   .ant-spin-nested-loading
     height 100%
     .ant-spin-container

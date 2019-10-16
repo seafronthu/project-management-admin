@@ -70,7 +70,7 @@
           </a-layout-header>
           <a-layout style="padding-top:88px;">
             <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
-            <a-layout-content>
+            <a-layout-content style="padding: 10px;">
               <transition name="page-slide-fade">
                 <keep-alive :include="cacheList">
                   <router-view/>
@@ -290,7 +290,7 @@ export default {
       z-index 89
   .layout-anim
     // padding-left 200px
-    width 100vw
+    // width 100vw
     transition padding 0.15s ease-in-out
     &.layout-anim-short
       // padding-left 80px
