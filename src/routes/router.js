@@ -47,19 +47,19 @@ const meta = {
   /**
    * @description 是否有面包屑
    */
-  notBreadcrumb: false,
+  notBreadcrumb: true,
   /**
    * @description 是否放在缓存即keep-alive
    */
-  notCache: false,
+  notCache: true,
   /**
    * @description 同时是否只能打开一个标签页
    */
-  notOpenTab: false,
+  notOpenTab: true,
   /**
    * @description 是否隐藏菜单栏
    */
-  hideMenu: false
+  hideMenu: true
 }
 Login.meta = { ...meta, ...Login.meta }
 const routes = [

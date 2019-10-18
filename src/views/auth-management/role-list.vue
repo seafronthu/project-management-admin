@@ -2,9 +2,10 @@
 <template>
   <ContainerFluid
     class="bg-color-f role-list"
+    full
   >
   <a-card :bordered="false">
-    <a-form layout="inline">
+    <a-form layout="inline" class="hhf-ant-form">
       <a-row :gutter="24">
         <a-col :md="8" :sm="24">
           <a-form-item label="角色ID">
@@ -31,7 +32,7 @@
         </a-col>
       </a-row>
     </a-form>
-    <a-table :columns="columns" :dataSource="tableData" @expand="handleExpanded" class="role-list-table">
+    <a-table :columns="columns" :scroll="{ x: 800 }" :dataSource="tableData" @expand="handleExpanded" class="role-list-table">
       <template #description="{description}">
         <div class="text-ellipsis" style="width: 100px;">{{description}}</div>
       </template>
@@ -133,21 +134,21 @@ export default {
 }
 </script>
 <style lang="stylus">
-.role-list
-  .ant-form-item
-    display flex
-    margin-bottom 12px
-    margin-right 0px
-    .ant-form-item-label
-      width auto
-      padding 0 8px 0 0
-      line-height 39.9999px
-    .ant-form-item-control-wrapper
-      flex 1 1
-  .role-list-table
-    .ant-table-content
-      overflow-y auto
-      .ant-table-body
-        min-width 800px
+// .role-list
+//   .ant-form-item
+//     display flex
+//     margin-bottom 12px
+//     margin-right 0px
+//     .ant-form-item-label
+//       width auto
+//       padding 0 8px 0 0
+//       line-height 39.9999px
+//     .ant-form-item-control-wrapper
+//       flex 1 1
+  // .role-list-table
+  //   .ant-table-content
+  //     overflow-y auto
+  //     .ant-table-body
+  //       min-width 800px
 
 </style>

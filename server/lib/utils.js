@@ -43,7 +43,9 @@ function collectLog ({
     str = `message: ${message}\r\n` + str
   }
   let saveFile = `${saveFileName}${moment().format('YYYYMMDD')}.txt`
+  console.log(saveDirectory)
   let pathFile = path.resolve(saveDirectory, saveFile)
+  console.log(pathFile)
   fs.mkdirSync(saveDirectory)
   fs.writeFileSync(pathFile, str, {
     flag: 'a'

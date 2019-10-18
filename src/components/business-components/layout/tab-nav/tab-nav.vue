@@ -241,7 +241,7 @@ export default {
     },
     // 选中的标签页
     chooseNavTag (item) {
-      if (!item.meta.notOpenTab) {
+      if (item.name && (!item.meta || !item.meta.notOpenTab)) {
         this.$nextTick(() => {
           let tabNavRef = this.$refs.tabNavRef
           let index = this.list.findIndex(v => isSameRoute(item, v))

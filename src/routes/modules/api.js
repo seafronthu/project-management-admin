@@ -15,7 +15,17 @@ const ApiProject = {
     title: 'API项目'
   }
 }
+const ApiVersion = {
+  path: 'api-version',
+  name: 'ApiVersion',
+  component: () => import(/* webpackChunkName: "ApiVersion" */ '@v/api-management/api-version.vue'),
+  meta: {
+    title: 'API版本',
+    hideMenu: true
+  }
+}
 export default {
   ApiManagement,
-  ApiProject
+  ApiProject,
+  ApiVersion
 }

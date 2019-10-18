@@ -146,7 +146,7 @@ export default {
         const { tabNavList } = this
         const { name, query, params, meta } = to
         const newTag = { name, query, params, meta }
-        if (!tabNavList.some(v => v.name === name) && !meta.notOpenTab) {
+        if (!tabNavList.some(v => isSameRoute(v, to)) && (!meta || !meta.notOpenTab)) {
           this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
         }
         this.tagChecked = newTag
@@ -242,10 +242,14 @@ export default {
     // 首次加载的时候存入 tabnav 和 breadcrumbList的数据
     handleFirstLoading () {
       const { name, query, params, meta } = this.$route
-      let homeInfoArr = this.routerList.filter(v => config.homeName.includes(v.name) || (v.name === name && !meta.notOpenTab))
+      let homeInfoArr = this.routerList.filter(v => config.homeName.includes(v.name))
       const newTag = { name, query, params, meta }
-      this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr])
-      this.tagChecked = newTag
+      if (!homeInfoArr.some(v => v.name === name) && (!meta || !meta.notOpenTab)) {
+        this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr, newTag])
+        this.tagChecked = newTag
+      } else {
+        this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr])
+      }
       this.initBreadcrumb = homeInfoArr.filter(v => config.homeName[0] === v.name).map(v => ({ name: v.name, ...v.meta, key: v.name }))
       let breadcrumb = config.homeName[0] === name ? [] : meta && meta.breadcrumb
       this.breadcrumbList = [...this.initBreadcrumb, ...(breadcrumb || [])]
@@ -277,6 +281,7 @@ export default {
   .layout-container
     padding-top 45px
     background-color #f5f7f9
+    max-width 100%
   .layout-header
     padding 0
     height auto

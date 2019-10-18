@@ -1,10 +1,13 @@
 <!-- 100%容器  -->
 <template>
-  <div class="container-fluid" ref="fluid" :style="styleColl">
-    <a-spin :spinning="spinning" :tip="spinTip" :size="spinSize" >
-      <slot></slot>
-    </a-spin>
-  </div>
+<div class="container-fluid" :style="containerStyle">
+  <slot name="header"></slot>
+  <a-spin :spinning="spinning" :tip="spinTip" :size="spinSize" >
+    <div class="container-fluid-scroll" :style="scrollStyle">
+        <slot></slot>
+    </div>
+  </a-spin>
+</div>
 </template>
 
 <script>
@@ -30,7 +33,8 @@ export default {
     overflowY: {
       type: Boolean,
       default: false
-    }
+    },
+    scrollBackgroundColor: String
   },
   data () {
     return {
@@ -41,13 +45,19 @@ export default {
   components: {},
 
   computed: {
-    styleColl () {
+    containerStyle () {
       const {
         height,
         full
       } = this
       return full ? {
         height
+      } : null
+    },
+    scrollStyle () {
+      return this.full ? {
+        overflowY: 'auto',
+        backgroundColor: this.scrollBackgroundColor
       } : null
     }
   },
@@ -64,9 +74,15 @@ export default {
 </script>
 <style lang="stylus">
 .container-fluid
-  border-radius 3px
+  display flex
+  flex-flow column nowrap
   .ant-spin-nested-loading
     height 100%
     .ant-spin-container
       height 100%
+  .container-fluid-scroll
+    border-radius 3px
+    height auto
+    max-height 100%
+    flex 1
 </style>

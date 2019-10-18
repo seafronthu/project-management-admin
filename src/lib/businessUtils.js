@@ -113,8 +113,8 @@ function isSameRoute (comparedRoute, compareRoute) {
   let param2 = compareRoute.params || {}
   let query2 = compareRoute.query || {}
   let name2 = compareRoute.name
-  let singlePage = !comparedRoute.meta || !comparedRoute.meta.notSinglePage // 判断是否是单独标签页
-  return singlePage ? name1 === name2 : name1 === name2 && isSameObjTool(param1, param2) && isSameObjTool(query1, query2)
+  // let openTab = !comparedRoute.meta || !comparedRoute.meta.notOpenTab // 判断可以打开标签页
+  return name1 === name2 && isSameObjTool(param1, param2) && isSameObjTool(query1, query2)
 }
 /**
  * 选中那个标签页

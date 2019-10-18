@@ -22,6 +22,7 @@ export const judgementTypeTool = (obj, type) => {
  * @param {JSON|Array} obj2
  */
 export const isSameObjTool = (obj1, obj2) => {
+  console.log(obj1, obj2)
   if (judgementTypeTool(obj1, 'object')) {
     let arr = Object.keys(obj1)
     for (let i = 0; i < arr.length; ++i) {
