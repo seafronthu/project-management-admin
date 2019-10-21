@@ -55,7 +55,7 @@
               ref="tabNavRef"
               dot
               class="tab-nav-anim"
-              :key="item.name"
+              :key="item.meta.createTime"
               height="100%"
               :color="checkedColorFunc(item)"
               :closable="judgeIsCloseCurrentdFunc(item)"
@@ -252,6 +252,20 @@ export default {
     },
     // 得到标签名
     getNameFunc (item) {
+      const {
+        query,
+        params
+      } = item
+      let title = ''
+      if (params) {
+        title += Object.keys(params).map(v => `${v}=${params[v]}`).join('&')
+      }
+      if (query) {
+        title += Object.keys(query).map(v => `${v}=${query[v]}`).join('&')
+      }
+      if (title) {
+        return ((item && item.meta && item.meta.title) + '?' + title) || ''
+      }
       return (item && item.meta && item.meta.title) || ''
     },
     // 选中的颜色

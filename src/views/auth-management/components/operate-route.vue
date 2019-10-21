@@ -97,8 +97,7 @@
               }
             ]">
             <a-select-option value="MENU">MENU</a-select-option>
-            <a-select-option value="LIST">LIST</a-select-option>
-            <a-select-option value="DETAIL">DETAIL</a-select-option>
+            <a-select-option value="PAGE">PAGE</a-select-option>
             <a-select-option value="TAB">TAB</a-select-option>
             <a-select-option value="BUTTON">BUTTON</a-select-option>
           </a-select>
@@ -121,6 +120,8 @@
               }
             ]">
             <a-select-option value="OTHER">OTHER</a-select-option>
+            <a-select-option value="LIST">LIST</a-select-option>
+            <a-select-option value="DETAIL">DETAIL</a-select-option>
             <a-select-option value="INSERT">INSERT</a-select-option>
             <a-select-option value="DELETE">DELETE</a-select-option>
             <a-select-option value="UPDATE">UPDATE</a-select-option>

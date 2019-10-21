@@ -21,7 +21,8 @@ const ApiVersion = {
   component: () => import(/* webpackChunkName: "ApiVersion" */ '@v/api-management/api-version.vue'),
   meta: {
     title: 'API版本',
-    hideMenu: true
+    hideMenu: true,
+    singleTab: true // 单tab页
   }
 }
 export default {

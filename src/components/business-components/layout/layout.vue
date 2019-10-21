@@ -145,11 +145,43 @@ export default {
         }
         const { tabNavList } = this
         const { name, query, params, meta } = to
-        const newTag = { name, query, params, meta }
-        if (!tabNavList.some(v => isSameRoute(v, to)) && (!meta || !meta.notOpenTab)) {
-          this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
+        const newTag = {
+          name,
+          query,
+          params,
+          meta: {
+            ...meta,
+            createTime: new Date().getTime()
+          } }
+        if (!meta || !meta.notOpenTab) { // 是否可以打开tab标签页
+          if (meta && meta.singleTab) { // 是否单页
+            if (!tabNavList.some(v => isSameRoute(v, to))) { // 单tab页的时候query和param也要相同
+              this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
+            }
+          } else {
+            let isHasTag = false
+            let newTagArr = tabNavList.map(v => {
+              if (v.name === name) {
+                isHasTag = true
+                return {
+                  ...v,
+                  query,
+                  params
+                }
+              }
+              return v
+            })
+            if (isHasTag) {
+              this.APP_SETTABNAVLIST_MUTATE([...newTagArr])
+            } else {
+              this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
+            }
+          }
         }
-        this.tagChecked = newTag
+        const tagChecked = this.tabNavList.filter(v => isSameRoute(v, newTag))
+        if (tagChecked.length === 1) {
+          this.tagChecked = tagChecked[0]
+        }
         let breadcrumb = config.homeName[0] === name ? [] : meta && meta.breadcrumb
         this.breadcrumbList = [...this.initBreadcrumb, ...(breadcrumb || [])]
       }
@@ -186,7 +218,12 @@ export default {
     },
     // 点击标签页
     handleTagClick (item) {
-      this.$router.push({ name: item.name })
+      const {
+        name,
+        query,
+        params
+      } = item
+      this.$router.push({ name, query, params })
     },
     // 关闭标签页
     // 操作的标签页 item  操作类型type
@@ -242,13 +279,33 @@ export default {
     // 首次加载的时候存入 tabnav 和 breadcrumbList的数据
     handleFirstLoading () {
       const { name, query, params, meta } = this.$route
-      let homeInfoArr = this.routerList.filter(v => config.homeName.includes(v.name))
-      const newTag = { name, query, params, meta }
+      let createTime = +new Date()
+      let homeInfoArr = this.routerList.filter(v => config.homeName.includes(v.name)).map(v => ({
+        ...v,
+        meta: {
+          ...v.meta ? v.meta : {},
+          createTime: --createTime
+        }
+      }))
+      const newTag = { name,
+        query,
+        params,
+        meta: {
+          ...meta,
+          createTime: --createTime
+        } }
       if (!homeInfoArr.some(v => v.name === name) && (!meta || !meta.notOpenTab)) {
-        this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr, newTag])
-        this.tagChecked = newTag
+        if (meta && meta.singleTab && !homeInfoArr.some(v => isSameRoute(v, this.$route))) {
+          this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr, newTag])
+        } else if (!homeInfoArr.some(v => v.name === name)) {
+          this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr, newTag])
+        }
       } else {
         this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr])
+      }
+      const tagChecked = this.tabNavList.filter(v => isSameRoute(v, newTag))
+      if (tagChecked.length === 1) {
+        this.tagChecked = tagChecked[0]
       }
       this.initBreadcrumb = homeInfoArr.filter(v => config.homeName[0] === v.name).map(v => ({ name: v.name, ...v.meta, key: v.name }))
       let breadcrumb = config.homeName[0] === name ? [] : meta && meta.breadcrumb
