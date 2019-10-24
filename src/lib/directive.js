@@ -1,61 +1,65 @@
 import { isSameRoute } from '@l/businessUtils'
 function routeChange (binding) {
-  let target = binding.value
-  let foo = binding.arg
+  const {
+    value: target,
+    arg: routeName,
+    modifiers
+  } = binding
   const {
     $route,
     $route: {
       query,
-      param,
+      params,
       name
     },
-    state: {
-      app: {
-        tabNavList
+    $store: {
+      state: {
+        app: {
+          tabNavList
+        }
       }
     }
   } = target
   let routeList = target.routeList
-  console.log(routeList)
-  if (!routeList.some(v => isSameRoute(v, $route))) {
+  if (name === routeName && !routeList.some(v => isSameRoute(v, $route))) {
     target.routeList.push({
       query,
-      param,
+      params,
       name
     })
-    target[foo]()
+    Object.keys(modifiers).forEach(key => {
+      target[key]()
+    })
   }
   let len = routeList.length
   while (len > 0) {
     let index = tabNavList.findIndex(v => isSameRoute(v, routeList[len - 1]))
     if (!~index) {
       target.routeList.splice(index, 1)
-    } else {
-      --len
     }
+    --len
   }
 }
 const singleTab = {
   name: 'single-tab',
   bind (el, binding, vnod) {
-    console.log(binding, 'bind')
-    // let target = binding.value
-    // target.routeList = []
-    // routeChange(binding)
+    // console.log('bind')
+    let target = binding.value
+    target.routeList = []
+    routeChange(binding)
   },
   inserted (el, binding, vnod) {
-    console.log('inserted', this)
+    // console.log('inserted', this)
   },
   componentUpdated (el, binding, vnod) {
-    console.log(binding, 'componentUpdated')
-    // routeChange(target)
+    // console.log('componentUpdated')
+    routeChange(binding)
   },
   unbind (el, binding, vnod) {
-    console.log('unbind')
+    // console.log('unbind')
   }
 }
 function directive (Vue) {
-  console.log(singleTab.name, singleTab)
   Vue.directive(singleTab.name, singleTab)
 }
 export default directive

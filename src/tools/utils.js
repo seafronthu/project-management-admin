@@ -40,10 +40,12 @@ export const isSameObjTool = (obj1, obj2) => {
         return false
       }
     }
-  } else {
+  } else if (judgementTypeTool(obj1, 'undefined') || judgementTypeTool(obj2, 'undefined')) {
     if (obj1 !== obj2) {
       return false
     }
+  } else if (obj1.toString() !== obj2.toString()) {
+    return false
   }
   return true
 }
@@ -61,6 +63,13 @@ function getParentsOffsetTop (selfEle, parentsEle) {
   }
   return distance + getParentsOffsetTop(parentEle, parentsEle)
 }
+function delayExecute (delayTime = 0) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, delayTime)
+  })
+}
 /**
  * 异步函数补货错误信息
  * @param {*} asyncFunc promise函数
@@ -76,5 +85,6 @@ async function errorCaptured (asyncFunc, ...arg) {
 }
 export {
   getParentsOffsetTop,
-  errorCaptured
+  errorCaptured,
+  delayExecute
 }

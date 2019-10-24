@@ -42,7 +42,7 @@ function arrageObjToRouterTree ({
   let arr = obj[parentId]
   let parentArr = []
   arr.forEach(items => {
-    if (items.genre === 'menu' || items.genre === 'list' || items.genre === 'detail') {
+    if (items.genre === 'menu' || items.genre === 'page' || items.genre === 'detail') {
       // const routeObj = routers[items.component] ? routers[items.component] : { // 父级路由
       //   name: items.component,
       //   path: componentNameConversion(items.component)['-'],
@@ -67,7 +67,7 @@ function arrageObjToRouterTree ({
           // href: items.href, // 跳转到其它网站
           // keywords: items.keywords, // 关键字用来搜索路由
           genre: items.genre, // 路由类型 menu菜单（一般父级路由）list列表 detail详情 tab 5button
-          buttonType: items.buttonType, // 其他other 按钮类型 insert增 delete删 update改 export导出 import导入
+          type: items.type, // 其他other 按钮类型 insert增 delete删 update改 export导出 import导入
           tag: items.tag, // 是否软删除
           jurisdiction: items.jurisdiction, // 权限
           ...meta
@@ -107,13 +107,13 @@ function arrageObjToRouterTree ({
         // }
         obj[id].forEach(its => {
           let genre = its.genre
-          let buttonType = its.buttonType
-          if (genre === 'button' && buttonType !== 'other') { // 按钮权限 增删改
-            let buttonArray = routerObj.meta[buttonType]
+          let type = its.type
+          if (genre === 'button' && type !== 'other') { // 按钮权限 增删改
+            let buttonArray = routerObj.meta[type]
             if (Array.isArray(buttonArray)) {
-              routerObj.meta[buttonType].push(its.component)
+              routerObj.meta[type].push(its.component)
             } else {
-              routerObj.meta[buttonType] = [its.component]
+              routerObj.meta[type] = [its.component]
             }
           } else if (genre === 'detail') {
             routerObj.meta['select'] = true
@@ -156,7 +156,7 @@ function backFrontRoutesConcat ({
   let arr = []
   let objRoute = arrageArrToObj(backstageRoutes) // 以parentId为键名的JSON对象
   backstageRoutes.forEach((items, index) => {
-    if (items.genre === 'MENU' || items.genre === 'LIST' || items.genre === 'DETAIL') {
+    if (items.type === 'MENU' || items.type === 'PAGE') {
       if (!frontstageRoutes[items.component]) {
         return
       }
@@ -173,8 +173,8 @@ function backFrontRoutesConcat ({
           description: items.description, // 描述用来搜索路由
           // href: items.href, // 跳转到其它网站
           // keywords: items.keywords, // 关键字用来搜索路由
-          genre: items.genre, // 路由类型 menu菜单（一般父级路由）list列表 detail详情 tab 5button
-          buttonType: items.buttonType, // 其他other 按钮类型 insert增 delete删 update改 export导出 import导入
+          type: items.type, // 路由类型 menu菜单（一般父级路由） page页面 tab button按钮
+          genre: items.genre, // 其他other  list列表 detail详情 按钮类型 insert增 delete删 update改 export导出 import导入
           tag: items.tag, // 是否软删除
           jurisdiction: items.jurisdiction, // 权限
           ...meta
@@ -183,18 +183,41 @@ function backFrontRoutesConcat ({
       }
       // 每个路由塞进按钮权限
       if (objRoute[items.id]) {
-        objRoute[items.id].forEach(its => {
-          let genre = its.genre
-          let buttonType = its.buttonType
-          if (genre === 'BUTTON' && buttonType !== 'OTHER') { // 按钮权限 增删改
-            let buttonArray = routeObj.meta[buttonType]
-            if (Array.isArray(buttonArray)) {
-              routeObj.meta[buttonType].push(its.component)
+        let childRouteArr = objRoute[items.id].filter(v => v.genre === 'BUTTON' || v.genre === 'TAB')
+        let len = childRouteArr.length
+        let l = len
+        let cur = 0
+        while (cur < l) {
+          let childRoute = childRouteArr[cur]
+          let type = childRoute.type
+          let genre = childRoute.genre
+          let name = childRoute.component
+          let id = childRoute.id
+          if (type === 'TAB') {
+            let tab = routeObj.meta['TAB']
+            if (Array.isArray(tab)) {
+              routeObj.meta['TAB'].push(name)
             } else {
-              routeObj.meta[buttonType] = [its.component]
+              routeObj.meta['TAB'] = [name]
             }
           }
-        })
+          if (type === 'BUTTON') {
+            let btn = routeObj.meta[genre]
+            if (Array.isArray(btn)) {
+              routeObj.meta[genre].push(name)
+            } else {
+              routeObj.meta[genre] = [name]
+            }
+          }
+          if (objRoute[id]) {
+            objRoute[id].forEach(v => {
+              if (v.type === 'BUTTON' || v.type === 'TAB') {
+                ++l
+              }
+            })
+          }
+          ++cur
+        }
       }
       arr.push(routeObj)
     }
@@ -283,7 +306,7 @@ function arrageMenuTree ({
   let parentArr = []
   arr.forEach(items => {
     // 合并菜单
-    if (items.genre === 'MENU' || items.genre === 'LIST' || items.genre === 'DETAIL') {
+    if (items.type === 'MENU' || items.type === 'PAGE') {
       // const routeObj = routers[items.component] ? routers[items.component] : { // 父级路由
       //   name: items.component,
       //   path: componentNameConversion(items.component)['-'],

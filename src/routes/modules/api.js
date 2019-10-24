@@ -22,7 +22,7 @@ const ApiVersion = {
   meta: {
     title: 'API版本',
     hideMenu: true,
-    singleTab: true // 单tab页
+    notSingleTab: false // 单tab页
   }
 }
 export default {

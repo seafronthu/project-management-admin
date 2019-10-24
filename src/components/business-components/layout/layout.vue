@@ -71,7 +71,11 @@
           <a-layout style="padding-top:88px;">
             <!-- <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"> -->
             <a-layout-content style="padding: 10px;">
-              <transition name="page-slide-fade">
+              <transition name="page-slide-fade"
+              @enter="enter"
+              @after-enter="afterEnter"
+              @leave="leave"
+              >
                 <keep-alive :include="cacheList">
                   <router-view/>
                 </keep-alive>
@@ -98,6 +102,7 @@ import { deviceMixin } from '@l/mixin'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 // isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
 import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
+import { delayExecute } from '@/tools/utils'
 import config from '@/config'
 export default {
   name: 'Layout',
@@ -154,11 +159,13 @@ export default {
             createTime: new Date().getTime()
           } }
         if (!meta || !meta.notOpenTab) { // 是否可以打开tab标签页
-          if (meta && meta.singleTab) { // 是否单页
-            if (!tabNavList.some(v => isSameRoute(v, to))) { // 单tab页的时候query和param也要相同
+          if (meta && meta.notSingleTab) { // 不是单页即多页
+            if (!tabNavList.some(v => isSameRoute(v, to))) { // 不是单tab页的时候query和params也要相同
               this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
             }
           } else {
+            // 当query或param不同的时候需要处理缓存
+            // do something ...
             let isHasTag = false
             let newTagArr = tabNavList.map(v => {
               if (v.name === name) {
@@ -207,6 +214,23 @@ export default {
 
   methods: {
     ...mapMutations(['APP_SETTABNAVLIST_MUTATE']),
+    enter (el, done) {
+      // 去除动画的时候出现滚动条
+      document.body.style.overflow = 'hidden'
+      delayExecute(500).then(() => {
+        done()
+      })
+    // ...
+      // done()
+    },
+    afterEnter (el) {
+      document.body.style.overflow = null
+    // ...
+    },
+    leave (el, done) {
+      document.body.style.overflow = null
+      done()
+    },
     // 当关闭标签页的时候跳转页面
     goToPageFunc (list, route, item) {
       let router = selectNavTab(list, route, item)

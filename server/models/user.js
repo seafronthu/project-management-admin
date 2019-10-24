@@ -26,14 +26,14 @@ exports.getRoute = async (connection) => {
   return errorCaptured(conc.execute.bind(conc), `SELECT * from ROUTE WHERE tag=0`) // await connection.execute
 }
 // 创建路由
-exports.createRoute = async (connection, { component, parentId, title, description, genre, buttonType }) => {
+exports.createRoute = async (connection, { component, parentId, title, description, genre, type }) => {
   let conc = await connection
   // 防止重新引用丢失调用对象conc.execute.bind(conc)
-  return errorCaptured(conc.execute.bind(conc), `INSERT ROUTE (component, parentId, title, description, genre, buttonType) VALUES ("${component}", "${parentId}", "${title}", "${description}", "${genre}", "${buttonType}")`) // await connection.execute
+  return errorCaptured(conc.execute.bind(conc), `INSERT ROUTE (component, parentId, title, description, genre, type) VALUES ("${component}", "${parentId}", "${title}", "${description}", "${genre}", "${type}")`) // await connection.execute
 }
 // 更新路由
-exports.updateRoute = async (connection, { component, id, title, description, genre, buttonType }) => {
+exports.updateRoute = async (connection, { component, id, title, description, genre, type }) => {
   let conc = await connection
   // 防止重新引用丢失调用对象conc.execute.bind(conc)
-  return errorCaptured(conc.execute.bind(conc), `UPDATE ROUTE SET component="${component}", title="${title}", description="${description}", genre="${genre}", buttonType="${buttonType}" WHERE id=${id}`)
+  return errorCaptured(conc.execute.bind(conc), `UPDATE ROUTE SET component="${component}", title="${title}", description="${description}", genre="${genre}", type="${type}" WHERE id=${id}`)
 }

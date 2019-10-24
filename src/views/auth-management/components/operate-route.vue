@@ -87,13 +87,13 @@
           <template v-slot:label>
             <span
               class="text-ellipsis"
-              title="genre（路由类型）"
-            >genre（路由类型）</span>
+              title="type（节点类型）"
+            >type（节点类型）</span>
           </template>
           <a-select v-decorator="[
-              'genre',
+              'type',
               {
-                rules: [{ required: true, message: 'genre is required!' }],
+                rules: [{ required: true, message: 'type is required!' }],
               }
             ]">
             <a-select-option value="MENU">MENU</a-select-option>
@@ -110,13 +110,13 @@
           <template v-slot:label>
             <span
               class="text-ellipsis"
-              title="buttonType（按钮类型）"
-            >buttonType（按钮类型）</span>
+              title="genre（数据类型）"
+            >type（数据类型）</span>
           </template>
           <a-select v-decorator="[
-              'buttonType',
+              'genre',
               {
-                rules: [{ required: true, message: 'buttonType is required!' }],
+                rules: [{ required: true, message: 'genre is required!' }],
               }
             ]">
             <a-select-option value="OTHER">OTHER</a-select-option>
@@ -237,14 +237,14 @@ export default {
           component: this.$form.createFormField({
             value: this.fields.component
           }),
-          genre: this.$form.createFormField({
-            value: this.fields.genre
+          type: this.$form.createFormField({
+            value: this.fields.type
           }),
           title: this.$form.createFormField({
             value: this.fields.title
           }),
-          buttonType: this.$form.createFormField({
-            value: this.fields.buttonType
+          genre: this.$form.createFormField({
+            value: this.fields.genre
           }),
           description: this.$form.createFormField({
             value: this.fields.description

@@ -1,12 +1,14 @@
 <!-- 100%容器  -->
 <template>
-<div class="container-fluid" :style="containerStyle">
-  <slot name="header"></slot>
-  <a-spin :spinning="spinning" :tip="spinTip" :size="spinSize" >
-    <div class="container-fluid-scroll" :style="scrollStyle">
-        <slot></slot>
-    </div>
-  </a-spin>
+<div>
+  <div class="container-fluid" :style="containerStyle">
+    <slot name="header"></slot>
+    <a-spin :spinning="spinning" :tip="spinTip" :size="spinSize" >
+      <div class="container-fluid-scroll" :style="scrollStyle">
+          <slot></slot>
+      </div>
+    </a-spin>
+  </div>
 </div>
 </template>
 

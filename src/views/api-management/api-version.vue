@@ -1,5 +1,4 @@
 <!-- api项目版本 -->
-
 <script>
 import { mapState } from 'vuex'
 export default {
@@ -20,25 +19,30 @@ export default {
 
   methods: {
     routeChange () {
-      console.log(this, 'vue')
+      console.log('routeChange')
     }
   },
   mounted () {
   },
-  activated () {},
+  // activated () {
+  //   // console.log(1)
+  // }
   render (h) {
     let directives = [
       {
         name: 'single-tab',
-        value: 2,
-        expression: '1 + 1'
-        // arg: 'routeChange'
+        value: this,
+        // expression: '1 + 1'
+        arg: 'ApiVersion',
+        modifiers: {
+          routeChange: true
+        }
       }
     ]
     //  <div a={1} ></div>
     //  return <div {...props}></div>
-    // return <div { ...directives }>111</div>
-    return <div directives={directives}>111</div>
+    return <div { ...{ directives } }>111</div>
+    // return <div directives={ directives: directives }>111</div>
   }
 }
 </script>

@@ -72,8 +72,8 @@ export default {
       fields: {
         // component: {},
         // title: {},
+        // type: {},
         // genre: {},
-        // buttonType: {},
         // description: {}
       },
       routeList: []
@@ -135,8 +135,8 @@ export default {
       this.fields = {
         component: '',
         title: '',
+        type: '',
         genre: '',
-        buttonType: '',
         description: ''
       }
     },
@@ -150,8 +150,8 @@ export default {
       this.fields = {
         component: '',
         title: '',
+        type: '',
         genre: '',
-        buttonType: '',
         description: ''
       }
     },
@@ -168,8 +168,8 @@ export default {
         component: itemData.component,
         title: itemData.title,
         description: itemData.description,
-        genre: itemData.genre,
-        buttonType: itemData.buttonType
+        type: itemData.type,
+        genre: itemData.genre
       }
     },
     // 删除
@@ -195,7 +195,7 @@ export default {
     // 保存修改路由权限
     handleConfirm ({ fields, routeInfo }) {
       const { id, parentId } = routeInfo
-      const { component, title, description, genre, buttonType } = fields
+      const { component, title, description, type, genre } = fields
       let $this = this
       let typeName = id ? '修改' : '新增'
       $this.$confirm({
@@ -203,18 +203,18 @@ export default {
         content: '请慎重操作',
         onOk () {
           if (id) { // 修改
-            return updateRouteApi({ component, title, description, genre, buttonType, id }).then(res => {
+            return updateRouteApi({ component, title, description, type, genre, id }).then(res => {
               if (res.code === 200) {
-                $this.succcessUpdate({ parentId, component, title, description, genre, buttonType, id })
+                $this.succcessUpdate({ parentId, component, title, description, type, genre, id })
                 $this.$message.success('修改成功！')
               } else if (res.code) {
                 $this.$message.warning(res.message)
               }
             })
           } else { // 添加
-            return createRouteApi({ parentId, component, title, description, genre, buttonType }).then(res => {
+            return createRouteApi({ parentId, component, title, description, type, genre }).then(res => {
               if (res.code === 200) {
-                $this.successInsert({ parentId, component, title, description, genre, buttonType, id: res.data.id })
+                $this.successInsert({ parentId, component, title, description, type, genre, id: res.data.id })
                 $this.$message.success('保存成功！')
               } else if (res.code) {
                 $this.$message.warning(res.message)
@@ -226,16 +226,16 @@ export default {
       })
     },
     // 成功添加
-    successInsert ({ parentId, component, title, description, genre, buttonType, id }) {
+    successInsert ({ parentId, component, title, description, type, genre, id }) {
       const boo = this.routeList.some(v => v.id === id)
       if (!boo) {
-        this.routeList.push({ parentId, component, title, description, genre, buttonType, id })
+        this.routeList.push({ parentId, component, title, description, type, genre, id })
       }
     },
     // 成功更新
-    succcessUpdate ({ parentId, component, title, description, genre, buttonType, id }) {
+    succcessUpdate ({ parentId, component, title, description, type, genre, id }) {
       const index = this.routeList.findIndex(v => v.id === id)
-      this.routeList.splice(index, 1, { parentId, component, title, description, genre, buttonType, id })
+      this.routeList.splice(index, 1, { parentId, component, title, description, type, genre, id })
     }
   },
   created () {

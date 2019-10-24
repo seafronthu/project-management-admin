@@ -115,8 +115,8 @@ class User {
       sendRespond({ ctx, code })
       return
     }
-    let { request: { body: { component, parentId, title, description, genre, buttonType } } } = ctx
-    const [error, results] = await userModels.createRoute(ctx.sql_connection, { component, parentId, title, description, genre, buttonType })
+    let { request: { body: { component, parentId, title, description, genre, type } } } = ctx
+    const [error, results] = await userModels.createRoute(ctx.sql_connection, { component, parentId, title, description, genre, type })
     if (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         sendRespond({ ctx, code: 252 })
@@ -141,8 +141,8 @@ class User {
       sendRespond({ ctx, code })
       return
     }
-    let { request: { body: { component, id, title, description, genre, buttonType } } } = ctx
-    const [error, results] = await userModels.updateRoute(ctx.sql_connection, { component, id, title, description, genre, buttonType })
+    let { request: { body: { component, id, title, description, genre, type } } } = ctx
+    const [error, results] = await userModels.updateRoute(ctx.sql_connection, { component, id, title, description, genre, type })
     if (error) {
       sendRespond({ ctx, data: error, code: 500 })
       return
