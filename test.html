@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .container {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform-origin: center;
+      margin: auto;
+    }
+
+    .content {
+      width: 100%;
+      height: 100%;
+      background: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+      <span>1111111</span>
+      222222222222222222222222222222222222
+    </div>
+  </div>
+  <script>
+    var evt = "onorientationchange" in window ? "orientationchange" : "resize";
+    window.addEventListener(evt, resize, false);
+
+    function resize(fals) {
+      let width = window.clinetWidth
+      let height = window.clientHeight
+      if (window.orientation == 0 || window.orientation == 180) {
+        document.querySelector('.container').style.transform = null
+        document.querySelector('.container').style.width = null
+        document.querySelector('.container').style.height = null
+        // alert("竖屏");
+      } else {
+        console.log(1)
+        document.querySelector('.container').style.width = '100vh'
+        document.querySelector('.container').style.height = '100vw'
+        document.querySelector('.container').style.transform = 'rotate(90deg)'
+        // alert("横屏");
+      }
+    }
+    resize()
+  </script>
+</body>
+
+</html>

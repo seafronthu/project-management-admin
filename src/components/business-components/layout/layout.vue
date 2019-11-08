@@ -6,6 +6,7 @@
         class="layout-header"
         style="top:0;left:0;"
       >
+      <!-- <div @click="APP_SETCACHEROUTESLIST_MUTATE(tabNavList.filter(v => v.name !== 'ApiVersion'))">clear</div> -->
         <TopHead>
           <template #left>
             <Logo v-if="!isMobile" />
@@ -76,7 +77,7 @@
               @after-enter="afterEnter"
               @leave="leave"
               >
-                <keep-alive :include="cacheList">
+                <keep-alive :include="cacheRoutesList">
                   <router-view/>
                 </keep-alive>
               </transition>
@@ -99,7 +100,7 @@ import FullScreen from './full-screen'
 import Logo from './logo'
 import HeaderMessage from './header-message'
 import { deviceMixin } from '@l/mixin'
-import { mapGetters, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 // isCloseRoute判断meta中是否不允许关闭标签栏（notClose: true） isSameRoute 判断meta是否不是单页(notSinglePage: true) 并且name包括query和param都相同
 import { isCloseRoute, isSameRoute, selectNavTab } from '@l/businessUtils'
 import { delayExecute } from '@/tools/utils'
@@ -119,7 +120,8 @@ export default {
   computed: {
     ...mapState({
       tabNavList: state => state.app.tabNavList,
-      userInfo: state => state.user.userInfo
+      userInfo: state => state.user.userInfo,
+      cacheRoutesList: state => state.app.cacheRoutesList
     }),
     ...mapGetters(['menuList', 'routerList']),
     layoutLeft () {
@@ -133,62 +135,75 @@ export default {
     // 是否是其它设备（除了手机和台式之外的设备）
     isOtherDevice () {
       return !this.isMobile && !this.isDesktop
-    },
-    // 缓存列表
-    cacheList () {
-      return [...this.tabNavList.length ? this.tabNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
     }
+    // 缓存列表
+    // cacheList () {
+    //   return [...this.tabNavList.length ? this.tabNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
+    // }
   },
-
+  // beforeRouteEnter (to, from, next) {
+  //   console.log(1)
+  //   next(vm => {
+  //     console.log(2)
+  //     vm.handleFirstLoading()
+  //   })
+  // },
+  beforeRouteUpdate (to, from, next) {
+    const { tabNavList } = this
+    const { name, query, params, meta, path, fullPath } = to
+    const newTag = {
+      name,
+      query,
+      params,
+      path,
+      fullPath,
+      meta: {
+        ...meta,
+        createTime: new Date().getTime() // 用作tab标签页的key
+      } }
+    if (!meta || !meta.notOpenTab) { // 是否可以打开tab标签页
+      if (meta && meta.notSingleTab) { // 不是单页即多页
+        if (!tabNavList.some(v => isSameRoute(v, to))) { // 不是单tab页的时候query和params也要相同
+          this.APP_SETTABNAVLISTANDCACHEROUTESLIST_ACTION([...tabNavList, newTag])
+        }
+      } else {
+        // 当query或param不同的时候需要处理缓存
+        // do something ...
+        let isHasTag = false // tab标签页是否存在
+        let newTagArr = tabNavList.map(v => {
+          if (v.name === name) {
+            isHasTag = true
+            return {
+              ...v,
+              query,
+              params
+            }
+          }
+          return v
+        })
+        if (!isHasTag) {
+          newTagArr.push(newTag)
+        }
+        this.APP_SETTABNAVLISTANDCACHEROUTESLIST_ACTION([...newTagArr])
+      }
+    }
+    const tagChecked = this.tabNavList.filter(v => isSameRoute(v, newTag))
+    if (tagChecked.length === 1) {
+      this.tagChecked = tagChecked[0]
+    }
+    next()
+  },
   watch: {
     '$route': {
       handler (to, from) {
-        if (to.name === 'ReplacePage') {
-          // 刷新当前路由
-          this.$router.back()
-          return
-        }
-        const { tabNavList } = this
-        const { name, query, params, meta } = to
-        const newTag = {
-          name,
-          query,
-          params,
-          meta: {
-            ...meta,
-            createTime: new Date().getTime()
-          } }
-        if (!meta || !meta.notOpenTab) { // 是否可以打开tab标签页
-          if (meta && meta.notSingleTab) { // 不是单页即多页
-            if (!tabNavList.some(v => isSameRoute(v, to))) { // 不是单tab页的时候query和params也要相同
-              this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
-            }
-          } else {
-            // 当query或param不同的时候需要处理缓存
-            // do something ...
-            let isHasTag = false
-            let newTagArr = tabNavList.map(v => {
-              if (v.name === name) {
-                isHasTag = true
-                return {
-                  ...v,
-                  query,
-                  params
-                }
-              }
-              return v
-            })
-            if (isHasTag) {
-              this.APP_SETTABNAVLIST_MUTATE([...newTagArr])
-            } else {
-              this.APP_SETTABNAVLIST_MUTATE([...tabNavList, newTag])
-            }
-          }
-        }
-        const tagChecked = this.tabNavList.filter(v => isSameRoute(v, newTag))
-        if (tagChecked.length === 1) {
-          this.tagChecked = tagChecked[0]
-        }
+        // const { tabNavList, cacheRoutesList } = this
+        const { name, meta } = to
+        // if (!tabNavList.some(v => isSameRoute(v, to) && cacheRoutesList.includes(v.name))) { // 在tab页路由相同并且不在缓存中
+        //   console.log('xixi')
+        //   this.APP_SETCACHEROUTESLIST_MUTATE(tabNavList)
+        // }
+
+        // console.log(this.cacheRoutesList)
         let breadcrumb = config.homeName[0] === name ? [] : meta && meta.breadcrumb
         this.breadcrumbList = [...this.initBreadcrumb, ...(breadcrumb || [])]
       }
@@ -213,7 +228,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['APP_SETTABNAVLIST_MUTATE']),
+    ...mapMutations(['APP_SETTABNAVLIST_MUTATE', 'APP_SETCACHEROUTESLIST_MUTATE']),
+    ...mapActions(['APP_SETTABNAVLISTANDCACHEROUTESLIST_ACTION']),
     enter (el, done) {
       // 去除动画的时候出现滚动条
       document.body.style.overflow = 'hidden'
@@ -252,12 +268,23 @@ export default {
     // 关闭标签页
     // 操作的标签页 item  操作类型type
     handleTagClose ({ item, type, index }) {
+      // console.log(item)
+      const {
+        fullPath,
+        name
+      } = item
       let { tabNavList } = this
       let beforeArr = []
       let afterArr = []
       switch (type) {
         case 'refresh':
-          this.$router.push({ name: 'ReplacePage' })
+          this.$routerReplace({ name: 'ReplacePage',
+            refresh: true,
+            redirect: {
+              fullPath: encodeURIComponent(fullPath),
+              name
+            }
+          })
           return
         case 'closeCurrent':
           tabNavList = tabNavList.filter(v => !isSameRoute(item, v))
@@ -281,7 +308,7 @@ export default {
           tabNavList = tabNavList.filter(v => isSameRoute(item, v) || !isCloseRoute(v))
           break
       }
-      this.APP_SETTABNAVLIST_MUTATE(tabNavList)
+      this.APP_SETTABNAVLISTANDCACHEROUTESLIST_ACTION(tabNavList)
       this.goToPageFunc(tabNavList, this.$route, item)
     },
     handleResize () {
@@ -302,10 +329,11 @@ export default {
     },
     // 首次加载的时候存入 tabnav 和 breadcrumbList的数据
     handleFirstLoading () {
-      const { name, query, params, meta } = this.$route
+      const { name, query, params, meta, path, fullPath } = this.$route
       let createTime = +new Date()
       let homeInfoArr = this.routerList.filter(v => config.homeName.includes(v.name)).map(v => ({
         ...v,
+        fullPath: v.path,
         meta: {
           ...v.meta ? v.meta : {},
           createTime: --createTime
@@ -314,18 +342,20 @@ export default {
       const newTag = { name,
         query,
         params,
+        fullPath,
+        path,
         meta: {
           ...meta,
           createTime: --createTime
         } }
       if (!homeInfoArr.some(v => v.name === name) && (!meta || !meta.notOpenTab)) {
         if (meta && meta.singleTab && !homeInfoArr.some(v => isSameRoute(v, this.$route))) {
-          this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr, newTag])
+          this.APP_SETTABNAVLISTANDCACHEROUTESLIST_ACTION([...homeInfoArr, newTag])
         } else if (!homeInfoArr.some(v => v.name === name)) {
-          this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr, newTag])
+          this.APP_SETTABNAVLISTANDCACHEROUTESLIST_ACTION([...homeInfoArr, newTag])
         }
       } else {
-        this.APP_SETTABNAVLIST_MUTATE([...homeInfoArr])
+        this.APP_SETTABNAVLISTANDCACHEROUTESLIST_ACTION([...homeInfoArr])
       }
       const tagChecked = this.tabNavList.filter(v => isSameRoute(v, newTag))
       if (tagChecked.length === 1) {

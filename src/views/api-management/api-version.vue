@@ -6,6 +6,7 @@ export default {
 
   data () {
     return {
+      vers: 11111
     }
   },
 
@@ -16,13 +17,13 @@ export default {
       tabNavList: state => state.app.tabNavList
     })
   },
-
   methods: {
     routeChange () {
       console.log('routeChange')
     }
   },
   mounted () {
+    console.log('api-version 缓存了吗？')
   },
   // activated () {
   //   // console.log(1)

@@ -2,7 +2,20 @@
 <script>
 export default {
   name: 'ReplacePage',
-  render () {
+  beforeCreate () {
+    const {
+      query,
+      params: {
+        redirect
+      }
+    } = this.$route
+    // this.$router.push({ path: decodeURIComponent(redirect) })
+    this.$routerReplace({
+      path: decodeURIComponent(redirect),
+      query
+    })
+  },
+  render (h) {
     return {}
   }
 }

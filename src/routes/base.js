@@ -25,7 +25,7 @@ const Home = {
   }
 }
 const ReplacePage = {
-  path: '/replace-page',
+  path: '/replace-page/:redirect*',
   name: 'ReplacePage',
   component: () => import(/* webpackChunkName: "ReplacePage" */ '@v/other/replace-page.vue'),
   meta: {

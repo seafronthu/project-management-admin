@@ -66,14 +66,14 @@
             >
               {{getNameFunc(item)}}
               <template v-slot:menu>
-                <!-- <a-menu-item
+                <a-menu-item
                   key="refresh"
                   :name="item"
                 >
                   <a
                     href="javascript:;"
                   >刷新</a>
-                </a-menu-item> -->
+                </a-menu-item>
                 <a-menu-item
                   key="closeCurrent"
                   :name="item"
@@ -258,10 +258,10 @@ export default {
       } = item
       let title = ''
       if (params) {
-        title += Object.keys(params).map(v => `${v}=${params[v]}`).join('&')
+        title += Object.keys(params).filter(v => v !== 'refresh').map(v => `${v}=${params[v]}`).join('&')
       }
       if (query) {
-        title += Object.keys(query).map(v => `${v}=${query[v]}`).join('&')
+        title += Object.keys(query).filter(v => v !== 'refresh').map(v => `${v}=${query[v]}`).join('&')
       }
       if (title) {
         return ((item && item.meta && item.meta.title) + '?' + title) || ''

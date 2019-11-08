@@ -83,8 +83,17 @@ async function errorCaptured (asyncFunc, ...arg) {
     return [err, null]
   }
 }
+// 获取随机颜色
+function getRandomColor (options = {}) {
+  let { red = 255, green = 255, blue = 255, opacity = 1 } = options
+  const colFunc = (color) => Math.floor(Math.random() * (color + 1)) // +1 防止不能随机到当前color值
+  const [r, g, b, a] = [colFunc(red), colFunc(green), colFunc(blue), opacity]
+  return `rgba(${r},${g},${b},${a})`
+  // return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).substr(-6)
+}
 export {
   getParentsOffsetTop,
   errorCaptured,
-  delayExecute
+  delayExecute,
+  getRandomColor
 }

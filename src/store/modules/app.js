@@ -9,7 +9,8 @@ export default {
     // menuList: getLocalStorage(menuStorage) || [], // 菜单列表
     tabNavList: [], // 选项卡导航
     authorizationList: [], // 权限列表
-    baseRouterList: {} // 默认路由
+    baseRouterList: {}, // 默认路由
+    cacheRoutesList: [] // 缓存路由
   },
   // getters: {
   //   menuList: (state, getters, rootState) => {
@@ -32,6 +33,10 @@ export default {
       //   state.tabNavList.push(item)
       // }
     },
+    // 设置缓存路由
+    APP_SETCACHEROUTESLIST_MUTATE (state, list) {
+      state.cacheRoutesList = [...list.length ? list : []]
+    },
     // 删除选项卡导航
     APP_REMOVETABNAVLIST_MUTATE (state, name) {
       state.tabNavList = state.tabNavList.filter(v => v.name !== name)
@@ -46,6 +51,10 @@ export default {
     }
   },
   actions: {
+    APP_SETTABNAVLISTANDCACHEROUTESLIST_ACTION ({ state, commit }, list) {
+      commit('APP_SETTABNAVLIST_MUTATE', list)
+      commit('APP_SETCACHEROUTESLIST_MUTATE', list.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name))
+    },
     // 获取权限列表
     async APP_GETUSERATHORITYAPI_ACTION ({ state, commit }, baseRouterList) {
       try {
