@@ -1,21 +1,21 @@
 <!-- api项目团队管理  -->
 <template>
-  <a-modal title="项目成员" :visible="visible">
-    <a-list itemLayout="horizontal" :dataSource="data">
+  <a-modal title="项目成员" :visible="visible" width="1000px" @cancel="handleCancel">
+    <a-list :dataSource="data" v-bind="listProps">
       <template v-slot:renderItem="item">
-        <a-list-item>
-          <a-list-item-meta
-            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-          >
-          <template v-slot:title>
-            <a href="https://vue.ant.design/">{{item.title}}</a>
-          </template>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
-          </a-list-item-meta>
-        </a-list-item>
+            <a-list-item>
+              <a-list-item-meta
+                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+              >
+              <template v-slot:title>
+                <a href="https://vue.ant.design/">{{item.title}}</a>
+              </template>
+                <a-avatar
+                  slot="avatar"
+                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                />
+              </a-list-item-meta>
+            </a-list-item>
       </template>
   </a-list>
   </a-modal>
@@ -40,6 +40,13 @@ export default {
   },
   data () {
     return {
+      listProps: {
+        itemLayout: 'horizontal',
+        grid: {
+          // gutter: 16,
+          xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3
+        }
+      },
       data: [
         {
           title: 'Ant Design Title 1'
@@ -64,6 +71,12 @@ export default {
   methods: {
     log (val) {
       return console.log(val)
+    },
+    handleClose () {
+      this.$emit('trigger-change', false)
+    },
+    handleCancel () {
+      this.handleClose()
     }
   },
 

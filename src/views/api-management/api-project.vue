@@ -134,13 +134,15 @@ export default {
   },
   methods: {
     // 跳转到版本页
-    handleRouter (id) {
-      console.log(111)
+    handleRouter (items) {
+      const {
+        id, name: title
+      } = items
       this.$routerPush({
         name: 'ApiVersion',
         refresh: true,
         query: {
-          title: '项目一',
+          title,
           id
         } })
       // this.$router.push({ name: 'ApiVersion',
