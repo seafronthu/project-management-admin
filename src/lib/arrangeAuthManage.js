@@ -229,7 +229,7 @@ function backFrontRoutesConcat ({
  * @param {{backstageRoutes:JSON, frontstageRoutes: JSON}} {backstageRoutes 后台路由, frontstageRoutes 前台路由}
  * @returns {JSON} 返回合并的路由数据
  */
-function arrageRoutes ({
+function arrageBeforeAfterRoutes ({
   backstageRoutes,
   frontstageRoutes,
   parentId = 0
@@ -291,6 +291,12 @@ function arrageRoutes ({
     v.meta.breadcrumb = breadcrumb.filter(v => !v.notBreadcrumb)
     return v
   }).filter(v => v.meta.genre !== 'menu') // 最后过滤父级菜单（前面没有过滤是因为需要做breadcrumb和path）
+}
+function arrageRoutes (options) {
+  let frontBackRoutes = arrageBeforeAfterRoutes(options)
+  return frontBackRoutes.filter(v => {
+    return v.meta.type === 'PAGE'
+  })
 }
 /**
  * 整理成树状menu

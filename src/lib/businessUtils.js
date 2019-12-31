@@ -195,6 +195,10 @@ function arrageObjToTree (obj, parentId = '0') {
 function arrageDataToTree (arr, parentId = '0') {
   return arrageObjToTree(arrageArrToObj(arr), parentId)
 }
+/**
+ * 将树级结构的数据分级成二维数组
+ * @param {Array} list 数组数据
+ */
 function gradeChildren (list) {
   let nodes = []
   if (list) {

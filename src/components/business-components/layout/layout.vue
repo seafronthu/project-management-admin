@@ -206,6 +206,7 @@ export default {
         // console.log(this.cacheRoutesList)
         let breadcrumb = config.homeName[0] === name ? [] : meta && meta.breadcrumb
         this.breadcrumbList = [...this.initBreadcrumb, ...(breadcrumb || [])]
+        console.log(this.breadcrumbList)
       }
     },
     isOtherDevice: {
@@ -364,6 +365,7 @@ export default {
       this.initBreadcrumb = homeInfoArr.filter(v => config.homeName[0] === v.name).map(v => ({ name: v.name, ...v.meta, key: v.name }))
       let breadcrumb = config.homeName[0] === name ? [] : meta && meta.breadcrumb
       this.breadcrumbList = [...this.initBreadcrumb, ...(breadcrumb || [])]
+      console.log(this.breadcrumbList)
     }
   },
   created () {

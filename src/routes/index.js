@@ -69,6 +69,7 @@ router.beforeEach((to, from, next) => {
                   component: Layout,
                   children: [ReplacePage, ...store.getters.routerList]
                 }, Error404]
+              console.log(routerList)
               router.addRoutes(routerList)
               ++addErr
               const redirect = decodeURIComponent(from.query.redirect || to.path)
