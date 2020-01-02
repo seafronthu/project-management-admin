@@ -1,12 +1,10 @@
 <template>
   <div id="app">
-    <HhfImage style="width: 200px;height:200px;position: absolute; z-index: 1000" :src="abc.src" />
     <router-view/>
   </div>
 </template>
 <script>
 import { mixin } from '@l/mixin'
-import HhfImage from '@hhf/image'
 export default {
   mixins: [mixin],
   data () {
@@ -15,14 +13,8 @@ export default {
     }
   },
   components: {
-    HhfImage
   },
   created () {
-    setTimeout(() => {
-      this.abc = {
-        src: 'http://seafront.top/afdsanfdsjad.png'
-      }
-    }, 2000)
   }
 }
 </script>
