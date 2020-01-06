@@ -37,6 +37,7 @@ export default {
 
   data () {
     return {
+      spinning: true,
       vers: 11111
     }
   },

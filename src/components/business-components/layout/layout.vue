@@ -196,6 +196,7 @@ export default {
   watch: {
     '$route': {
       handler (to, from) {
+        console.log(this.cacheRoutesList)
         // const { tabNavList, cacheRoutesList } = this
         const { name, meta } = to
         // if (!tabNavList.some(v => isSameRoute(v, to) && cacheRoutesList.includes(v.name))) { // 在tab页路由相同并且不在缓存中
