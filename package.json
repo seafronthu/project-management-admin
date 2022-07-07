@@ -19,7 +19,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "koa-static-cache": "^5.1.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mysql2": "^1.6.5",
     "nprogress": "^0.2.0",
     "vue": "^2.6.10",
